@@ -1,0 +1,55 @@
+<group description="Enter Fields to Create Account">
+	<setInputField xpath="id('firstName')" value="#{firstName}" description="firstName" />
+	<setInputField xpath="id('middleName')" value="#{middleName}" description="middleName" />
+	<setInputField xpath="id('lastName')" value="#{lastName}" description="lastName" />
+	<setInputField xpath="id('userEmail')" value="#{userEmail}" description="userEmail" />
+	<setInputField xpath="id('userEmailReEnter')" value="#{reEnteruserEmail}" description="userEmail" />
+	<setInputField xpath="id('userPassword')" value="#{userPassword}" description="userPassword" />
+	<setInputField xpath="id('userPasswordReenter')" value="#{userPasswordReenter}" description="userPasswordReenter" />
+	
+	<setInputField xpath="id('billToFirstName')" value="#{billToFirstName}" description="billToFirstName" />
+	<setInputField xpath="id('billToMiddleName')" value="#{billToMiddleName}" description="billToMiddleName" />
+	<setInputField xpath="id('billToLastName')" value="#{billToLastName}" description="billToLastName" />
+	<setInputField xpath="id('billToAptCompanySuite')" value="#{billToAptCompanySuite}" description="billToAptCompanySuite" />
+	<setInputField xpath="id('billToStreetAddress')" value="#{billToStreetAddress}" description="billToStreetAddress" />
+	<setInputField xpath="id('billToAddressTwo')" value="#{billToAddressTwo}" description="billToAddressTwo" />
+	<setInputField xpath="id('billToCity')" value="#{billToCity}" description="billToCity" />
+	
+	<setSelectField xpath="id('billToState')" text="#{billToState}" description="billToState" />
+	<setInputField xpath="id('billToZipCode')" value="#{billToZipCode}" description="billToZipCode" />
+	<setInputField xpath="id('billToDayAreaCode')" value="#{billToDayAreaCode}" description="billToDayAreaCode" />
+	<setInputField xpath="id('billToDayPhone')" value="#{billToDayPhone}" description="billToDayPhone" />
+	<setInputField xpath="id('billToDayExtension')" value="#{billToDayExtension}" description="billToDayExtension" />
+	<setInputField xpath="id('billToEveAreaCode')" value="#{billToEveAreaCode}" description="billToEveAreaCode" />
+	<setInputField xpath="id('billToEvePhone')" value="#{billToEvePhone}" description="billToEvePhone" />
+	<setInputField xpath="id('billToEveExtension')" value="#{billToEveExtension}" description="billToEveExtension" />
+	
+	<setCheckbox name="copyToShipping" checked="#{copyToShipping}" description="copyToShipping" />
+	
+	<ifStep>
+		<condition>
+			<not>
+				<verifyProperty name="copyToShipping" value="true" propertyType="dynamic" />
+			</not>
+		</condition>
+		<then>	
+			<setInputField xpath="id('shipToFirstName')" value="#{shipToFirstName}" description="shipToFirstName" /> 
+			<setInputField xpath="id('shipToMiddleName')" value="#{shipToMiddleName}" description="shipToMiddleName" />
+			<setInputField xpath="id('shipToLastName')" value="#{shipToLastName}" description="shipToLastName" />
+			<setInputField xpath="id('shipToAptCompanySuite')" value="#{shipToAptCompanySuite}" description="shipToAptCompanySuite" />
+			<setInputField xpath="id('shipToStreetAddress')" value="#{shipToStreetAddress}" description="shipToStreetAddress" />
+			<setInputField xpath="id('shipToAddressTwo')" value="#{shipToAddressTwo}" description="shipToAddressTwo" />
+			<setInputField xpath="id('shipToCity_orig')" value="#{shipToCity_orig}" description="shipToCity_orig" />
+			<setSelectField xpath="id('shipToState_orig')" text="#{shipToState_orig}" description="shipToState_orig" />
+			<setInputField xpath="id('shipToZipCode')" value="#{shipToZipCode}" description="shipToZipCode" />
+			<setInputField xpath="id('shipToDayAreaCode')" value="#{shipToDayAreaCode}" description="shipToDayAreaCode" />
+			<setInputField xpath="id('shipToDayPhone')" value="#{shipToDayPhone}" description="shipToDayPhone" />
+			<setInputField xpath="id('shipToDayExtension')" value="#{shipToDayExtension}" description="shipToDayExtension" />
+			<setInputField xpath="id('shipToEveAreaCode')" value="#{shipToEveAreaCode}" description="shipToEveAreaCode" />
+			<setInputField xpath="id('shipToEvePhone')" value="#{shipToEvePhone}" description="shipToEvePhone" />
+			<setInputField xpath="id('shipToEveExtension')" value="#{shipToEveExtension}" description="shipToEveExtension" />
+		</then>
+	</ifStep>	
+</group>
+
+

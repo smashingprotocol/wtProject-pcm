@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchCategoryResult">
+
+	<target name="searchCategoryResult">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />
+			&searchKeyword;
+			
+			
+	
+			<verifyXPath xpath="(//a[contains(text(),'${category1}')]) [position()=1]" description="verify the Category section is filtered" />
+			<clickLink xpath="id('advancedForm')//a[contains(text(),'${category1}')]" description="Click the link for the Category 1" />
+			<storeXPath xpath="//div[@class='fDblue floatL']" property="resultCount" propertyType="dynamic" description="Store the count of result"/>
+			<verifyXPath xpath="(//a[contains(text(),'${category1}') and contains(text(),'#{resultCount}')]) [position()=1]" description="verify the result count matches the category faceting count" />
+		</webtest>
+		
+	</target>
+</project>

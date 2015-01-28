@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchSKU">
+
+	<target name="searchSKU">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />
+			<ifStep description="Check if to invoke url or use search keyword">
+				<condition>
+					<not>
+						<verifyProperty name="invokeurl" value="" propertyType="ant" />
+					</not>					
+				</condition>
+				<then>
+					<invoke url="${invokeurl}" description="Invoke search result by invoking url" />
+				</then>
+				<else>
+					&searchKeyword;
+				</else>
+			</ifStep>
+			
+			<not>
+				<verifyXPath xpath="//div[@class='pcmallpartupc']//li[contains(text(),'#{search.keyword}')]" description="SKU is found in PDP Page" />
+			</not>
+			
+			<ifStep description="If Search should redirect to Product no longer available with related item search result.">
+				<condition>
+					<verifyProperty property="redirectURLText" value="/n/Search-Redirect-Solr/msc-254" propertytype="ant" description="Verify the url text expected" />
+				</condition>
+				<then>
+					<verifyDocumentURL text="http://${host}${redirectURLText}" regex="true" description="Verify the URL of the Product no longer available with related search item" />
+					<verifyXPath xpath="//h1[contains(text(),'Sorry, that product is no longer available.')]" description="Verify the message product is not available" />
+				</then>
+			</ifStep>
+			
+			<ifStep description="If Search should redirect to No Match product with Todays Deal.">
+				<condition>
+					<verifyProperty property="redirectURLText" value="/n/PDP-Error-Link/msc-252" propertytype="ant" description="Verify the url text expected" />
+				</condition>
+				<then>
+					<verifyDocumentURL text="http://${host}${redirectURLText}" regex="true" description="Verify the URL of the Product no longer available with related search item" />
+					<verifyXPath xpath="//h2[contains(text(),'You might want to check out')]" description="Verify the message You might want to check out Today&apos;s Deals." />
+				</then>
+			</ifStep>
+			
+			
+			
+		</webtest>
+		
+	</target>
+</project>

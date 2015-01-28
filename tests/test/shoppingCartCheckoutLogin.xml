@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartCheckoutLogin">
+
+	<target name="shoppingCartCheckoutLogin">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="Shopping Cart: ${title}. [${pcmHost}${username}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<group description="Define properties value">
+				<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+				<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+				<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+				<storeProperty name="cartDPNo.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+				<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+				<storeProperty name="ccey.dynamic" value="2015" description="Define Credit Card Year" />
+				<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+				<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+				<storeProperty name="cardSecCode.dynamic" value="123" description="Define Credit Card Number" />
+			</group>
+			
+			&addtoCartPDPSearchSKU;
+			
+			<ifStep description="Express Checkout or Proceed to Checkout">
+				<condition>
+					<verifyProperty name="checkout" value="express" propertyType="ant"/>
+				</condition>
+				<then>
+					<clickElement xpath="${cart.btnExpressCheckout}" description="Click Express Checkout" />
+					<clickLink href="/n/Shopping-Cart/msc-cart" />
+					<not>
+						<verifyText text="Your shopping cart is currently empty!" />
+					</not>
+					&getEDPofCartDPNo;
+				</then>
+				<else>
+					<clickElement xpath="${cart.btnProceedToCheckout}" description="Click Proceed to Checkout" />
+					&cartCheckoutLogin;
+					<clickLink href="/n/Shopping-Cart/msc-cart" />
+					<not>
+						<verifyText text="Your shopping cart is currently empty!" />
+					</not>
+					&getEDPofCartDPNo;
+				</else>
+			</ifStep>
+				
+		</webtest>
+		
+	</target>
+</project>

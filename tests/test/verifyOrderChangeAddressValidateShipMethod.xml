@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderChangeAddressValidateShipMethod">
+
+	<target name="verifyOrderChangeAddressValidateShipMethod">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title}.">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${sku}" description="Define Sku to checkout" />
+			<storeProperty name="shippingMethod.dynamic" value="${shippingMethod}" description="Define Shipping method" />
+			&myAccountLogin;
+			&addtoCartPDPSearchSKU;
+			<storeProperty name="cctype.dynamic" value="vi" description="Define Credit Card Month" />
+			<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+			<storeProperty name="ccey.dynamic" value="2016" description="Define Credit Card Year" />
+			<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+			<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+			<storeProperty name="cardSecCode.dynamic" value="123" description="Define Credit Card Number" />
+	
+			
+			&proceedtoCheckoutShippingAddress;
+			&proceedtoCheckoutShipMethod;
+			&proceedtoCheckoutBillingPayment;
+
+			<group description="Change City that can avail free shipping">
+				<storeProperty name="city.dynamic" value="${city.withtax}" description="Define City  that contains the address." />
+				&verifyOrderChangeAddressbyCity;
+				<verifyXPath xpath="(//table//span[@class='txtsubtotalVal']) [position()=3]" text="$0.00" description="Verify the tax is 0.00 "/>
+			</group>
+			
+			<group description="Change City to APO/FPO non Free Shipping">
+				<storeProperty name="city.dynamic" value="${city.apo}" description="Define City  that contains the address." />
+				&verifyOrderChangeAddressbyCity;
+				<not description="Tax is not 0.00">
+					<verifyXPath xpath="(//table//span[@class='txtsubtotalVal']) [position()=3]" text="$0.00" description="Verify the tax is 0.00 "/>
+				</not>
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

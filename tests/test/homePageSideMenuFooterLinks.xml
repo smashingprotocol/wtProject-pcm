@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="homePageSideMenuFooterLinks">
+
+	<target name="homePageSideMenuFooterLinks">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="HOMEPAGE: Check SIDE MENU/FOOTER Links with Page Not Found and PC Mall wordings [${host}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			
+			<group description="Side Menu and Footer">
+					<storeXPath xpath="count(//a[@class='wt'])" property="wtLinkCount" propertyType="dynamic" />
+					<storeProperty property="wterrorctr" value="0" propertyType="dynamic" description="Initialize value for wterrorctr" />	
+					<repeat	count="#{wtLinkCount}" startCount="1" counterName="wtlinkctr">
+						<!--<storeXPath xpath="(//a[@class='wt']) [position()=#{wtlinkctr}]" property="wtlinkdescription" propertyType="dynamic" description="Click Link"/>-->
+						
+						<storeElementAttribute xpath="(//a[@class='wt']) [position()=#{wtlinkctr}]" attributeName="href" property="linkhref" propertyType="dynamic" />
+						
+						<!--<clickElement xpath="(//a[@class='wt']) [position()=#{wtlinkctr}]" description="#{linkhref}"/> -->
+						<clickLink href="#{linkhref}" />
+						
+						<ifStep description="If Page Not  Found">
+							<condition>
+								<verifyXPath xpath="//span[contains(text(),'we were unable to find the page you requested.')]" />
+							</condition>
+							<then>
+								<echo message="PAGE NOT FOUND" />
+								<storeProperty property="wterrorctr" value="#{wterrorctr} + 1" eval="true" propertyType="dynamic" description="Increment ctr by 1" />
+								<storeProperty property="wtpagewitherror#{wterrorctr}" value="#{wtlinkctr} - #{linkhref}" description="Store the link with error." />
+							</then>
+							<else>
+								<ifStep description="If PC Mall wordings is found">
+									<condition>
+										<verifyText text="PC Mall" regex="true" description="Look for PC Mall wordings" />
+										<verifyText text="PCMall" regex="true" description="Look for PC Mall wordings" />
+									</condition>
+									<then>
+										<echo message="PC Mall wording found" />
+										<storeProperty property="wterrorctr" value="#{wterrorctr} + 1" eval="true" propertyType="dynamic" description="Increment ctr by 1" />
+										<storeProperty property="wtpagewitherror#{wterrorctr}" value="#{wtlinkctr} - #{linkhref}" description="Store the link with error." />
+									</then>		
+								</ifStep>
+							</else>
+						</ifStep>
+						<invoke url="${basepath}" description="Return to PCMall Homepage"/>
+					</repeat>	
+			</group>
+			
+			<repeat	count="#{wterrorctr}" startCount="1" counterName="wterrctr" description="Side Menu and Footer Page with Errors">
+				<echo message="#{wtpagewitherror#{wterrctr}}" />
+			</repeat>
+			
+		</webtest>
+		
+	</target>
+</project>

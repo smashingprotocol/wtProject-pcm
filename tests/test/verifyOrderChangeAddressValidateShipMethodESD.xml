@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+
+<!-- History Log: -->
+<!-- Updated to be compatible with Unified version -->
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderChangeAddressValidateShipMethodESD">
+
+	<target name="verifyOrderChangeAddressValidateShipMethodESD">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title} - ${state} [manilaqa+${pcmHost}${username}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<group description="Store Property">
+				<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${username}" description="Define username to login" />
+				<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+				<storeProperty name="sku.dynamic" value="${sku}" description="Define Sku to checkout" />
+				<storeProperty name="shippingMethod.dynamic" value="${shippingMethod}" description="Define Shipping method" />
+				<storeProperty name="cctype.dynamic" value="vi" description="Define Credit Card Month" />
+				<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+				<storeProperty name="ccey.dynamic" value="2016" description="Define Credit Card Year" />
+				<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+				<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+				<storeProperty name="cardSecCode.dynamic" value="123" description="Define Credit Card Number" />
+				<storeProperty name="city.dynamic" value="${city}" description="Define the City" />	
+			</group>
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			<clickElement xpath="${unifiedCart.btnCheckout}" description="Click Checkout in Unified Shopping Cart" />
+				&verifyOrderChangeShipAddbyCity;
+				<ifStep description="Verify ESD Tax Fee for state">
+						<condition>
+							<verifyProperty property="freetax" value="true" propertyType="ant" description="Verify property freetax"/>
+						</condition>
+						<then>
+							<verifyXPath xpath="id('taxTotal')" text="$0.00" description="Verify the tax is 0.00 "/>
+						</then>
+						<else>
+							<not>
+								<verifyXPath xpath="id('taxTotal')" text="$0.00" description="Verify the tax is 0.00 "/>
+							</not>	
+						</else>
+				</ifStep>
+			
+			
+			
+	
+		</webtest>
+		
+	</target>
+</project>

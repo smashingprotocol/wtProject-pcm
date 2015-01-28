@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="resourceCenterLogin">
+
+	<target name="resourceCenterLogin">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="RESOURCE CENTER: ${title} [${host}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+			
+			
+			
+			<invoke url="/n/Resource-Center/navLinks-411#activeTab=kbCaseStudy" description="Invoke Resource Center" />
+			<sleep seconds="15"/>
+			<clickLink xpath="//a[contains(@href,'viewArticle')]" description="Click PC Mall eGuide: Networking: Optimizing Efficiencies link" />
+			<clickLink xpath="//a[contains(text(),'Download Full Article')]" description="Click Download Full Article link" />
+			
+			
+			<group description="Check if users successfully logs In">
+				&resourceCenterLogin;
+				<ifStep description="Check if user able to login">
+					<condition>
+						<verifyProperty name="login" value="true" propertyType="ant"/>
+					</condition>
+					<then>
+						<invoke url="${basepath}" description="Return to home"/>
+						<clickLink href="/o/My-Account-Dashboard/msc-4" description="Go to My Account" />
+						<not>
+							<setInputField xpath="id('emailAddress5')" value="#{username.dynamic}" description="Enter Username" />
+						</not>
+					</then>
+					<else>
+						<verifyXPath xpath="//p[@class='wcR']" text="Invalid email address or password." description="Validation message appears" />
+						<setInputField xpath="id('emailAddress5')" value="#{username.dynamic}" description="Enter Username" />
+					</else>
+				</ifStep>				
+			</group>
+		
+		</webtest>
+		
+	</target>
+</project>

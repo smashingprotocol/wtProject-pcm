@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartAddItem">
+
+	<target name="shoppingCartAddItem">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to MacMall Homepage"/>
+			&deleteAllIteminCart;
+			
+			<group description="Navigate in Nav link">
+				<clickLink href="${navLinks}" description="Click the ${description} link" />
+				<sleep seconds="15"/>
+				<clickLink xpath="(//span[@class='itemImg']/a) [position()=1]" description="Click the image of the 1st item."/>
+				<sleep seconds="15"/>
+			</group>
+			
+			<group description="Proceed to Add item in shopping cart">
+				<clickElement xpath="id('btn-addcart')" description="PDP: Click Add to Cart button" />
+				<verifyDocumentURL text="http://${host}/n/Shopping-Cart/macmsc-cart?" regex="true" description="Verify page is Shopping Cart"/>
+				<not>
+					<verifyText text="Your shopping cart is currently empty!" />
+				</not>
+			</group>
+			
+			<ifStep description="If Engraving is available, proceed without engraving.">
+				<condition>
+					<verifyInputField xpath="id('customcode_1')"  value="" description="Verify if Engraving is available." />
+				</condition>
+				<then>
+					<clickElement xpath="id('addIpodWithoutEngraving')" description="Click add to cart without engraving" />
+				</then>
+			</ifStep>
+			
+			<group description="Verify Order Page">
+				<clickElement xpath="//img[@src='/mall/widgetti/images/cart/shoppingCart/btnProcessCheckout.jpg']" description="Click Checkout Now" />
+				
+				<ifStep description="If login in cart, login the user.">
+					<condition>
+						<verifyProperty name="shoppingCartLogin" text="true" propertyType="ant"/>
+					</condition>
+					<then>
+						<setInputField xpath="id('emailAddress')" value="${username}" description="Enter Email Address"/>
+						<setInputField xpath="id('password')" value="${password}" description="Enter Email Address"/>
+						<clickElement xpath="//input[@class='signBtn']" description="Click Sign In Button" />
+					</then>
+				</ifStep>
+				
+				<verifyDocumentURL text="https://${host}/o/Verify-Order/macmsc-macmsc.46" regex="true" description="Verify Order" />
+				
+				<not>
+					<verifyText text="Your shopping cart is currently empty!" />
+				</not>
+			</group>		
+		</webtest>
+		
+	</target>
+</project>

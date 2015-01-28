@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartAddESDSkuviaSaveforLater">
+
+	<target name="shoppingCartAddESDSkuviaSaveforLater">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: Saved for Later ESD item cannot be moved back to cart with shipping item.">
+			
+			&config;
+			
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${${pcmHost}.username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="cartDPNo.dynamic" value="${sku.nonesd}" description="Store the SKU to get Its EDP No" />
+			&myAccountLogin;
+			&clearCart;
+			
+			
+			<group description="Add cart and Save For Later Item with Shipping">
+				<storeProperty name="sku.dynamic" value="${sku.nonesd}" description="Define Sku to checkout" />
+				&addtoCartPDPSearchSKU;
+				
+				<storeProperty name="cartDPNo.dynamic" value="${sku.nonesd}" description="Store the SKU to get Its EDP No" />
+				&getEDPofCartDPNo;
+				<storeProperty name="nonesd.dpno" value="#{cartEDPNo}" description="Store the SKU to get Its EDP No" />
+				
+				<clickLink href="javascript:saveForLater('#{nonesd.dpno}')" description="Click Save For Later for Item with Shipping" />
+				<verifyText text="Your cart is currently empty!" />
+			</group>
+			
+			<group description="Add cart and Save For Later ESD">
+				<storeProperty name="sku.dynamic" value="${sku.esd}" description="Define Sku to checkout" />
+				&addtoCartPDPSearchSKU;
+				
+				<storeProperty name="cartDPNo.dynamic" value="${sku.esd}" description="Store the SKU to get Its EDP No" />
+				&getEDPofCartDPNo;
+				<storeProperty name="esd.dpno" value="#{cartEDPNo}" description="Store the SKU to get Its EDP No" />
+				
+				<clickLink href="javascript:saveForLater('#{esd.dpno}')" description="Click Save For Later for Item with Shipping" />
+				<verifyText text="Your cart is currently empty!" />
+			</group>
+			
+			<group description="Move to Cart first the Shipping item">
+				<setCheckbox name="sflChk" value="#{nonesd.dpno}" description="Select the SKU in the Saved Items"/>
+				<clickElement xpath="${cart.btnmovetocart}" description="Click Move to Cart" />
+				<not description="Cart should not be empty">
+					<verifyText text="Your cart is currently empty!" />
+				</not>
+				
+				<verifyXPath xpath="id('cartStaticQty_#{nonesd.dpno}')" description="Verify the qty box of the item appears in shopping cart"/> 
+			</group>
+			
+			<group description="Move to Cart the ESD">
+				<setCheckbox xpath="//input[@value='#{esd.dpno}' and @name='sflChk']" description="Select the SKU in the Saved Items"/>
+				<clickElement xpath="${cart.btnmovetocart}" description="Click Move to Cart" />
+				<not description="Cart should not be empty">
+					<verifyXPath xpath="id('cartStaticQty_#{esd.dpno}')" description="Verify the qty box of the item appears in shopping cart"/> 
+				</not>
+				<verifyText text="We are unable to process orders which have both software downloads and products that require shipping" />
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

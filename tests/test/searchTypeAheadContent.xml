@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchTypeAheadContent">
+
+	<target name="searchTypeAheadContent">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title} - ${keyword}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />	
+			
+			<group description="Enter a keyword in the Search Field and Go">
+				<setInputField xpath="id('searchTextInput')" value="#{search.keyword}" description="Enter sku in Search field." />
+				<verifyXPath xpath="//div[@class='rst typeahead']" />
+				<sleep seconds="10" />
+				<verifyXPath xpath="//span[@class='txt' and contains(text(),'computers')]" />
+				
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

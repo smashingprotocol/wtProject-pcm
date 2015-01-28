@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartValidationviaQuickAdd">
+
+	<target name="shoppingCartValidationviaQuickAdd">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: Quick Add - ${title}">
+			
+			&config;
+			
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="${${pcmHost}.username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="quickaddsku.dynamic" value="${quickaddsku}" propertyType="dynamic" description="Define Sku in excel file" />
+		
+			<ifStep description="Call For Price validation">
+					<condition>
+						<verifyProperty property="message.id" value="callforprice" propertyType="ant" description="excel dynamic data" />
+					</condition>
+					<then>
+						&quickAddCart;
+						<verifyXPath xpath="//p[text()='Call for Price For SKU #{quickaddsku.dynamic}']" description="Verify the message box appears" />
+					</then>
+			</ifStep>
+			
+			<ifStep description="Invalid Sku validation">
+					<condition>
+						<verifyProperty property="message.id" value="invalidsku" propertyType="ant" description="excel dynamic data" />
+					</condition>
+					<then>
+						&quickAddCart;
+						<verifyXPath xpath="//p[contains(text(),'Please enter a valid SKU')]" description="Verify the message box appears" />
+					</then>
+			</ifStep>
+			
+			<ifStep description="Sold Out Validation">
+					<condition>
+						<verifyProperty property="message.id" value="soldout" propertyType="ant" description="excel dynamic data" />
+					</condition>
+					<then>
+						&quickAddCart;
+						<verifyXPath xpath="${cart.soldoutmsg}" description="Verify the Sold Out message appears under the item" />
+						<verifyXPath xpath="${cart.stopsignimg}" description="Verify the See Qty Limitation icon" />
+					</then>
+			</ifStep>
+			
+			<ifStep description="Item could not be added on cart">
+					<condition>
+						<verifyProperty property="message.id" value="couldnotbeadded" propertyType="ant" description="excel dynamic data" />
+					</condition>
+					<then>
+						&quickAddCart;
+						<verifyXPath xpath="//p[text()='The item could not be added to the cart.']" description="Verify the message box appears" />
+					</then>
+			</ifStep>
+			
+			<ifStep description="Item could not be added on cart">
+					<condition>
+						<verifyProperty property="message.id" value="ipadskuviabd" propertyType="ant" description="excel dynamic data" />
+					</condition>
+					<then>
+						&quickAddCart;
+						<verifyXPath xpath="//p[contains(text(),'Call 1-800-700-1000 to order or buy online via')]" description="Verify the message box appears" />
+					</then>
+			</ifStep>
+			
+			
+			
+		</webtest>
+		
+	</target>
+</project>

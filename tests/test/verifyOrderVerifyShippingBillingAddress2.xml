@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<!-- History Log: -->
+<!-- Excluded when version is Unified -->
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderVerifyShippingBillingAddress2">
+
+	<target name="verifyOrderVerifyShippingBillingAddress2">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: Verify Address 2 in Shipping Address and Billing &amp; Payment.">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${default.checkoutuser}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+			<storeProperty name="address2.dynamic" value="This is Address 2" description="Define Sku to checkout" />			
+			&myAccountLogin;
+			&addtoCartPDPSearchSKU;
+			
+			<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+			<storeProperty name="ccey.dynamic" value="2015" description="Define Credit Card Year" />
+			<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+			<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+			<storeProperty name="cardSecCode.dynamic" value="123" description="Define Credit Card Number" />
+
+			<clickElement xpath="${cart.btnProceedToCheckout}" description="Click Proceed to Checkout" />	
+			<verifyXPath xpath="//span[contains(text(),'#{address2.dynamic}')]" description="Verify the Address 2 is in the Other Shipping Address" />
+			<clickElement xpath="${checkout.btnChangeAdd}" description="Click Change button" />
+			<sleep seconds="3"/>
+			<storeXPath xpath="id('shipOpt')/option[contains(text(),'#{address2.dynamic}')]" property="shipaddress" propertyType="dynamic" description="Store the option in Shipping Address" />
+			<setSelectField xpath="id('shipOpt')" text="#{shipaddress}" description="Change the address" />
+			
+			<clickElement xpath="id('subDefShipBut')" description="Click the Continue button" />
+			<retry maxcount="3">
+				<sleep seconds="3"/>
+				<verifyXPath xpath="//td[@class='listIndent sideBorder c0d3b6c fbold']/span[contains(text(),'#{shipaddress}')]" description="Verify the address is set to default" />
+			</retry>
+			<clickElement xpath="id('subAddbut')" description="Enter Continue" />
+			&proceedtoCheckoutShipMethod;
+			<verifyXPath xpath="id('billOpt')/option[contains(text(),'#{address2.dynamic}')]" description="verify the address in dropdown" />
+			
+		</webtest>
+		
+	</target>
+</project>

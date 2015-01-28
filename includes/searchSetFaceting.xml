@@ -1,0 +1,101 @@
+<group description="Set the Category in Faceting" >
+	<repeat count="3" startCount="1" counterName="ctr" description="Count the category">
+			<ifStep description="Count the Category to filtered">
+				<condition>
+					<not>
+						<verifyProperty name="category#{ctr}" text="" propertyType="ant" />
+					</not>	
+				</condition>
+				<then>
+					<!-- Strip the non numeric characters and store the count of the link -->
+					<!--<storeXPath xpath="id('advancedForm')//a[contains(text(),'${category#{ctr}}')]" property="category.link" propertyType="dynamic" description="Store the Category link including the count" /> -->
+					<storeXPath xpath="//a[contains(@onclick,'${category#{ctr}}') and contains(@onclick,'setStn')]" property="category.link" propertyType="dynamic" description="Store the Category link including the count" />
+					
+					<scriptStep description="Store the match count" language="javascript">
+						var strCatLink = step.getWebtestProperty('category.link');
+						var strCatCount = strCatLink.replaceAll("[A-z,(,),&amp;,]", "");
+						step.setWebtestProperty('catCount',strCatCount);
+					</scriptStep>
+					<storeProperty property="category#{ctr}.count" value="#{catCount}" propertyType="dynamic" description="Store the count of the category" />
+					<!--end get count-->
+					
+					<storeElementAttribute xpath="//div[@class='box']//a[contains(@onclick,'${category#{ctr}}')]" attributeName="title" property="titlecat.dynamic" propertyType="dynamic" description="Store the onclick attribute" />
+					<echo message="#{titlecat.dynamic}"/>
+					
+					<scriptStep description="Replace character to html entities" language="javascript">
+						var strStn = step.getWebtestProperty('titlecat.dynamic');
+						var strStnValue = strStn.replaceAll("[&amp;]", "%26");
+						step.setWebtestProperty('stnValue',strStnValue);
+					</scriptStep>
+					
+					<echo message="#{stnValue}"/>
+					<storeProperty property="searchurl.dynamic" value="#{searchurl.dynamic}&amp;n=msc-search&amp;includeImage=true&amp;numPerPage=25&amp;showFacetStatus=show&amp;resultViewType=list&amp;isAutoExpandDisabled=true&amp;stn=#{stnValue}" propertyType="dynamic" description="Store the Search URL with parameter" />
+					<invoke url="#{searchurl.dynamic}" description="Invoke search url parameter" />
+					
+					<verifyXPath xpath="//div[@class='pth']//span[contains(text(),'${category#{ctr}}')]" description="Verify the sub categories in the Categories Tree" />
+				</then>
+			</ifStep>
+	</repeat>
+</group>
+
+<group description="Set the Brand in Faceting">
+	<ifStep description="If to select a Brand">
+		<condition>
+			<not>
+				<verifyProperty name="brand" text="" propertyType="ant" description="If empty" />
+			</not>
+		</condition>
+		<then>
+			<storeXPath xpath="(//a[contains(@onclick,'setStn')]) [position()=2]" property="category1.link" propertyType="dynamic" description="store the 2nd category" />
+			<storeProperty property="searchurl.dynamic" value="#{searchurl.dynamic}&amp;man=${brand.urlparam}" description="Invoke search url parameter with Brand" />
+			<invoke url="#{searchurl.dynamic}" description="Invoke search url parameter" />
+		</then>
+	</ifStep>
+</group>
+
+
+<group description="Set the Condition in Faceting">
+
+	<ifStep description="If In Stock is checked">
+		<condition>
+			<verifyProperty name="instockItem" text="true" propertyType="ant" />
+		</condition>
+		<then>
+			<setCheckbox xpath="//input[contains(@id,'shipOnlyFilter')]" description="Checked the In Stock item only" />
+			<storeProperty property="searchurl.dynamic" value="#{searchurl.dynamic}&amp;shipOnlyFilter=true" propertyType="dynamic" description="Store the Search URL with parameter with ship only filter" />
+		</then>
+	</ifStep>
+	
+	<ifStep description="If Clearance item is checked">
+		<condition>
+			<verifyProperty name="clearanceItem" text="true" propertyType="ant" />
+		</condition>
+		<then>
+			<setCheckbox xpath="//input[contains(@id,'clearanceCondition')]" description="Checked the Clearance item only" />
+			<storeProperty property="searchurl.dynamic" value="#{searchurl.dynamic}&amp;clearanceCondition=true" propertyType="dynamic" description="Store the Search URL with parameter with Clearance Condition" />
+		</then>
+	</ifStep>
+	
+	<clickElement xpath="${search.btnfilterresult}" description="Click the Filter Result button" />
+	<invoke url="#{searchurl.dynamic}" description="Invoke the search url with parameter as a temp solution for links not filtering in htmlunit" />
+	
+	<ifStep description="Verify the In Stock Condition is selected">
+		<condition>
+			<verifyProperty name="instockItem" text="true" propertyType="ant" />
+		</condition>
+		<then>
+			<verifyXPath xpath="//div[@class='pth']//a[contains(text(),'In Stock')]" description="Verify the sub categories in the Categories Tree" />
+		</then>
+	</ifStep>
+	
+	<ifStep description="Verify the Clearance Condition is selected">
+		<condition>
+			<verifyProperty name="clearanceItem" text="true" propertyType="ant" />
+		</condition>
+		<then>
+			<verifyXPath xpath="//div[@class='keywordbg']//table//td[contains(text(),'Clearance items only')] or //div[@class='pth']//a[contains(text(),'Clearance')]" text="true" description="Verify the sub categories in the Categories Tree" />
+		</then>
+	</ifStep>
+	
+</group>
+

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="checkoutAppleCustomizationCode">
+
+	<target name="checkoutAppleCustomizationCode">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="CHECKOUT: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<group description="Define properties">
+					<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${username}" description="Define username to login" />
+					<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+					<storeProperty name="sku.dynamic" value="${sku.withapplecare}" description="Define Sku to checkout" />
+					<storeProperty name="serviceplansku.dynamic" value="${sku.withcustomcode}" description="Define Sku to checkout" />
+					<storeProperty name="field1.dynamic" value="${firstname}" description="Enter End User First Name" />
+					<storeProperty name="field2.dynamic" value="${lastname}" description="Enter End User Last Name" />
+					<storeProperty name="field3.dynamic" value="${phone}" description="Enter End User Phone" />
+					<storeProperty name="field4.dynamic" value="${email}" description="Enter End User Email" />
+					<storeProperty name="field5.dynamic" value="${serial}" description="Enter End User Serial" />
+					<storeProperty name="field6.dynamic" value="${date}" description="Enter End User Purchase Date" />
+					<storeProperty name="cctype.dynamic" value="vi" description="Define Credit Card Month" />
+					<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+					<storeProperty name="ccey.dynamic" value="2016" description="Define Credit Card Year" />
+					<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+					<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+					<storeProperty name="cardSecCode.dynamic" value="123" description="Define Credit Card Security Code" />
+					<storeProperty name="placeOrder.dynamic" value="false" description="Define If will continue to Place Order" />
+					<storeProperty name="shippingMethod.dynamic" value="${shippingMethod}" description="Define If will continue to Place Order" />
+			</group>
+			
+			&myAccountLogin;
+			&buyCustomizeAppleAddtoCart;
+			&proceedtoCheckoutCustomizationCode;
+			&proceedtoCheckoutShipMethod;
+			&proceedtoCheckoutBillingPayment;
+			&proceedtoCheckoutPlaceOrder;
+			<sleep seconds="30"/>
+			<ifStep description="If Prod, expect the card to be declined">
+				<condition>
+					<verifyProperty name="pcmHost" value="prod" propertyType="ant" />
+				</condition>
+				<then>
+					<verifyXPath xpath="id('billingMessage')" text="The card entered was not approved by your bank. You may use a different credit method, enter a new card or contact your bank." description="Enter Credit Card is not accepted." />
+				</then>
+				<else>
+					<verifyXPath xpath="//div[@class='capOrderConfirm']//p" text="Your order has been submitted successfully." regex="true" description="Verify Order Confirmation Page" />
+				</else>
+			</ifStep>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

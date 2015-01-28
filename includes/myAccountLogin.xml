@@ -1,0 +1,13 @@
+<group description="Enter Account and Password in My Account Page">
+	<clickLink href="/n/Shopping-Cart/msc-257" description="Click Saved Cart in Cart to temporary login in cart" />
+	<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+	<setInputField xpath="id('password')" value="#{password.dynamic}" description="Enter Username" />
+	
+	<clickElement xpath="//input[@id='input-submit']" description="Click the Login in the New Form" />
+	
+	<retry maxCount="3">
+		<sleep seconds="10"/>
+		<verifyXPath xpath="//a[@class='sgn-out']" description="Sign out link" />
+	</retry>
+</group>
+&verifyStoreCookies;

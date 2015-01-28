@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="myAccountLoginafterSessionExpires">
+
+	<target name="myAccountLoginafterSessionExpires">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="LOGIN: ${title} [${session} Minutes]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to MacMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<sleep seconds="${session}"/>
+			&myAccountLogin;
+		
+			
+		<group description="Check if users successfully logs In">
+			<ifStep description="If successful login">
+				<condition>	
+					<verifyProperty name="login" value="true" propertyType="ant"/>
+				</condition>
+				<then>
+					<not description="Login field should not be visible">
+						<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+						<verifyXPath xpath="//p[@class='wcR']" text="Invalid email address or password." description="Validation message appears" />
+					</not>	
+				</then>
+				<else>
+					<verifyXPath xpath="//p[@class='wcR']" text="Invalid email address or password." description="Validation message appears" />
+					<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+				</else>
+			</ifStep>
+			&deleteAllIteminCart;
+		</group>
+		
+		</webtest>
+		
+	</target>
+</project>

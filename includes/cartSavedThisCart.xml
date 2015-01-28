@@ -1,0 +1,25 @@
+<!-- Define the cart name in cartName.dynamic property-->
+<group description="Saved Cart Entry">
+	<clickLink href="msc-258?cartSource=1" description="Click Saved This Carts" />
+	
+	<ifStep description="If Saved Cart already exist, select existing saved car">
+		<condition>
+			<setRadioButton xpath="//input[@value='#{cartName.dynamic}']" description="Select the exisiting Saved Cart" />
+		</condition>
+		<then>
+			<clickElement xpath="${savedcart.btnaddtoexistingcart}" description="Click Save Button" />
+		</then>
+		<else>
+			<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Saved Cart Entry" regex="true" description="Verify breadcrumbs is Saved Cart Entry" />
+			<setInputField xpath="id('txtBasketName')" value="#{cartName.dynamic}" description="Enter Shopping Cart name" />
+			<clickElement xpath="${savedcart.btnsave}" description="Click Save Button" />
+		</else>
+	</ifStep>
+
+	<retry maxCount="6" description="Wait for Saved Cart Detail">
+		<sleep seconds="10"/>
+		<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Saved Cart Detail" regex="true" description="Verify breadcrumbs is Saved Cart Detail" />
+		<verifyText text="#{cartName.dynamic}" description="Verify the Cart Name" />
+	</retry>
+	
+</group>

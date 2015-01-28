@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!-- Updated to Unified Checkout -->
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderExpressRecyclingFee">
+
+	<target name="verifyOrderExpressRecyclingFee">
+		
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${defaultSku.recyclingfee}" description="Default Sku to checkout" />
+			&myAccountLogin;
+			&addtoCartPDPSearchSKU;
+			<group description="Store value in property for expressCheckout">
+				<storeProperty name="defaultShipping.dynamic" value="${defaultShipping}" description="Set Shipping to default" />
+				<storeProperty name="defaultShipMethod.dynamic" value="${defaultShipMethod}" description="Shipping method is default" />
+				<storeProperty name="defaultBilling.dynamic" value="${defaultBilling}" description="Verify if Shipping Method is not set to default" />
+				<storeProperty name="cardSecCode.dynamic" value="123" description="Define Credit Card Number" />
+				<storeProperty name="verifyrecyclingfee.dynamic" value="true" description="Define Credit Card Number" />
+				<storeProperty name="recyclingfee.dynamic" value="${recyclingFee}" description="Define Credit Card Number" />
+				<storeProperty name="placeOrder.dynamic" value="false" description="Define Credit Card Number" />
+			</group>
+			
+			
+			<clickElement xpath="${unifiedCart.btnCheckout}" description="Click Checkout in Unified Shopping Cart" />
+			<verifyXPath xpath="id('stateFee')" description="Verify Recycling fee" />
+			<verifyXPath xpath="${unifiedCheckout.lblRecyclingFee}" description="Verify Recycling fee Label" />
+			
+			
+		
+		</webtest>
+		
+	</target>
+</project>

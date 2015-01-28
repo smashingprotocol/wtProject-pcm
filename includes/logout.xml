@@ -1,0 +1,4 @@
+<group description="Logout User">
+	<clickLink href="?op=mall.web.common.signInLink.signInLink&amp;reqOp=logOut" description="Click Logout." />
+	<verifyXPath xpath="id('signin-btn-21')" description="Sign In link appears" />
+</group>

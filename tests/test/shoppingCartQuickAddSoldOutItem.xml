@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartQuickAddSoldOutItem">
+
+	<target name="shoppingCartQuickAddSoldOutItem">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: Unable to Proceed Checkout Sold Out items in cart">
+			
+			&config;
+			
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<group description="Set properties">
+				<storeProperty name="username.dynamic" value="${${pcmHost}.username}" description="Define username to login" />
+				<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+				<storeProperty name="quickaddsku.dynamic" value="${defaultSku},${defaultsku.soldout}" propertyType="dynamic" description="Define Sku to checkout" />
+			</group>
+			
+			&myAccountLogin;
+			
+			<clickLink href="/n/Shopping-Cart/msc-cart" description="View Cart" />
+			
+			&quickAddCart;
+			
+			<group description="Verify the Sold Out info and Proceed Checkout">
+				<ifStep>
+					<condition>
+						<verifyXPath xpath="//div[@class='txtitemsold2' and contains(text(),'Sold Out - Please call for availability.')]" description="Verify the Sold Out info on the item" />
+					</condition>
+					<then>
+						<verifyXPath xpath="${cart.iconstop}" description="Stop Icon"/>
+					</then>
+					<else>
+						<verifyXPath xpath="id('errorMsgBox')//p[text()='The item could not be added to the cart.']" description="Item is not added in cart" />
+					</else>
+				</ifStep>	
+				<!--
+				<not description="Verify the Checkout buttons are not available">
+					<verifyXPath xpath="//img[@src='/mall/widgetti/images/checkOut/newLook/expressbtn.jpg']" description="Express Checkout"/>
+					<verifyXPath xpath="//img[@src='/mall/widgetti/images/checkOut/newLook/proceedcheckbtn.jpg']" description="Proceed Checkout"/>
+				</not> -->
+				
+			</group>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

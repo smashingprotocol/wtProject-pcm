@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchNewEngravingtoPDPwithQTY">
+
+	<target name="searchNewEngravingtoPDPwithQTY">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />
+			<storeProperty name="searchaddqty.dynamic" value="${qty}" description="Define vto dialog box action" />
+			&searchKeyword;
+			
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+			</not>
+			
+			<storeElementAttribute xpath="${searchnew.addtocart}" attributeName="id" property="searchAddBtnID" propertyType="dynamic" description="Store the qty box DPNo" />
+			
+			&searchGetSKUinAddBtn;
+			
+			<setInputField xpath="id('addCartQty#{searchGetSKUinAddBtn.value}')" value="#{searchaddqty.dynamic}" description="Enter qty for the sku" />
+			<clickElement xpath="${searchnew.addtocart}" description="Click Add to cart button on the first list of search result" />
+			
+			<clickElement xpath="${searchcto.configureitembtn}" description="Click Configure Item button on the Ipod dialog" />
+			<verifyDocumentURL text="http://${host}/n/productConfigurator-ipod-touch?configuratorBaseSkuQty=#{searchaddqty.dynamic}##{searchGetSKUinAddBtn.value},#{searchGetSKUinAddBtn.value}" description="URL for Product Configurator" />
+			
+		</webtest>
+		
+	</target>
+</project>

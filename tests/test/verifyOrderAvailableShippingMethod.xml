@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderAvailableShippingMethod">
+
+	<target name="verifyOrderAvailableShippingMethod">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title} [ZipCode: ${zipCode}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${default.checkoutuser}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${sku}" description="Define Dynamic Sku" />
+			<storeProperty name="zipcode.dynamic" value="${zipCode}" description="Define Dynamic zipcode" />
+			<storeProperty property="qty.dynamic" value="${qty}" description="Store the quantity." />
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			&unifiedProceedtoCheckout;
+			
+			&verifyOrderChangeShipAddbyZipCode;
+			
+			<repeat count="${shipmethod.ctr}" counterName="ctr.shipmethod" startCount="1" description="Get All the Shipping method in Pcmall properties">
+				<ifStep description="Check if shipping method is not available in the dropdown [FALSE]">
+					<condition>
+						<verifyProperty property="isshipmethod.#{ctr.shipmethod}" propertyType="ant" value="false" description="Verify if the Shipping Method is false in the excel dynamic value" />
+					</condition>
+					<then>
+						<not description="Verify ${shipmethod.#{ctr.shipmethod}} is not available" >
+							<verifyXPath xpath="//label[contains(@for,'shippingMethod')]/span[contains(text(),'${shipmethod.#{ctr.shipmethod}}')]" description="Verify if ${shipmethod.#{ctr.shipmethod}}"/>
+						</not>	
+					</then>
+				</ifStep>
+				
+				<ifStep description="Check if shipping method is available in the dropdown [TRUE]">
+					<condition>
+						<verifyProperty property="isshipmethod.#{ctr.shipmethod}" propertyType="ant" value="true" description="Verify if the Shipping Method is false in the excel dynamic value" />
+					</condition>
+					<then>
+						<verifyXPath xpath="//label[contains(@for,'shippingMethod')]/span[contains(text(),'${shipmethod.#{ctr.shipmethod}}')]" description="Verify if ${shipmethod.#{ctr.shipmethod}}"/>
+					</then>
+				</ifStep>
+			
+			</repeat>
+				
+			
+			
+		</webtest>
+		
+	</target>
+</project>

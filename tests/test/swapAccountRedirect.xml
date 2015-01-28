@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="swapAccountRedirect">
+
+	<target name="swapAccountRedirect">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="LOGIN: ${title} [${pcmHost}${username}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			<storeProperty name="username.dynamic" value="${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="siteLogin.dynamic" value="${siteLogin}" description="Define siteLogin" />
+			
+			<clickLink href="/o/My-Account-Dashboard/msc-4" description="Click My Account" />
+			<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+			<setInputField xpath="id('password')" value="#{password.dynamic}" description="Enter Username" />
+
+			&invokePostNewLogin;
+			
+			<verifyDocumentURL text="https://${host}/o/My-Account-Dashboard/msc-4" regex="true" description="Verify the url is the redirect URL value" />
+			
+			<ifStep description="Select a BD Account to Switch">
+				<condition>
+					<verifyProperty name="siteLogin.dynamic" value="bd" propertyType="dynamic"/>
+				</condition>
+				<then>
+					<storeElementAttribute xpath="(//a[@data-storeid='S128']) [position()=1]" attributeName="data-userloginid" property="userLoginId.dynamic" description="Store Login ID" />
+					<storeProperty property="userStoreId.dynamic" value="S128" description="Store ID" />
+					&invokePostSwapAccount;
+					<retry maxCount="4">
+						<sleep seconds="15"/>
+						<verifyDocumentURL text="https://${bdHost}/n/bd-147?" regex="true" description="Site is BD PCM"/>
+					</retry>
+					
+					<not description="BD Login form should not appear">
+						<verifyXPath xpath="id('bdLoginForm')" description="BD Login Form" />
+					</not>
+					
+				</then>
+			</ifStep>
+			
+			
+			
+		</webtest>
+		
+	</target>
+</project>

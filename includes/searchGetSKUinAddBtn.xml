@@ -1,0 +1,10 @@
+<!-- Need to pass the SKU to the searchAddBtnID.dynamic property, and page should be in shopping cart -->
+<group description="Function to Get sku in search - add to cart button id">
+	<verifyProperty property="searchAddBtnID" propertyType="dynamic" description="Verify searchAddBtnID property is defined" />
+	<scriptStep description="Store the match count" language="javascript">
+		var strsearchAddBtnID = step.getWebtestProperty('searchAddBtnID');
+		var strsearchAddBtnID = strsearchAddBtnID.replaceAll("[A-Za-z,(,),_]", "");
+		step.setWebtestProperty('searchGetSKUinAddBtn.value',strsearchAddBtnID);
+	</scriptStep>
+	<echo message="#{searchGetSKUinAddBtn.value}"/>
+</group>

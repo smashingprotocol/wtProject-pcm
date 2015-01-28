@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="homepageLastClickedTab">
+
+	<target name="homepageLastClickedTab">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="HOMEPAGE: [${store}] ${host} Last Clicked Tab [${hostip}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+		
+			<not description="Page not found is not display">
+				<verifyXPath xpath="//span[contains(text(),'we were unable to find the page you requested.')]" />
+			</not>
+			
+			<setInputField xpath="id('search-menu-9')//input" value="computer" description="Searchbox is shown"/>
+			<group description="Default Display">
+				<verifyXPath xpath="//p[@class='greetings-txt hide' and text()='WELCOME TO PCM!']" description="Default Header Display" />
+				<verifyXPath xpath="//a[@class='ga actv' and @navpoint-id='msc-home']" description="Default selected menu is PCM Home"/>
+			</group>
+			
+			<group description="STARTUPS / ENTREPRENEURS">
+				<enableJavaScript enable="false" />
+				<invoke url="/startups" description="Click STARTUPS / ENTREPRENEURS in the Menu" />
+				<enableJavaScript enable="true" />
+				<clickLink href="/n/Shopping-Cart/msc-cart" description="Click Cart link" />
+				<sleep seconds="15"/>
+				<verifyXPath xpath="//p[@class='greetings-txt hide' and text()='STARTUPS / ENTREPRENEURS']" description="Header Display is STARTUPS / ENTREPRENEURS" />
+				<verifyXPath xpath="//a[@class='ga actv' and @navpoint-id='msc-425']" description="Default selected menu is STARTUPS / ENTREPRENEURS" />
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

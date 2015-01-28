@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderMIRPriceVerification">
+
+	<target name="verifyOrderMIRPriceVerification">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<group description="Define properties">
+				<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${default.checkoutuser}" description="Define username to login" />
+				<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+				<storeProperty name="sku.dynamic" value="${sku}" description="Define dynamic Sku to checkout" />
+				<storeProperty name="addserviceplan.dynamic" value="${addServicePlan}" description="Define if to add a Serviceplan" />
+				
+				<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+				<storeProperty name="ccey.dynamic" value="2016" description="Define Credit Card Year" />
+				<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+				<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+				<storeProperty name="cardSecCode.dynamic" value="123" description="Define Security Code" />
+				<storeProperty name="placeOrder.dynamic" value="false" description="Define if to continue place order" />
+				<storeProperty name="rebateid.dynamic" value="${rebateid}" propertyType="dynamic"  description="Define Data Driven Rebate ID" />
+			</group>
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			<verifyXPath xpath="//div[@class='itemPrice']//p[@class='itemTotalPrice']" description="Verify first if the XPath of Final Price exist" />
+			
+			<ifStep description="Verify MAIL IN REBATES">
+				<condition>
+					<verifyProperty property="rebateid.dynamic" value="instantmailin" propertyType="dynamic" description="Verify Instant and Mail in Rebate" />
+				</condition>
+				<then>
+					<not description="PDP Final Price is not negative">
+						<verifyXPath xpath="//div[@class='itemPrice']//p[@class='itemTotalPrice' and contains(text(),'-')]" description="Verify the Unit Price is not Negative" />
+					</not>
+					<verifyXPath xpath="//div[@class='itemPrice']//p[@class='itemTotalPrice' and text()!='$0.00']" description="Verify the Unit Price is not 0.00" />
+					<verifyXPath xpath="//div[@class='itemPrice']//p[@class='itemTotalPrice' and text()!='#{pdp.finalprice}']" description="Verify the Unit Price in PDP is the prince in the cart" />
+				</then>
+			</ifStep>
+			
+			<ifStep description="Verify INSTANT REBATES">
+				<condition>
+					<verifyProperty property="rebateid.dynamic" value="instantrebates" propertyType="dynamic" description="Verify Instant and Mail in Rebate" />
+				</condition>
+				<then>
+					<not>
+						<verifyXPath xpath="//div[@class='itemPrice']//p[@class='itemTotalPrice' and contains(text(),'-')]" description="Verify the Unit Price is not negative" />
+					</not>
+					<verifyXPath xpath="//div[@class='itemPrice']//p[@class='itemTotalPrice' and text()!='$0.00']" description="Verify the Unit Price is not 0.00" />	
+					<verifyXPath xpath="//div[@class='itemPrice']//p[@class='itemTotalPrice' and text()='#{pdp.finalprice}']" description="Verify the Unit Price in PDP can be found in the cart" />
+				</then>
+			</ifStep>
+			
+			&unifiedProceedtoCheckout;
+			
+			<ifStep description="Verify MAIL IN REBATES">
+				<condition>
+					<verifyProperty property="rebateid.dynamic" value="instantmailin" propertyType="dynamic" description="Verify Instant and Mail in Rebate" />
+				</condition>
+				<then>
+					<verifyXPath xpath="//p[@id='subTotal' and text()!='#{pdp.finalprice}']" description="Verify the Sub Total in the Order Review is NOT same with the Cart" />
+					<verifyXPath xpath="//p[@id='total' and text()!='$0.00']" description="Verify the Grand Total is not 0" />
+					<not description="Verify Order: Sub Total is not negative">
+						<verifyXPath xpath="//p[@id='subTotal' and contains(text(),'-')]" description="Verify the Sub Total is not negative" />						
+					</not>
+				</then>
+			</ifStep>
+			
+			<ifStep description="Verify INSTANT REBATES">
+				<condition>
+					<verifyProperty property="rebateid.dynamic" value="instantrebates" propertyType="dynamic" description="Verify Instant and Mail in Rebate" />
+				</condition>
+				<then>
+					<verifyXPath xpath="//p[@id='subTotal' and text()='#{pdp.finalprice}']" description="Verify the Sub Total in the Order Review is same with the Cart" />
+					<verifyXPath xpath="//p[@id='total' and text()!='$0.00']" description="Verify the Grand Total is not 0" />
+					<not description="Verify Order: Sub Total is not negative">
+						<verifyXPath xpath="//p[@id='subTotal' and contains(text(),'-')]" description="Verify the Sub Total is not negative" />		
+					</not>
+				</then>
+			</ifStep>
+			
+		</webtest>
+		
+	</target>
+</project>

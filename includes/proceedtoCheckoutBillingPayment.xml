@@ -1,0 +1,61 @@
+<group description="Proceed to Checkout: 3. Billing and Payment">
+	<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Billing And Payment" regex="true" description="Verify breadcrumbs is Billing And Payment page" />
+	
+	<ifStep description="If to Verify the selected a Billing Address by optionIndex">
+		<condition>
+			<verifyProperty name="verifyBilling.dynamic" value="true" description="Verify the selected Biling Address" />
+		</condition>
+		<then>
+			<verifySelectField xpath="id('billOpt')" text="#{billText.dynamic}" description="Select a Billing Address by option index count" /> 
+		</then>
+	</ifStep>
+	
+	<ifStep description="If to Select a Billing Address by optionIndex">
+		<condition>
+			<verifyProperty name="selectBilling.dynamic" value="true" description="Verify if to select a Biling Address" />
+		</condition>
+		<then>
+			<storeXPath xpath="id('billOpt')/option[#{billingOptionIndex.dynamic}]" property="billText" propertyType="dynamic" />
+			<setSelectField xpath="id('billOpt')" text="#{billText}" description="Select a Billing Address by option index count" /> 
+		</then>
+	</ifStep>
+	
+	<ifStep description="Select a Saved Payment Method if available">
+		<condition>
+				<verifySelectField xpath="id('_defaultPayment')" text="Select your payment method" description="No Payment Method selected"/>
+		</condition>
+		<then>
+			<setRadioButton xpath="id('ccm')" description="Select Credit Card radiobutton" />
+			<sleep seconds="10"/>
+			
+			<ifStep description="If to select a credit card type, else default is VISA">
+				<condition>
+					<setRadioButton xpath="${cctype#{cctype.dynamic}.radiobtn}" description="Select #{cctype.dynamic} radiobutton" />
+				</condition>
+				<else>
+					<setRadioButton xpath="${cctypevi.radiobtn}" description="Select VISA radiobutton" />
+				</else>
+			</ifStep>
+
+			<setSelectField xpath="id('ccem')" text="#{ccem.dynamic}" description="Set the Month expiration date" />
+			<setSelectField xpath="id('ccey')" text="#{ccey.dynamic}" description="Set the Year expiration date" />
+			<setInputField xpath="id('cardName')" value="#{cardName.dynamic}" description="Set the Card Name" />
+			<setInputField xpath="id('cardNumber')" value="#{cardNumber.dynamic}" description="Set the Card Number" />
+			<setInputField xpath="id('cardSecCode')" value="#{cardSecCode.dynamic}" description="Set the Card security Code" />
+		</then>
+		<else>
+			<setRadioButton xpath="id('dpm')" description="Select Credit Card radiobutton" />
+		</else>
+	</ifStep>
+
+	<clickElement xpath="id('conCheckBut')" description="Enter Continue" />
+	<retry maxCount="6">
+		<sleep seconds="10"/>
+		<not description="Page should not be Billing and Payment anymore">	
+			<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Billing And Payment" regex="true" description="Verify breadcrumbs is Billing And Payment page" />
+		</not>
+	</retry>	
+</group>
+
+
+

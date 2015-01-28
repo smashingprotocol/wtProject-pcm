@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartAddESDSkuviaSearch">
+
+	<target name="shoppingCartAddESDSkuviaSearch">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: Unable to add ESD via Search with Shipping item on cart.">
+			
+			&config;
+			
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${${pcmHost}.username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${sku.nonesd}" propertyType="dynamic" description="Define Sku to checkout" />
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			<group description="Filter Search Direct Download Condition and add to cart the 1st item">
+				<storeProperty name="search.keyword" value="${keyword}" propertyType="dynamic" description="Define Search keyword" />
+				&searchKeyword;
+				<setCheckbox xpath="id('directDownloadFilter_advanced')" description="Check Direct Download Products Only" />
+				<clickElement xpath="${search.btnfilterresult}" description="Click Filter Results button" />
+				<clickElement xpath="${search.addtocartbtn}" description="Click Add to cart in Search" />
+				
+				<verifyText text="We are unable to process orders which have both software downloads and products that require shipping" />
+				<not description="ESD SKU should not be added in cart">
+					<verifyXPath xpath="//a[contains(text(),'Direct Download')]" description="Direct Download icon" />
+				</not>	
+			</group>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

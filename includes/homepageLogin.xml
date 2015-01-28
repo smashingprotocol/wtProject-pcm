@@ -1,0 +1,4 @@
+<group description="Open the Sign In Page via header and login">
+	<invoke url="/o/Sign-In/msc-login" description="Click Sign In in header" />
+	&invokePostNewLogin;
+</group>

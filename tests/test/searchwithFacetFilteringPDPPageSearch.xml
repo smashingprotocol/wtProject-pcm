@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchwithFacetFilteringPDPPageSearch">
+
+	<target name="searchwithFacetFilteringPDPPageSearch">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />
+			<storeProperty name="brand.dynamic" value="${brand}" description="Define Brand to search" />
+			&searchKeyword;
+			&searchSetFaceting;
+			
+			<group description="Step 2: Select 1st item in Search result to open PDP" >
+				<ifStep description="If result is only, PDP will open">
+					<condition>
+						<!-- <clickElement xpath="(id('searchResultList')//table//td[@class='sr-item_img rscontent']//span[@class='sr-item_image']//img) [position()=1]" description="Click the 1st image" /> Legacy -->
+						<clickElement xpath="(//img[@class='imgrcview' or contains(@onerror,'this.src')]) [position()=1]" description="Click the 1st image" />
+						
+					</condition>
+					<then>
+						<storeProperty name="search.keyword" value="ipod" description="Define keyword to search" />
+						&searchKeyword;
+						<verifyXPath xpath="(//img[@class='imgrcview' or contains(@onerror,'this.src')]) [position()=1]" description="verify the 1st image in search result." />
+					</then>
+					<else description="If page is not in search result, still perform search">
+						<storeProperty name="search.keyword" value="ipod" description="Define keyword to search" />
+						&searchKeyword;
+						<verifyXPath xpath="(//img[@class='imgrcview' or contains(@onerror,'this.src')]) [position()=1]" description="verify the 1st image in search result." />
+					</else>
+				</ifStep>			
+			</group>
+		
+		</webtest>
+		
+	</target>
+</project>

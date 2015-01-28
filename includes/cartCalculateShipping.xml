@@ -1,0 +1,47 @@
+<setInputField xpath="//input[@id='zipCode']" value="#{zipcode.dynamic}" description="Enter the Zip Code" />
+
+&getEDPofCartDPNo;
+
+
+addNewShippingBillingLink	
+authLink	
+cartAssocDpno_2532060	0
+cartCustomCodeValue_25320...	
+cartDescription_2532060	Showcase for 3rd Gen iPods
+cartDpno_2532060	454909
+cartManufacturer_2532060	Contour Design
+cartPrice_2532060	0.5000
+cartQty_2532060	1
+cartSku	Enter PCM Part #
+cartStaticQty_2532060	1
+cartWeight_2532060	0.1800
+checkOutLoginLink	
+configurationEDP	6735279
+couponCode	
+custCodeValue	
+customCodeLink	msc-113
+deliveryMtd	
+discountSourceCode	
+emailAddress	
+engravingURL	msc-80
+expressCheckout	
+op	mall.web.zones.shoppingCartMain.processCart
+opType	shipping
+password	
+paymentLink	
+receiptLink	
+savedViewStateID	0
+shippingMethod	
+soldOut_2532060	0
+zipCode 
+
+
+<storeXPath xpath="count(//form[@id='shoppingCart']//input[@type='hidden'])" property="inputCtr" description="Store the number of hidden parameters under the form used for processcart" />
+
+<repeat count="#{inputCtr}" startCount="1" counterName="ctr">
+</repeat>
+
+
+<invoke url="/n/Shopping-Cart/msc-cart" content="cartSku=Enter+PCM+Part+%23&amp;op=mall.web.zones.shoppingCartMain.processCart&amp;opType=shipping&amp;engravingURL=msc-80&amp;customCodeLink=msc-113&amp;checkOutLoginLink=&amp;receiptLink=&amp;paymentLink=&amp;authLink=&amp;addNewShippingBillingLink=&amp;discountSourceCode=&amp;configurationEDP=8696770&amp;savedViewStateID=0&amp;custCodeValue=&amp;expressCheckout=&amp;deliveryMtd=&amp;cartWeight_#{cartEDPNo}=0.1800&amp;cartDescription_#{cartEDPNo}=Showcase+for+3rd+Gen+iPods&amp;cartPrice_#{cartEDPNo}=0.5000&amp;cartQty_#{cartEDPNo}=1&amp;cartDpno_#{cartEDPNo}=454909&amp;cartAssocDpno_#{cartEDPNo}=0&amp;cartCustomCodeValue_#{cartEDPNo}=&amp;cartManufacturer_#{cartEDPNo}=Contour+Design&amp;cartStaticQty_#{cartEDPNo}=1&amp;soldOut_#{cartEDPNo}=0&amp;couponCode=&amp;zipCode=90245&amp;emailAddress=&amp;password=" method="POST" />
+ 
+<sleep seconds="15"/>

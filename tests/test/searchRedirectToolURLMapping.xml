@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchRedirectToolURLMapping">
+
+	<target name="searchRedirectToolURLMapping">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title} [${keyword}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />
+			&searchKeyword;
+		
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+			</not>
+		
+			<verifyDocumentURL text="${navPointURL}" regex="true" description="Verify the basepath is correct" />
+			<verifyDocumentURL text="${host}" regex="true" description="Verify the host" />
+	
+		
+	
+		</webtest>
+		
+	</target>
+</project>

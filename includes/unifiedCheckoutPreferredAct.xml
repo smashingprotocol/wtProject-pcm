@@ -1,0 +1,38 @@
+<group description="Proceed to Checkout">
+	<clickElement xpath="${unifiedCart.btnCheckout}" description="Click Checkout in Unified Shopping Cart" />
+	<verifyDocumentURL text="https://${host}/o/unifiedWidget-1?opOrigin=processCheckOut" description="Verify Unified Checkout Page" />
+</group>
+
+<clickElement xpath="id('existingUserWithoutPayment_mmpaPaymentTypeBtn')" description="Click Preferred Account" />
+<!--
+<group description="Select Preferred Account: Hardcoded values">
+	<clickElement xpath="id('existingUserWithoutPayment_mmpaPaymentTypeBtn')" description="Click Preferred Account" />
+	<setInputField xpath="id('preferredSSNumber1')" value="123" description="Enter Preferred" />
+	<setInputField xpath="id('preferredSSNumber2')" value="45" description="Enter Preferred" />
+	<setInputField xpath="id('preferredSSNumber3')" value="6789" description="Enter Preferred" />
+	<setSelectField name="preferredDateOfBirthMonth" value="4" description="Select Birth Month" />
+	<setSelectField name="preferredDateOfBirthDay" value="25" description="Select Birth Day" />
+	<setSelectField name="preferredDateOfBirthYear" value="1962" description="Select Birth Year" />
+	<setInputField xpath="id('workPhoneNo')" value="3315545100" description="Enter Preferred" />
+	<setRadioButton xpath="id('mmpaResidenceStatus_1')" description="residence status" />
+	<setInputField xpath="id('annualIncome')" value="100000" description="Enter Preferred" />
+	<setCheckbox xpath="id('mmpaTermsConditions')" description="Accept PA Condition" />
+	<clickElement xpath="//input[@class='iAgreeContinueOrder']" description="Click I Agree and Continue Order button" />
+</group>
+-->
+	<setSelectField name="preferredExpMonth" value="12" description="Select Birth Month" />
+	<setSelectField name="preferredExpYear" value="2016" description="Select Birth Year" />
+
+
+<ifStep description="If continue to Place Order">
+	<condition>
+		<verifyProperty name="placeOrder.dynamic" value="true" description="Proceed to Place Order"/>
+	</condition>
+	<then>
+		<setCheckbox xpath="id('mmTermsConditions')" description="Click checkbox Terms and Sale" />
+		<clickElement xpath="id('orderFormSubmit')" description="Enter Place Your Order" />
+		<sleep seconds="30"/>
+	</then>
+</ifStep>
+
+	

@@ -1,0 +1,96 @@
+<group description="Open PDP by SKU Search">
+		<storeProperty property="search.keyword" value="#{sku.dynamic}" propertyType="dynamic" description="Enter sku in Search field." />
+		&searchKeyword;
+		
+		<ifStep description="If the search shows multiple results, look for the one with sku as search keyword">
+			<condition>
+				<verifyXPath xpath="//input[contains(@onclick,'return addToShoppingCart(#{search.keyword})')]" description="Verify the Add to Cart button of the sku in Search result." /> 
+			</condition>
+			<then>
+				<clickElement xpath="//a[contains(@href,'#{search.keyword}')]" description="Click Image or description to go to PDP." /> 
+			</then>
+		</ifStep>
+		
+		<ifStep description="If the sku appears in the search result">
+			<condition>
+				<verifyXPath xpath="//input[contains(@onclick,'return addToShoppingCart(#{search.keyword})')]" description="Verify the Add to Cart button of the sku in Search result." /> 
+			</condition>
+			<then>
+				<clickElement xpath="//a[contains(@href,'#{search.keyword}')]" description="Click Image or description to go to PDP." /> 
+			</then>
+		</ifStep>
+</group>
+
+<group description="PDP: Add to Cart">
+		<verifyXPath xpath="//b[contains(text(),'#{sku.dynamic}')]" description="Verify the Sku number in PDP Breadcrumbs" />	
+		
+		<ifStep description="Change qty if define">
+			<condition>
+					<verifyProperty property="qty.dynamic" propertyType="dynamic" description="Verify if qty is define" />	
+			</condition>
+			<then>
+				<setInputField name="selectedDPNoQuantity" value="#{qty.dynamic}" description="Enter QTY" />
+			</then>
+		</ifStep>
+		
+		<ifStep description="If Service Plan dropdown available, add a Service Plan">
+			<condition>
+				<setSelectField xpath="id('warrantySku')" optionIndex="1" description="Add the 1st Service Plan in dropdown list" />
+			</condition>
+			<then>
+				<storeElementAttribute xpath="id('warrantySku')/option[2]" attributeName="value" property="servicePlanDPNo" propertyType="dynamic" description="Store the value of optionIndex 1 of Service Plan dropdown" />
+			</then>
+		</ifStep>
+		
+		<storeXPath xpath="//p[@itemprop='price']" property="pdp.finalprice" propertyType="dynamic" description="Store the Final Price of PDP" />
+		
+		<!--
+		<ifStep description="Store Final Price if has rebates, else store price">
+			<condition>
+					<verifyXPath xpath="//td[@class='infoPrice infoBorderContent wt15']" description="Verify the Final Price in PDP" />
+			</condition>
+			<then>
+				<storeXPath xpath="//td[@class='infoPrice infoBorderContent wt15']/text()" property="pdp.finalPrice" description="Store the Final Price in PDP" />
+			</then>
+			<else>
+				<storeXPath xpath="//td[@class='infoContent infoPrice wt15']/text()" property="pdp.finalPrice" description="Store the Item Price in PDP" />
+			</else>
+		</ifStep>
+		-->
+		
+		<!--<clickElement xpath="//img[@src='/mall/widgetti/images/pdp/pdpProductInfo/addtocartbtn.jpg']" description="PDP: Click Add to Cart button" /> -->
+		<ifStep description="If Buy Customize button - skip the mac config page">
+			<condition>
+				<clickElement xpath="${pdp.btnaddtocart}" description="PDP: Click Add to Cart button" />
+			</condition>
+			<else>
+				<clickElement xpath="${pdp.btnbuycustomize}" description="PDP: Click Buy-Customize button" />
+				<clickLink xpath="//a[contains(@href,'addToCart')]" description="Click Add to Cart" />
+				<clickLink xpath="//a[contains(@href,'submitServicePlansSelection')]" description="Click Next in Service Plan selection" />
+				<clickLink href="/n/Shopping-Cart/msc-cart" description="Click Proceed to Cart" />
+			</else>
+		</ifStep>
+		
+		<retry maxCount="3" description="Retry to wait if the page is still in PDP">
+			<sleep seconds="10" />
+			<not>
+				<verifyXPath xpath="${pdp.btnaddtocart}" description="Add to Cart button" />
+			</not>
+		</retry>
+		
+		<ifStep description="If page is msc-194">
+			<condition>
+				<verifyDocumentURL text="http://${host}/n/Shopping-Cart/msc-194" regex="true" description="Verify page is Shopping Cart"/>
+			</condition>
+			<then>
+				<clickLink href="/n/Shopping-Cart/msc-cart"  description="Click Proceed to Cart"/>
+				<sleep seconds="10" />
+			</then>
+		</ifStep>
+				
+		<not>
+			<verifyText text="Your shopping cart is currently empty!" />
+		</not>
+			
+</group>
+&verifyStoreCookies;

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="checkoutVerifyDefaultBillAddress">
+
+	<target name="checkoutVerifyDefaultBillAddress">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="CHECKOUT: Billing Address set as default is automatically selected Step 3: Billing and Payment.">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${default.checkoutuser}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${sku.withServicePlan}" description="Define Sku to checkout" />
+			
+			&myAccountLogin;
+			&addtoCartPDPSearchSKU;
+			
+			<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+			<storeProperty name="ccey.dynamic" value="2014" description="Define Credit Card Year" />
+			<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+			<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+			<storeProperty name="cardSecCode.dynamic" value="123" description="Define Credit Card Number" />
+			<storeProperty name="placeOrder.dynamic" value="true" description="Define if continue to place order" />
+			
+			<group description="Set the default billing address in Checkout: Billing and Payment">
+				<storeProperty name="selectBilling.dynamic" value="true" description="Define if to Select a Billing Address" />
+				<storeRandom description="Select Random index number" property="billingOptionIndex.dynamic" propertyType="dynamic" choice="1,2,3,4,5,6"/>	
+				&proceedtoCheckout;
+			</group>
+			
+			<group description="Verify the default Billing Address is selected in Billing and Payment" >
+				<storeProperty name="placeOrder.dynamic" value="false" description="Define if continue to place order" />
+				<storeProperty name="verifyBilling.dynamic" value="true" description="Define if to Verify the selected Billing Address" />
+				<storeProperty name="selectBilling.dynamic" value="false" description="Define IF to Select a Billing Address" />
+				<storeProperty name="billText.dynamic" value="#{billText}" description="Define text value selected in Billing Address" />
+				&addtoCartPDPSearchSKU;
+				&proceedtoCheckout;
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

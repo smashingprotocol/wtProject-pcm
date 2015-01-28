@@ -1,0 +1,74 @@
+<group description="Open the Sign In Page via header and login">
+	
+	<storeProperty property="tempusername" value="#{username.dynamic}" description="Store the username" />
+	
+	<storeElementAttribute xpath="//form[@id='loginForm']" property="loginURL" attributeName="action" description="Store the POST URL" />
+	<storeElementAttribute xpath="//input[@name='op']" property="op" attributeName="value" description="Store the Redirect OP value" />
+	<storeElementAttribute xpath="//input[@name='currentWidgetId']" property="currentWidgetId" attributeName="value" description="Store the Redirect OP value" />
+	<storeElementAttribute xpath="//input[@name='redirectUrl']" property="tempredirectUrl" attributeName="value" description="Store the Redirect URL value" />
+	<storeElementAttribute xpath="//input[@name='specificURL']" property="specificURL" attributeName="value" description="Store the Redirect specificURL value" />
+	<storeElementAttribute xpath="//input[@name='siteSelectorUrl']" property="siteSelectorUrl" attributeName="value" description="Store the Redirect siteSelectorUrl value" />
+	<storeElementAttribute xpath="//input[@name='siteSelectorPageSwitch']" property="siteSelectorPageSwitch" attributeName="value" description="Store the Redirect siteSelectorPageSwitch value" />
+	
+	<scriptStep description="Convert the characters to encodeURI to use in parameter" language="javascript">
+		var strUserName = step.getWebtestProperty('tempusername');
+		var strUserName = encodeURIComponent(strUserName);
+		step.setWebtestProperty('username.dynamic',strUserName);
+		
+		var strRedirectURL = step.getWebtestProperty('tempredirectUrl');
+		var strRedirectURL = decodeURIComponent(strRedirectURL);
+		step.setWebtestProperty('redirecturl.dynamic',strRedirectURL);
+	</scriptStep>
+	
+	<echo message="#{username.dynamic}"/>
+	<echo message="#{redirecturl.dynamic}"/>
+	<enableJavaScript enable="false" />
+	<invoke url="#{loginURL}" content="op=#{op}&amp;currentWidgetId=#{currentWidgetId}&amp;redirectUrl=#{tempredirectUrl}&amp;specificURL=&amp;siteSelectorUrl=#{siteSelectorUrl}&amp;siteSelectorPageSwitch=#{siteSelectorPageSwitch}&amp;emailAddress=#{username.dynamic}&amp;password=#{password.dynamic}&amp;rememberMe=on" method="POST" />
+	<enableJavaScript enable="true" />
+</group>
+
+<ifStep description="If Site Selector Form is TRUE">
+	<condition>	
+		<verifyProperty name="isSiteSelector.dynamic" value="true" propertyType="dynamic"/>
+	</condition>
+	<then>
+		<not description="Login field should not be visible">
+			<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+		</not>
+		<verifyXPath xpath="id('pcmSelect')" description="Verify the PCM site select" />
+		<verifyXPath xpath="id('bdSelect')" description="Verify the BD site select" />
+		
+		<storeElementAttribute xpath="//form[@id='siteSelectorForm']" property="siteSelectorURL" attributeName="action" description="Store the POST URL" />
+		
+		<storeElementAttribute xpath="//input[@name='op']" property="op" attributeName="value" description="Store the Redirect op value in site selector." />
+		<storeElementAttribute xpath="//input[@name='token']" property="token" attributeName="value" description="Store the Redirect token value" />
+		<storeElementAttribute xpath="//input[@name='preLoginUserToken']" property="preLoginUserToken" attributeName="value" description="Store the Redirect preLoginUserToken value" />
+		
+		
+		<ifStep description="Select a Site to login">
+			<condition>
+				<verifyProperty name="siteLogin.dynamic" value="bd" propertyType="dynamic"/>
+			</condition>
+			<then description="Select BD">
+				<clickLink xpath="//div[@id='select-account']//a[@id='bdSelect']" description="Click the BD site" />
+				<storeElementAttribute xpath="//input[@name='userStoreId']" property="userStoreId" attributeName="value" description="Store the Redirect userStoreId value" />
+				
+				<enableJavaScript enable="false" />
+				<invoke url="#{siteSelectorURL}" content="userLoginId=#{username.dynamic}&amp;userStoreId=S128&amp;op=#{op}&amp;token=#{token}&amp;preLoginUserToken=#{preLoginUserToken}" method="POST" />
+				<enableJavaScript enable="true" />
+				
+			</then>
+			<else description="Select PCM">
+				<enableJavaScript enable="false" />
+				<clickElement xpath="id('pcmSelect')" description="Click the PCM site" />
+				
+				<storeElementAttribute xpath="//input[@name='userStoreId']" property="userStoreId" attributeName="value" description="Store the Redirect userStoreId value" />
+				
+				<enableJavaScript enable="false" />
+				<invoke url="#{siteSelectorURL}" content="userLoginId=#{username.dynamic}&amp;userStoreId=S1&amp;op=#{op}&amp;token=#{token}&amp;preLoginUserToken=#{preLoginUserToken}" method="POST" />
+				<enableJavaScript enable="true" />
+				
+			</else> 
+		</ifStep>
+	</then>
+</ifStep>

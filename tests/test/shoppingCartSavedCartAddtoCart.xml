@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartSavedCartAddtoCart">
+
+	<target name="shoppingCartSavedCartAddtoCart">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: ${title} [${host}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${sku.withServicePlan}" description="Define Sku to checkout" />
+			<storeProperty name="cartName.dynamic" value="${now} With Service Plan" description="Define Cart Name" />
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			&cartSavedThisCart;
+		
+			<group description="Select the Principal SKU and Add to Cart">
+				<setCheckbox xpath="id('${sku.withServicePlan.dpNo}')" description="Select the Principal SKU using its DPNo" />
+				<clickElement xpath="${savedcart.btnaddtocart}" description="CLick Add to Cart" />
+				
+				<not description="Cart should not be empty">
+					<verifyText text="Your cart is currently empty!" description="Cart should be empty" />
+				</not>
+				
+				<verifyXPath xpath="id('cartStaticQty_${sku.withServicePlan.dpNo}')" description="Verify the QTY field of the Principal SKU is in Shopping Cart" />
+				
+				<not description="Service Plan DPNo should not be available">
+					<verifyXPath xpath="id('cartStaticQty_#{servicePlanDPNo}')" description="Verify the QTY field of the Principal SKU is in Shopping Cart" />
+				</not>
+				
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

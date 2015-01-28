@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="cartSavedEmailCartLogin">
+
+	<target name="cartSavedEmailCartLogin">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: ${title} [${host}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+			
+			&addtoCartPDPSearchSKU;
+			
+			
+			
+		<group description="Check if users successfully logs In">
+				
+			<ifStep description="Saved Cart">
+				<condition>
+					<verifyProperty name="loginCart" value="savedCarts" propertyType="ant"/>
+				</condition>
+				<then>
+						<clickLink href="${cart.savedcarthref}" description="Click Saved Carts" />
+						&invokePostNewLogin;
+						<ifStep description="Check if user able to login">
+							<condition>
+								<verifyProperty name="login" value="true" propertyType="ant"/>
+							</condition>
+							<then>	
+								<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Saved Carts List" regex="true" description="Verify breadcrumbs is Saved Carts List" />
+							</then>
+							<else>
+								<verifyXPath xpath="//p[@class='wcR']" text="Invalid email address or password." description="Validation message appears" />
+								<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+							</else>
+						</ifStep>
+				</then>
+			</ifStep>
+			
+			<ifStep description="Save This Cart">
+				<condition>
+					<verifyProperty name="loginCart" value="saveThisCart" propertyType="ant"/>
+				</condition>
+				<then>
+					<clickLink href="${cart.savethiscarthref}" description="Click Saved This Carts" />
+					&invokePostNewLogin;
+					
+					<ifStep description="Check if user able to login">
+						<condition>
+							<verifyProperty name="login" value="true" propertyType="ant"/>
+						</condition>
+						<then>	
+							<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Saved Cart Entry" regex="true" description="Verify breadcrumbs is Saved Cart Entry" />
+						</then>
+						<else>
+							<verifyXPath xpath="//p[@class='wcR']" text="Invalid email address or password." description="Validation message appears" />
+							<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+						</else>
+					</ifStep>
+					
+				</then>
+			</ifStep>
+			
+			<ifStep description="Email Cart">
+				<condition>
+					<verifyProperty name="loginCart" value="emailCart" propertyType="ant"/>
+				</condition>
+				<then>
+					<clickElement xpath="${cart.emailcartlink}" description="Click Email Cart" />
+					&invokePostNewLogin;
+					
+					<ifStep description="Check if user able to login">
+						<condition>
+							<verifyProperty name="login" value="true" propertyType="ant"/>
+						</condition>
+						<then>	
+							<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Shopping Cart" regex="true" description="Verify breadcrumbs is Shopping Cart" />
+						</then>
+						<else>
+							<verifyXPath xpath="//p[@class='wcR']" text="Invalid email address or password." description="Validation message appears" />
+							<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+						</else>
+					</ifStep>
+					
+				</then>
+			</ifStep>
+			
+			
+		</group>
+		
+		</webtest>
+		
+	</target>
+</project>

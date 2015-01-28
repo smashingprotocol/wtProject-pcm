@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="subscribe">
+
+	<target name="subscribe">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="HOMEPAGE: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			
+			<group description="Enter Email address in Subscribe">
+				<setInputField xpath="id('txtSubEMail')" value="${emailAddress}" description="Enter Email Address" />
+				<clickElement xpath="id('subscriptionMiniGoButton')" description="Go"/>
+				<verifyText text="Express Email Sign-up" description="Verify the Express Email Sign-up" />
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

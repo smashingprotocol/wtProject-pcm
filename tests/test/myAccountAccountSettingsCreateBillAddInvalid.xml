@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="myAccountAccountSettingsCreateBillAdd">
+
+	<target name="myAccountAccountSettingsCreateBillAdd">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="MY ACCOUNT: ${title} [${state_orig}]">
+			
+		&config;
+		<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+		<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${username}" description="Define username to login" />
+		<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+		
+		&myAccountLogin;
+		
+		<storeProperty property="firstName.dynamic" value="${firstName}" propertyType="dynamic" description="Enter firstName" />
+		<storeProperty property="middleInitial.dynamic" value="${middleInitial}" propertyType="dynamic" description="Enter middleInitial" />
+		<storeProperty property="lastName.dynamic" value="${pcmHost}${lastName}" propertyType="dynamic" description="Enter lastName" />
+		<storeProperty property="addressOne.dynamic" value="${addressOne} ${now}" propertyType="dynamic" description="Enter addressOne" />
+		<storeProperty property="addressTwo.dynamic" value="${addressTwo}" propertyType="dynamic" description="Enter addressTwo" />
+		<storeProperty property="city_orig.dynamic" value="${city_orig}" propertyType="dynamic" description="Enter city_orig" />
+		<storeProperty property="state_orig.dynamic" value="${state_orig}" propertyType="dynamic" description="Enter state_orig" />
+		<storeProperty property="zipCode.dynamic" value="${zipCode}" propertyType="dynamic" description="Enter zipCode" />
+		<storeProperty property="dayAreaCode.dynamic" value="${dayAreaCode}" propertyType="dynamic" description="Enter dayAreaCode" />
+		<storeProperty property="dayPhone1.dynamic" value="${dayPhone1}" propertyType="dynamic" description="Enter dayPhone1" />
+		<storeProperty property="dayPhone2.dynamic" value="${dayPhone2}" propertyType="dynamic" description="Enter dayPhone2" />
+		<storeProperty property="eveAreaCode.dynamic" value="${dayPhone2}" propertyType="dynamic" description="Enter eveAreaCode" />
+		<storeProperty property="evePhone1.dynamic" value="${evePhone1}" propertyType="dynamic" description="Enter evePhone1" />
+		<storeProperty property="evePhone2.dynamic" value="${evePhone2}" propertyType="dynamic" description="Enter evePhone2" />
+		<storeProperty property="formmode.dynamic" value="${mode}" propertyType="dynamic" description="Enter mode of form" />
+			
+			
+		<group description="My Account > Account Settings > Default Bill to Address">
+			&myAccountInputBillAddForm;
+			<not>
+				<verifyXPath xpath="//div[@id='billingShippingMessage')]" description="Verify Validation Message" />
+			</not>
+			
+			<retry maxCount="6">
+				<sleep seconds="10"/>
+				<ifStep description="If address saved">
+					<condition>
+						<verifyXPath xpath="id('QAS_AcceptOriginal')" description="Click QAS Use Address as entered"/>
+					</condition>
+					<then>
+						<clickElement xpath="id('QAS_AcceptOriginal')" description="Click QAS Use Address as entered"/>
+					</then>
+				</ifStep>
+				<verifyXPath xpath="id('accountProfileMessage')" text="Data Updated" />
+			</retry>
+			
+		</group>
+		
+		<group description="Check Billing Address if updated">
+			<clickLink href="/o/My-Account-Dashboard/msc-4" description="Click My Account" />
+			<clickElement xpath="//a[contains(@name,'Account Settings')]" description="Click Account Settings" />
+			<verifyXPath xpath="//h2[contains(text(),'#{addressOne.dynamic}')]" description="Verify bill to address is updated" />
+		</group>
+		
+		</webtest>
+		
+	</target>
+</project>

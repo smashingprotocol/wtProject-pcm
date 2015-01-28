@@ -1,0 +1,22 @@
+<group description="Enter Payment Info">
+	<setInputField xpath="id('paymentCardNumber')" value="#{cardNumber.dynamic}" description="Enter Credit card no" />
+	<setSelectField xpath="//select[@name='paymentExpirationMonth']" value="#{expMonth.dynamic}" description="Enter Expiration month" />
+	<setSelectField xpath="//select[@name='paymentExpirationYear']" value="#{expYear.dynamic}" description="Enter Expiration year" />
+	<setInputField xpath="id('enterSecurityCode')" value="#{secCode.dynamic}" description="Enter Security code no" />
+	<!--
+			<group description="Enter BML and Preferred">
+				<setInputField xpath="id('bmlSSNumber')" value="1234" description="Enter BML" />
+				<setCheckbox xpath="id('bmlTermsConditions')" description="Accept BML Condition" />
+				
+				<setInputField xpath="id('preferredSSNumber1')" value="123" description="Enter Preferred" />
+				<setInputField xpath="id('preferredSSNumber2')" value="45" description="Enter Preferred" />
+				<setInputField xpath="id('preferredSSNumber3')" value="6789" description="Enter Preferred" />
+				<setCheckbox xpath="id('mmpaTermsConditions')" description="Accept PA Condition" />
+				<setInputField xpath="id('workPhoneNo')" value="3315545100" description="Enter Preferred" />
+				<setRadioButton xpath="id('mmpaResidenceStatus_1')" description="residence status" />
+				<setInputField xpath="id('annualIncome')" value="100000" description="Enter Preferred" />
+				<clickElement xpath="//a[@class='bmlCancelButton bml1']" description="Cancel button BML" /> 
+				<clickElement xpath="//a[@class='mmpaCancelButton mmpa1']" description="Cancel button Preferred Account" />
+			</group>
+			-->
+</group>

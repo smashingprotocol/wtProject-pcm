@@ -1,0 +1,113 @@
+<group description="Proceed to Checkout: 1. Shipping Address">
+	<clickElement xpath="${cart.btnProceedToCheckout}" description="Click Proceed to Checkout" />
+	<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Shipping Address" regex="true" description="Verify breadcrumbs is Shipping Address page" />
+	<clickElement xpath="id('subAddbut')" description="Enter Continue" />
+</group>
+
+<group description="Proceed to Checkout: 2. Shipping Method">
+	<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Shipping Method" regex="true" description="Verify breadcrumbs is Shipping Method page" />
+	<clickElement xpath="id('subShipBut')" description="Enter Continue" />
+</group>
+
+<group description="Proceed to Checkout: 3. Billing and Payment">
+	<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Billing And Payment" regex="true" description="Verify breadcrumbs is Billing And Payment page" />
+	<setRadioButton xpath="id('pam')" description="Select Preferred Account"/>
+	
+	<setInputField xpath="id('ssn1')" value="123" description="Enter Preferred" />
+	<setInputField xpath="id('ssn2')" value="45" description="Enter Preferred" />
+	<setInputField xpath="id('ssn3')" value="6789" description="Enter Preferred" />
+	<setSelectField name="paem" value="4" description="Select Birth Month" />
+	<setSelectField name="paed" value="25" description="Select Birth Day" />
+	<setSelectField name="paey" value="1962" description="Select Birth Year" />
+	<setInputField xpath="id('workPhone')" value="3315545100" description="Enter Preferred" />
+	<setRadioButton xpath="id('pars1')" description="residence status" />
+	<setInputField xpath="id('annualIncome')" value="100000" description="Enter Preferred" />
+	
+	<setCheckbox xpath="id('sign')" description="Accept Terms" />
+	<clickElement xpath="id('conCheckBut')" description="Enter Continue" />
+</group>
+
+
+
+<group description="Proceed to Checkout: 4. Place Order">
+	<retry maxCount="6">
+		<sleep seconds="10"/>
+		<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Verify Order" regex="true" description="Verify breadcrumbs is Verify Order page" />
+	</retry>
+	
+	<ifStep description="VerifyTax">
+		<condition>
+			<verifyProperty name="verifytax.dynamic" value="true" description="Verify the tax if has a value or 0" />
+		</condition>
+		<then>
+			<ifStep description="If Tax Free, Tax Amount is 0">
+				<condition>
+					<verifyProperty name="taxfree.dynamic" value="true" description="Verify the tax if has a value or 0" />
+				</condition>
+				<then>
+					<verifyXPath xpath="(//table//span[@class='txtsubtotalVal']) [position()=2]" text="$0.00" description="Verify the amount on the second value sub total" />
+				</then>
+				<else>
+					<not description="Taxt amount should not be 0.00">
+						<verifyXPath xpath="(//table//span[@class='txtsubtotalVal']) [position()=2]" text="$0.00" description="Verify the amount on the second value sub total" />
+					</not>	
+				</else>
+			</ifStep>
+		</then>	
+	</ifStep>
+	
+	<ifStep description="Verify Recycling Fee">
+		<condition>
+			<verifyProperty name="verifyrecyclingfee.dynamic" value="true" description="Verify the tax if has a value or 0" />
+		</condition>
+		<then>
+			<ifStep description="If Recycling Fee included in Sub Total">
+				<condition>
+					<verifyProperty name="recyclingfee.dynamic" value="true" description="Verify the Recycling Fee if included in Sub Total" />
+				</condition>
+				<then>
+					<verifyXPath xpath="//table//td[@class='txtsubtotal' and contains(text(),'Recycling Fee:')]" description="Verify the Recycling Fee label is display" />
+				</then>
+				<else>
+					<not description="Recycling Fee should not be display">
+						<verifyXPath xpath="//table//td[@class='txtsubtotal' and contains(text(),'Recycling Fee:')]" description="Verify the Recycling Fee label is display" />
+					</not>	
+				</else>
+			</ifStep>
+		</then>	
+	</ifStep>
+	
+	
+	<ifStep description="If continue to Place Order">
+		<condition>
+			<verifyProperty name="placeOrder.dynamic" value="true" description="Proceed to Place Order"/>
+		</condition>
+		<then>
+		
+			<ifStep description="If Default payment is selected, reenter security code">
+				<condition>
+					<setInputField xpath="id('txtSecurityCode')" value="#{cardSecCode.dynamic}" description="Re enter Security Code in Verify Order" />
+				</condition>
+				<then>
+					<clickElement xpath="id('submitSecCodeBut')" description="Click Submit button" />
+					<sleep seconds="30"/>
+				</then>
+			</ifStep>
+			
+			<ifStep description="Accept Terms and Sales">
+				<condition>
+					<verifyXPath xpath="id('placeOrderTermsAndConditions')" description="Verify Terms and Sale checkbox" />
+				</condition>
+				<then>
+					<setCheckbox xpath="id('placeOrderTermsAndConditions')" description="Click checkbox Terms and Sale" />
+				</then>
+			</ifStep>
+			
+			<clickElement xpath="id('placeOrderBut')" description="Enter Continue" />
+			<sleep seconds="30"/>
+		
+		</then>
+	</ifStep>
+	
+	
+</group>

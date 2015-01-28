@@ -1,0 +1,71 @@
+<group description="Existing Customer - Enter Credit Card info and Place Order">
+	
+	<!-- the folllowing property should be defined
+	<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+	<storeProperty name="cardType.dynamic" value="2" description="Define Credit Card Type" />
+	<storeProperty property="expMonth.dynamic" value="12" propertyType="dynamic" description="Define expMonth" />
+	<storeProperty property="expYear.dynamic" value="2016" propertyType="dynamic" description="Define expYear" />
+	<storeProperty property="secCode.dynamic" value="123" propertyType="dynamic" description="Define secCode" />
+	-->
+
+	<setInputField xpath="id('paymentCardNumber')" value="#{cardNumber.dynamic}" description="Enter Credit card no" />
+	<setSelectField xpath="//select[@name='paymentExpirationMonth']" value="#{expMonth.dynamic}" description="Enter Expiration month" />
+	<setSelectField xpath="//select[@name='paymentExpirationYear']" value="#{expYear.dynamic}" description="Enter Expiration year" />
+	<setInputField xpath="id('enterSecurityCode')" value="#{secCode.dynamic}" description="Enter Security code no" />
+
+	<storeXPath xpath="count(id('orderForm')//input[@type='hidden'])" property="inputctr" description="Store the number of Hidden Input parameters" />
+
+	<repeat count="#{inputctr}" counterName="rptctr" startCount="1" description="Store all the hidden post url parameters under cart">
+		<storeElementAttribute xpath="(id('orderForm')//input[@type='hidden']) [position()=#{rptctr}]" property="name.#{rptctr}" attributeName="name" description="Store the name attribute" />
+		<storeElementAttribute xpath="(id('orderForm')//input[@type='hidden']) [position()=#{rptctr}]" property="#{name.#{rptctr}}" attributeName="value" description="Store the value  on the Name property" />
+		
+		<ifStep description="If the value is a string empty, convert it to empty value">
+			<condition>
+				<verifyProperty property="#{name.#{rptctr}}" value="empty" description="Value is a string Empty" />
+			</condition>
+			<then>
+				<storeProperty property="#{name.#{rptctr}}" value="" description="Replace empty string with empty value characters." />
+			</then>						
+		</ifStep>
+		
+		<ifStep description="If the value is a string undefined, convert it to empty value ">
+			<condition>
+				<verifyProperty property="#{name.#{rptctr}}" value="undefined" description="Value is a string undefined" />
+			</condition>
+			<then>
+				<storeProperty property="#{name.#{rptctr}}" value="" description="Replace undefined string with empty value characters." />
+			</then>						
+		</ifStep>
+				
+		<storeProperty property="tempvalue" value="#{#{name.#{rptctr}}}" description="Store temporarily the value of attribute to convert to URI" />
+
+		<scriptStep description="Convert the characters to encodeURI to use in parameter" language="javascript">
+			var strValue = step.getWebtestProperty('tempvalue');
+			var strValue = encodeURIComponent(strValue);
+			step.setWebtestProperty('tempvalue.dynamic',strValue);
+		</scriptStep>	
+		
+		<storeProperty property="#{name.#{rptctr}}" value="#{tempvalue.dynamic}" description="Store the URI encoded value on the property" />
+		
+		<echo message="#{name.#{rptctr}}=#{#{name.#{rptctr}}}" />
+	</repeat>
+
+	<storeProperty property="paymentCardType" value="#{cardType.dynamic}" description="Store the credit cart type value" />
+
+	<storeElementAttribute xpath="//input[@name='shippingMethod' and @checked]" attributeName="value" property="shippingMethod" description="Store the selected Shipping method" />
+
+	<storeXPath xpath="count(//input[contains(@id,'orQty')])" property="orQtyctr" description="Store the number of items on Order Review" />
+
+	<storeProperty property="orQtyParam" value="" description="Create initial value for this property" />
+
+	<repeat count="#{orQtyctr}" counterName="itmctr" startCount="1" description="Store all the hidden post url parameters under cart">
+		<storeElementAttribute xpath="(//input[contains(@id,'orQty')]) [position()=#{itmctr}]" attributeName="name" property="orQty#{itmctr}.name" description="Store the value of the name of the Item" />
+		<storeElementAttribute xpath="(//input[contains(@id,'orQty')]) [position()=#{itmctr}]" attributeName="value" property="orQty#{itmctr}.value" description="Store the quantity value of the Item" />
+		<storeProperty property="orQtyParam#{itmctr}" value="&amp;#{orQty#{itmctr}.name}=#{orQty#{itmctr}.value}" description="Formulate and store url parameter details of the item" />
+		<storeProperty property="orQtyParam" value="#{orQtyParam}#{orQtyParam#{itmctr}}" description="Formulate the final url parameters  for multiple items" />				
+	</repeat>	
+
+	<storeProperty property="postcontent" value="merchantId=#{merchantId}&amp;shippingMethod=#{shippingMethod}&amp;billingFname=#{billingFname}&amp;billingLname=#{billingLname}&amp;billingMname=#{billingMname}&amp;paymentCardType=#{paymentCardType}&amp;paymentCardNumber=#{cardNumber.dynamic}&amp;paymentExpirationMonth=#{expMonth.dynamic}&amp;paymentExpirationYear=#{expYear.dynamic}&amp;enterSecurityCode=#{secCode.dynamic}&amp;paymentSaveCreditCard=on&amp;isBML=#{isBML}&amp;bmlSSNumber=&amp;bmlDateOfBirthMonth=1&amp;bmlDateOfBirthDay=1&amp;bmlDateOfBirthYear=1900&amp;bmlAcctNoLast4=&amp;preferredSSNumber1=&amp;preferredSSNumber2=&amp;preferredSSNumber3=&amp;preferredSSNumber=&amp;preferredDateOfBirthMonth=1&amp;preferredDateOfBirthDay=1&amp;preferredDateOfBirthYear=1900&amp;workPhoneNo=&amp;annualIncome=&amp;preferredAcctNoLast4=&amp;preferredExpMonth=1&amp;preferredExpYear=2014#{orQtyParam}&amp;mmTermsConditions=on&amp;hasPaymentInfo=true" description="Store the created post content url parameter" />
+	<invoke url="https://${host}/o/unifiedWidget-1?op=mall.widgets.checkout.submitOrder" method="POST" content="#{postcontent}" />
+	<invoke url="https://${host}/o/unifiedWidget-3?ordStat=done" description="Force redirect to Order Confirmation Page after submit order" />
+</group>	

@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="pdpInvalidQTYValidation">
+
+	<target name="pdpInvalidQTYValidation">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="PDP: Invalid Quantity Input validation">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="sku.dynamic" value="${defaultSku}" propertyType="dynamic"  description="Define default Sku to open" />
+			
+			&searchSKUOpenPDP;
+			
+			
+			
+			
+			<group description="NON NUMERIC">
+				<expectDialogs description="set up dialog expectations">
+					<alert description="expect alert with save of dialog message"
+						saveProperty="alertValidationMsg" />
+				</expectDialogs>
+			
+				<setInputField name="selectedDPNoQuantity" value="aaa" description="Enter quantity" />
+				<clickElement xpath="${pdp.btnaddtocart}" description="Click add to cart" />
+				<verifyDocumentURL text="http://${host}/p/" regex="true" description="Verify page is still in PDP" />
+				<verifyProperty property="alertValidationMsg" value="Quantity can only accept number value." description="Verify Alert Message" />
+			</group>
+			
+			<group description="NEGATIVE VALUE">
+				<expectDialogs description="set up dialog expectations">
+					<alert description="expect alert with save of dialog message"
+						saveProperty="alertValidationMsg" />
+				</expectDialogs>
+				
+				<setInputField name="selectedDPNoQuantity" value="-1" description="Enter quantity" />
+				<clickElement xpath="${pdp.btnaddtocart}" description="Click add to cart" />
+				<verifyDocumentURL text="http://${host}/p/" regex="true" description="Verify page is still in PDP" />
+				<verifyProperty property="alertValidationMsg" value="Quantity can only accept number value." description="Verify Alert Message" />
+			</group>
+			
+			<group description="0 VALUE">
+				<expectDialogs description="set up dialog expectations">
+					<alert description="expect alert with save of dialog message"
+						saveProperty="alertValidationMsg" />
+				</expectDialogs>
+				
+				<setInputField name="selectedDPNoQuantity" value="0" description="Enter quantity" />
+				<clickElement xpath="${pdp.btnaddtocart}" description="Click add to cart" />
+				<verifyDocumentURL text="http://${host}/p/" regex="true" description="Verify page is still in PDP" />
+				<verifyProperty property="alertValidationMsg" value="Minimum quantity is one item." description="Verify Alert Message" />
+			</group>
+			
+			<group description="NULL VALUE">
+				<expectDialogs description="set up dialog expectations">
+					<alert description="expect alert with save of dialog message"
+						saveProperty="alertValidationMsg" />
+				</expectDialogs>
+				
+				<setInputField name="selectedDPNoQuantity" value="" description="Enter quantity" />
+				<clickElement xpath="${pdp.btnaddtocart}" description="Click add to cart" />
+				<verifyDocumentURL text="http://${host}/p/" regex="true" description="Verify page is still in PDP" />
+				<verifyProperty property="alertValidationMsg" value="Quantity can only accept number value." description="Verify Alert Message" />
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

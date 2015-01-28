@@ -1,0 +1,49 @@
+<group description="Open the Sign In Page via header and login">
+	
+	<storeProperty property="tempusername" value="#{username.dynamic}" description="Store the username" />
+	
+	
+	<storeElementAttribute xpath="//form[@id='loginForm']" property="loginURL" attributeName="action" description="Store the POST URL" />
+	<storeElementAttribute xpath="//input[@name='op']" property="op" attributeName="value" description="Store the Redirect OP value" />
+	<storeElementAttribute xpath="//input[@name='currentWidgetId']" property="currentWidgetId" attributeName="value" description="Store the Redirect OP value" />
+	<storeElementAttribute xpath="//input[@name='redirectUrl']" property="tempredirectUrl" attributeName="value" description="Store the Redirect URL value" />
+	<storeElementAttribute xpath="//input[@name='specificURL']" property="specificURL" attributeName="value" description="Store the Redirect specificURL value" />
+	<!--<storeElementAttribute xpath="//input[@name='siteSelectorUrl']" property="siteSelectorUrl" attributeName="value" description="Store the Redirect siteSelectorUrl value" />
+	<storeElementAttribute xpath="//input[@name='siteSelectorPageSwitch']" property="siteSelectorPageSwitch" attributeName="value" description="Store the Redirect siteSelectorPageSwitch value" /> -->
+	
+	<scriptStep description="Convert the characters to encodeURI to use in parameter" language="javascript">
+		var strUserName = step.getWebtestProperty('tempusername');
+		var strUserName = encodeURIComponent(strUserName);
+		step.setWebtestProperty('username.dynamic',strUserName);
+		
+		var strRedirectURL = step.getWebtestProperty('tempredirectUrl');
+		var strRedirectURL = decodeURIComponent(strRedirectURL);
+		step.setWebtestProperty('redirecturl.dynamic',strRedirectURL);
+	</scriptStep>
+	
+	<echo message="#{username.dynamic}"/>
+	<echo message="#{redirecturl.dynamic}"/>
+	
+	<enableJavaScript enable="false" />
+	<!--<invoke url="https://${host}/o/New-Sign-in/msc-445" content="op=mall.unified.login.signIn.signIn&amp;currentWidgetId=signIn_7&amp;redirectUrl=#{tempredirectUrl}&amp;emailAddress=#{username.dynamic}&amp;password=#{password.dynamic}&amp;rememberMe=on" method="POST" /> -->
+	<invoke url="#{loginURL}" content="op=#{op}&amp;currentWidgetId=#{currentWidgetId}&amp;redirectUrl=#{tempredirectUrl}&amp;emailAddress=#{username.dynamic}&amp;password=#{password.dynamic}&amp;rememberMe=on" method="POST" />
+	<enableJavaScript enable="true" />
+</group>
+
+<!--
+<ifStep description="If Single Sign In is On">
+	<condition>
+		<verifyProperty name="enableSingleSignIn" text="1" propertyType="ant" description="Single Sign In enable" />
+	</condition>
+	<then>
+		<ifStep description="If PCM and BD user with same password, select a site">
+			<condition>
+				<verifyProperty name="site" text="consumer" propertyType="ant" description="To select consumer" />
+			</condition>
+			<then>
+				<clickElement xpath="id('selectBtnLogin366')" description="Selector window" />
+			</then>
+		</ifStep>
+	</then>
+</ifStep>
+-->

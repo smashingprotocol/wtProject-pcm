@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartSavedCartAddtoCartESD">
+
+	<target name="shoppingCartSavedCartAddtoCartESD">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: Unable to Mixed Cart ESD and Non ESD via Saved Cart Detail [ESD:${sku.esd}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			
+			<group description="Saved the Cart with ESD">
+				<storeProperty name="sku.dynamic" value="${sku.esd}" description="Define Sku to checkout" />
+				<storeProperty name="cartName.dynamic" value="${now} ESD Item" description="Define Cart Name" />
+				&myAccountLogin;
+				&addtoCartPDPSearchSKU;
+			
+				<storeProperty name="cartDPNo.dynamic" value="${sku.esd}" description="Define the ESD SKU" />
+				&getEDPofCartDPNo;
+				<storeProperty name="esd.edpno" value="#{cartEDPNo}" description="Store the EDP No of the ESD"/>
+				
+				&cartSavedThisCart;
+				<clickLink href="/n/Shopping-Cart/msc-cart" description="Click the View Cart" />
+				<verifyText text="Your cart is currently empty!" description="Cart should be empty" />
+			</group>
+					
+			<group description="Add to Cart a Non ESD">
+				<storeProperty name="sku.dynamic" value="${sku.nonesd}" description="Define Sku to checkout" />
+				&addtoCartPDPSearchSKU;
+				
+				<storeProperty name="cartDPNo.dynamic" value="${sku.nonesd}" description="Define the ESD SKU" />
+				&getEDPofCartDPNo;
+				<storeProperty name="nonesd.edpno" value="#{cartEDPNo}" description="Store the EDP No of the ESD"/>
+				
+				<verifyXPath xpath="id('cartStaticQty_#{nonesd.edpno}')" description="Verify the QTY field of the Non ESD SKU is in Shopping Cart" />
+			</group>	
+					
+			<group description="Go to Saved cart of the ESD and Add to Cart">
+				<clickLink href="msc-257" description="Click the Saved Cart" />
+				<clickLink xpath="//a[text()='#{cartName.dynamic}']" description="Click the Saved Cart link" />
+				<verifyText text="Cart Name : #{cartName.dynamic}" description="Verify the Cart Name" />
+			</group>
+			
+			<group description="Saved Cart Detail: Select the ESD SKU and Add to Cart">
+				<setCheckbox xpath="id('#{esd.edpno}')" description="Select the ESD SKU using its DPNo" />
+				<clickElement xpath="${savedcart.btnaddtocart}" description="CLick Add to Cart" />
+				
+				<not description="Cart should not be empty">
+					<verifyText text="Your cart is currently empty!" description="Cart should be empty" />
+				</not>
+				
+				<verifyXPath xpath="id('cartStaticQty_#{nonesd.edpno}')" description="Verify the QTY field of the Non ESD SKU is in Shopping Cart" />
+			
+				<not description="ESD DPNo should not be available">
+					<verifyXPath xpath="id('cartStaticQty_#{esd.edpno}')" description="Verify the QTY field of the ESD SKU is not in Shopping Cart" />
+				</not>
+			
+				<verifyText text="We are unable to process orders which have both software downloads and products that require shipping" />
+			
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

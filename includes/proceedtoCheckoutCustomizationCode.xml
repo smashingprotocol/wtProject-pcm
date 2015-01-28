@@ -1,0 +1,39 @@
+<group description="Enter Customization Code and Proceed to Checkout: 1. Shipping Address">
+	<verifyDocumentURL text="/n/Shopping-Cart/msc-cart" regex="true" description="Verify Page is in Shopping Cart" />
+	<clickElement xpath="${cart.btnProceedToCheckout}" description="Click Proceed to Checkout" />
+	
+	&customCodeFormFillupForm;
+	
+	<ifStep description="If Login page appears,login user">
+		<condition>
+			<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Sign-In CheckOut" regex="true" description="Verify breadcrumbs is Sign-In Checkout page" />
+		</condition>
+		<then>
+			&cartCheckoutLogin;
+		</then>
+	</ifStep>
+	
+	<retry maxcount="3">
+		<sleep seconds="10"/>
+		<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Shipping Address" regex="true" description="Verify breadcrumbs is Shipping Address page" />
+	</retry>
+	
+	<ifStep description="If to checkout using specific City for Shipping Address, edit the shipping address">
+		<condition>
+				<verifyProperty property="shipcity.dynamic" propertyType="dynamic" description="Property is defined" />	
+		</condition>
+		<then>
+			<clickElement xpath="${checkout.btnChangeAdd}" description="Click the Change Button"/>
+			<sleep seconds="3"/>
+			<storeXPath xpath="id('shipOpt')/option[contains(text(),'#{shipcity.dynamic}')]" property="shipaddress" propertyType="dynamic" description="Store the option in Shipping Address" />
+			<setSelectField xpath="id('shipOpt')" text="#{shipaddress}" description="Change the address" />
+			<clickElement xpath="id('subDefShipBut')" description="Click the Continue button" />
+			<retry maxcount="3">
+				<sleep seconds="3"/>
+				<verifyXPath xpath="//span[contains(text(),'#{shipaddress}')]" description="Verify the address is set to default" />
+			</retry>
+		</then>
+	</ifStep>
+	
+	<clickElement xpath="id('subAddbut')" description="Enter Continue" />	
+</group>

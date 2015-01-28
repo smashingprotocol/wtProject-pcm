@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="checkoutCreateBillAdd">
+
+	<target name="checkoutCreateBillAdd">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="CHECKOUT: ${title} [${state_orig}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			
+			<group description="Define property values">
+				<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${default.checkoutuser}" description="Define default username to login" />
+				<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define default password to login" />
+			
+				<storeProperty property="firstName.dynamic" value="${firstName}" propertyType="dynamic" description="Enter firstName" />
+				<storeProperty property="middleInitial.dynamic" value="${middleInitial}" propertyType="dynamic" description="Enter middleInitial" />
+				<storeProperty property="lastName.dynamic" value="${pcmHost}${lastName}" propertyType="dynamic" description="Enter lastName" />
+				<storeProperty property="companyName.dynamic" value="${companyName}" propertyType="dynamic" description="Enter companyName" />
+				<storeProperty property="addressOne.dynamic" value="${addressOne}" propertyType="dynamic" description="Enter addressOne" />
+				<storeProperty property="addressTwo.dynamic" value="${addressTwo}" propertyType="dynamic" description="Enter addressTwo" />
+				<storeProperty property="city_orig.dynamic" value="${city_orig}" propertyType="dynamic" description="Enter city_orig" />
+				<storeProperty property="state_orig.dynamic" value="${state_orig}" propertyType="dynamic" description="Enter state_orig" />
+				<storeProperty property="zipCode.dynamic" value="${zipCode}" propertyType="dynamic" description="Enter zipCode" />
+				<storeProperty property="saveAsToMyAccount.dynamic" value="${saveAsToMyAccount}" propertyType="dynamic" description="Enter saveAsToMyAccount" />
+				<storeProperty property="dayAreaCode.dynamic" value="${dayAreaCode}" propertyType="dynamic" description="Enter dayAreaCode" />
+				<storeProperty property="dayPhone1.dynamic" value="${dayPhone1}" propertyType="dynamic" description="Enter dayPhone1" />
+				<storeProperty property="dayPhone2.dynamic" value="${dayPhone2}" propertyType="dynamic" description="Enter dayPhone2" />
+				<storeProperty property="eveAreaCode.dynamic" value="${dayPhone2}" propertyType="dynamic" description="Enter eveAreaCode" />
+				<storeProperty property="evePhone1.dynamic" value="${evePhone1}" propertyType="dynamic" description="Enter evePhone1" />
+				<storeProperty property="evePhone2.dynamic" value="${evePhone2}" propertyType="dynamic" description="Enter evePhone2" />
+				<storeProperty property="formmode.dynamic" value="${mode}" propertyType="dynamic" description="Enter mode of form" />
+					
+				<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+			</group>
+			
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			&proceedtoCheckoutShippingAddress;
+			&proceedtoCheckoutShipMethod;
+			&checkoutBillAddForm;
+				
+			<not description="No alert validation message appears">
+				<verifyNoDialogs/>
+			</not>
+			
+			<retry maxCount="6" description="try to wait for the edit successful message">
+				<sleep seconds="10"/>
+				<ifStep description="If address saved">
+					<condition>
+						<clickElement xpath="id('QAS_AcceptOriginal')" description="Click QAS Use Address as entered"/>
+					</condition>
+					<then>
+							<ifStep description="If saved, wait for the Billing  change success message, else it should redirect to Verify Order">
+								<condition>
+									<verifyXPath xpath="//div[@id='billingMessage' and contains(text(),'#{billaddmessage}')]" description="Verify the Billing address updated/added successfully message" />
+								</condition>
+								<else>
+									<verifyDocumentURL text="https://${host}/o/Verify-Order/msc-46" description="Verify Order URL" />
+								</else>
+							</ifStep>
+					</then>
+					<else>
+							<ifStep description="If saved, wait for the Billing  change success message, else it should redirect to Verify Order">
+								<condition>
+									<verifyXPath xpath="//div[@id='billingMessage' and contains(text(),'#{billaddmessage}')]" description="Verify the Billing address updated/added successfully message" />
+								</condition>
+								<else>
+									<verifyDocumentURL text="https://${host}/o/Verify-Order/msc-46" description="Verify Order URL" />
+								</else>
+							</ifStep>	
+					</else>
+				</ifStep>
+			</retry>
+				
+	
+	
+			
+		</webtest>
+		
+	</target>
+</project>

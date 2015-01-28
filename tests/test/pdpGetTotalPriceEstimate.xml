@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="pdpGetTotalPriceEstimate">
+
+	<target name="pdpGetTotalPriceEstimate">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="PDP: ${title} [ZipCode: ${zipCode}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="sku.dynamic" value="${sku}" description="Define Sku to checkout" />
+			<storeProperty name="zipcode.dynamic" value="${zipCode}" description="Define Sku to checkout" />
+			
+			&searchSKUOpenPDP;
+			
+			<group description="Total Price Estimator">
+				
+				<clickElement xpath="id('lblEstimate')" description="Click Get a Total Price Estimate" />
+				<setInputField xpath="id('zipCode2')" value="#{zipcode.dynamic}" description="Enter the Zip Code" />
+				<clickElement xpath="id('btnEstimate')" description="Click Estimate Button" />
+				
+				
+				<storeXPath xpath="count(//select[@name='shippingList']/option)" property="shipMethodCount" propertyType="dynamic" />
+				<storeXPath xpath="//td[@valign='bottom']//span[contains(@style,'Helvetica')]" property="subTotal" propertyType="dynamic"  description="Store the Initial Grand total without Selected Shipping"/>
+				
+				<ifStep description="If to verify the Free Shipping promo is available in dropdown">
+					<condition>
+						<verifyProperty property="withFreeShipping" value="true" propertyType="ant" description="Check if to verify free shipping" />
+					</condition>
+					<then>
+						<verifyXPath xpath="//select[@name='shippingList']/option[contains(text(),'FREE')]" description="Verify the Free Shipping promo" />
+					</then>
+				</ifStep>	
+				
+				<repeat count="#{shipMethodCount}" counterName="ctr">
+					<setSelectField xpath="id('shippingList')" optionIndex="#{ctr}" description="Select the Shipping Method" />
+					<clickElement xpath="id('btnEstimate')" description="Click Estimate button" />
+					
+					<ifStep description="If no selection is made yet">
+						<condition>
+							<not>
+								<verifySelectField xpath="id('shippingList')" value="noShipMethod" description="No selection is made"/>
+							</not>	
+						</condition>
+						<then>
+							<storeXPath xpath="(//span[contains(@style,'Helvetica') and contains(@style,'12px') and contains(@style,'bold')]) [position()=2]" property="TaxAmount" propertyType="dynamic" description="Store the Tax amount display in the Sub Total"  />
+							<storeXPath xpath="(//span[contains(@style,'Helvetica') and contains(@style,'12px') and contains(@style,'bold')]) [position()=3]" property="ShipAmount" propertyType="dynamic" description="Store the shipping amount display in the Sub Total"  />
+							
+							<ifStep description="If Shipping Amount is 0.00 - Free Shipping method is display in dropdown">
+								<condition>
+									<verifyProperty property="ShipAmount" value="$0.00" description="Verify the value is 0.00"/>
+								</condition>
+								<then>
+									<verifyXPath xpath="//select[@name='shippingList']//option[contains(text(),'FREE') and @selected]" description="Verify the Shipping amount is the one selected in the Shipping Method dropdown" />
+								</then>
+								<else>
+										<verifyXPath xpath="//select[@name='shippingList']//option[contains(text(),'#{ShipAmount}') and @selected]" description="Verify the Shipping amount is the one selected in the Shipping Method dropdown" />
+								</else>
+							</ifStep>
+							
+							<scriptStep description="Compute the Grand Total" language="javascript">
+										var strSubTotal = step.getWebtestProperty('subTotal');
+										var strShipCost = step.getWebtestProperty('ShipAmount');
+										var strTaxCost = step.getWebtestProperty('TaxAmount');
+				
+										var strGrandTotal;
+										
+										strSubTotal = strSubTotal.replace('$','');
+										strShipCost = strShipCost.replace('$','');
+										strTaxCost = strTaxCost.replace('$','');
+										
+										
+										strSubTotal = strSubTotal.replace(',','');
+										strShipCost = strShipCost.replace(',','');
+										strTaxCost = strTaxCost.replace(',','');
+										
+										
+										strGrandTotal = parseFloat(strSubTotal) + parseFloat(strShipCost) + parseFloat(strTaxCost);
+										strGrandTotal = parseFloat(strGrandTotal).toFixed(2);
+										
+										step.setWebtestProperty('grandTotal',strGrandTotal);
+										
+										step.setWebtestProperty('subTotalTemp',strSubTotal);
+										step.setWebtestProperty('shipCostTemp',strShipCost);
+										step.setWebtestProperty('taxCostTemp',strTaxCost);
+										
+										
+										
+							</scriptStep>
+								
+								
+								<echo message="Sub Total: #{subTotalTemp}" />
+								<echo message="ShipCost Total: #{shipCostTemp}" />
+								<echo message="ShipCost Total: #{taxCostTemp}" />
+								<echo message="Grand Total: #{grandTotal}" />
+								
+								<!--<verifyXPath xpath="//span[@class='wcOrange1Cart' and contains(text(),'$#{grandTotal}')]" description="Verify The Grand Total computed the Shipping Method" /> -->
+								<verifyXPath xpath="translate(translate(//td[@valign='bottom']//span[contains(@style,'Helvetica')],'$',''),',','')" text="#{grandTotal}" description="Verify The Grand Total computed the Tax and Shipping Method" /> 
+						</then>
+					</ifStep>	
+					
+				</repeat>
+				
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

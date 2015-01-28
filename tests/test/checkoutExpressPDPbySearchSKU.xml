@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<!-- Excluded in All test when version is Unified -->
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="checkoutExpressPDPbySearchSKU">
+
+	<target name="checkoutExpressPDPbySearchSKU">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="CHECKOUT: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${sku}" description="Define Sku to checkout" />
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			
+			<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+			<storeProperty name="ccey.dynamic" value="2014" description="Define Credit Card Year" />
+			<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+			<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+			<storeProperty name="cardSecCode.dynamic" value="123" description="Define Credit Card Number" />
+			<storeProperty name="placeOrder.dynamic" value="true" description="Define Credit Card Number" />
+			
+			
+			<storeProperty name="defaultShipping.dynamic" value="${defaultShipping}" description="Set Shipping to default" />
+			<storeProperty name="defaultShipMethod.dynamic" value="${defaultShipMethod}" description="Shipping method is default" />
+			<storeProperty name="defaultBilling.dynamic" value="${defaultBilling}" description="Verify if Shipping Method is not set to default" />
+			<storeProperty name="placeOrder.dynamic" value="true" description="Proceed to Place Order"/>
+			
+			&expressCheckout;
+			<ifStep description="If Prod, expect the card to be declined">
+				<condition>
+					<verifyProperty name="pcmHost" value="prod" propertyType="ant" />
+				</condition>
+				<then>
+					<retry maxCount="6">
+						<sleep seconds="10"/>
+						<ifStep>
+							<condition>
+								<verifyXPath xpath="id('billingMessage')" text="The card entered was not approved by your bank. You may use a different credit method, enter a new card or contact your bank." description="Enter Credit Card is not accepted." />
+							</condition>
+							<else>
+								<verifyXPath xpath="id('billingMessage')" text="Because your card issuer cannot authenticate this card, please select another card or form of payment to complete your purchase." description="Enter Credit Card is not accepted." />
+							</else>
+						</ifStep>	
+					</retry>
+				</then>
+				<else>
+					<retry maxCount="6">
+						<sleep seconds="10"/>
+						<verifyXPath xpath="//div[@class='capOrderConfirm']//p" text="Your order has been submitted successfully." regex="true" description="Verify Order Confirmation Page" />
+					</retry>	
+					<!--<verifyDocumentURL text="https://${host}/o/Order-Confirmation/msc-47" description="Verify the Order Confirmation URL" /> -->
+				</else>
+			</ifStep>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

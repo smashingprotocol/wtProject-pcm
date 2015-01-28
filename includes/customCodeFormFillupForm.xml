@@ -1,0 +1,10 @@
+<group description="Enter values in Custom Code Form">
+		<setInputField xpath="(//input[@class='inputField allowedname wt12 wcGray1']) [position()=1]" value="#{field1.dynamic}" description="Enter End User First Name" />
+		<setInputField xpath="(//input[@class='inputField allowedname wt12 wcGray1']) [position()=2]" value="#{field2.dynamic}" description="Enter End User Last Name" />
+		<setInputField xpath="//input[@class='inputField numeric wt12 wcGray1']" value="#{field3.dynamic}" description="Enter End User Phone" />
+		<setInputField xpath="//input[@class='inputField email wt12 wcGray1']" value="#{field4.dynamic}" description="Enter End User Email" />
+		<setInputField xpath="//input[@class='inputField alphanum wt12 wcGray1']" value="#{field5.dynamic}" description="Enter End User Serial" />
+		<setInputField xpath="//input[@class='inputField date wt12 wcGray1']" value="#{field6.dynamic}" description="Enter End User Purchase Date" />
+		
+		<clickElement xpath="//a[contains(@href,'javascript:processCart')]" description="Click Process to Checkout" />
+</group>

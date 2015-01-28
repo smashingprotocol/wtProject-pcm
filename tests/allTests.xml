@@ -1,0 +1,1093 @@
+<?xml version="1.0"?>
+
+<project default="defaultTest">
+
+
+	<tstamp>
+			<format property="now2" pattern="MMdhm" />
+	</tstamp>
+	
+	
+	<target name="defaultTest" depends="homepageAlive,fullTest" />
+	
+	<condition property="isProd">
+			<equals arg1="${host}" arg2="${prodHost}" casesensitive="false" trim="true" />
+	</condition>
+	
+	<condition property="isSingleSignIn">
+			<equals arg1="${enableSingleSignIn}" arg2="1" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="isAllowMixedCart">
+			<equals arg1="${allowMixedCart}" arg2="1" casesensitive="false" trim="true" />
+	</condition>
+	
+	<condition property="isAPPCustomizationPage">
+			<equals arg1="${aPPCustomizationPage}" arg2="1" casesensitive="false" trim="true" />
+	</condition>
+	
+	<condition property="isPCMOnly">
+			<equals arg1="${store}" arg2="pcm" casesensitive="false" trim="true" />
+	</condition>
+	
+	
+	<!-- set test case if to execute -->
+	<condition property="isSearch">
+			<contains substring="isSearch" string="${testcase.selected}"/>
+	</condition>
+	<condition property="isHomeMyAccount">
+			<contains substring="isHomeMyAccount" string="${testcase.selected}"/>
+	</condition>
+	<condition property="isShoppingCart">
+			<contains substring="isShoppingCart" string="${testcase.selected}"/>
+	</condition>
+	<condition property="isVerifyOrderCheckout">
+			<contains substring="isVerifyOrderCheckout" string="${testcase.selected}"/>
+	</condition>
+	<condition property="isLogin">
+			<contains substring="isLogin" string="${testcase.selected}"/>
+	</condition>
+	<condition property="isUserInfoFieldValidation">
+			<contains substring="isUserInfoFieldValidation" string="${testcase.selected}"/>
+	</condition>
+	<condition property="isVerifyLinks">
+			<contains substring="isVerifyLinks" string="${testcase.selected}"/>
+	</condition>
+	<condition property="isPriceRebatesVerification">
+			<contains substring="isPriceRebatesVerification" string="${testcase.selected}"/>
+	</condition>
+	
+	
+	
+	<!-- set type of test to execute -->
+	<condition property="isBasic">
+			<contains substring="Basic" string="${testtype.selected}"/>
+	</condition>
+	
+	<condition property="isFull">
+			<contains substring="Full" string="${testtype.selected}"/>
+	</condition>
+	
+	
+	<target name="fullTest">
+		<antcall target="verifyOrderCheckout"/>
+		<antcall target="shoppingCart"/>
+		<antcall target="isSearch"/>
+		<antcall target="isHomeMyAccount"/>
+		<antcall target="singleSignIn"/>
+		<antcall target="userInfoFieldValidation"/>
+		<antcall target="verifyLinks"/>
+		<antcall target="priceRebateVerification"/>
+	</target>
+	
+	<target name="isSearch" if="isSearch">
+		<antcall target="basicSearch" />
+		<antcall target="fullSearch" />
+	</target>
+	
+	<target name="isHomeMyAccount" if="isHomeMyAccount">
+		<!--<antcall target="createAccountValidData" />
+		<antcall target="myAccountChangePassword" />
+		<antcall target="myAccountSubscribeUnsubscribe" />
+		<antcall target="myAccountVerifyOrderStatus" />
+		<antcall target="myAccountAccountSettingsCreateShipAdd" />
+		<antcall target="myAccountAccountSettingsCreateBillAdd" />
+		<antcall target="myAccountAddressBookCreateShipAdd" />
+		<antcall target="myAccountAddressBookDeleteShipAdd" /> 
+		<antcall target="homepagePcmNotRedirecttoHome" />
+		<antcall target="forgotPassword" /> My Account page not compatible with webtest htmlunit-->
+		<antcall target="swapAccountRedirect" />
+		<antcall target="orderStatusOrderLookup" />
+		<antcall target="pdpDefaultTab" />
+		<antcall target="pdpGetTotalPriceEstimate" />
+		<antcall target="pdpMaxQty" />
+		<antcall target="pdpIpadtoPCMBDLite" />
+		<antcall target="pdpInvalidQTYValidation" />
+		<!--<antcall target="pdpPromoCodeCouponBox" /> -->
+		<!--<antcall target="realLogin" /> -->
+	</target>
+		
+	<target name="shoppingCart" description="ShoppingCart" if="isShoppingCart">
+		<antcall target="basicShoppingCart" /> <!-- Selected testcases for basic testing only (Less time) -->
+		<antcall target="fullShoppingCart" /> <!-- Selected testcases for full testing only (takes a lot of time) -->
+	</target>
+	
+	<target name="verifyOrderCheckout" description="Verify Order and Checkout" if="isVerifyOrderCheckout">
+		<antcall target="basicCheckout" /> <!-- Selected testcases for basic testing only (Less time) -->
+		<antcall target="fullCheckout" /> <!-- Selected testcases for full testing only (takes a lot of time) -->
+	</target>
+	
+	<!--Single Sign In test cases -->
+	<target name="singleSignIn"  if="isLogin">
+		<antcall target="loginSingleSignOn" />
+		<antcall target="myAccountLogin" />
+		<antcall target="cartSavedEmailCartLogin" />
+		<antcall target="pdpReviewLogin" />
+		<antcall target="pdpPriceAlertLogin" />
+		<!--<antcall target="myAccountLoginafterSessionExpires" />
+		<antcall target="resourcesVideoLibraryLogin" />
+		<antcall target="resourceCenterLogin" />-->
+		<!-- <antcall target="loginSingleSignOn" /> Currently not enabled on servers-->
+	</target>
+	
+	<!-- User Info Form unified validations-->
+	<target name="userInfoFieldValidation" if="isUserInfoFieldValidation">
+		<antcall target="createAccountNewInvalidDataValidation" />
+		<!--<antcall target="myAccountAccountSettingsCreateShipAddInvalid" />
+		<antcall target="checkoutCreateShipAdd" />
+		<antcall target="checkoutCreateBillAdd" /> -->
+	</target>
+	
+	<!-- Verify links in Products and Solutions menu for Page not found" -->
+	<target name="verifyLinks" if="isVerifyLinks">
+		<antcall target="homePageMainMenuVerifyLinks" />
+		<antcall target="homePageSideMenuFooterLinks" /> 
+		<!--<antcall target="verifyLinksPCMSite" />-->
+	</target>
+	
+	<target name="priceRebateVerification" if="isPriceRebatesVerification">
+		<antcall target="pdpPriceRebateVerification" />
+		<antcall target="verifyOrderMIRPriceVerification" />
+	</target>
+	
+	<target name="basicSearch" if="isBasic" description="Selected test cases for Basic Search">
+		<antcall target="searchwithFacetFiltering" />
+		<antcall target="searchwithFacetFilterCount" />
+		<antcall target="searchwithFacetFilteringPDPPageSearch" />
+		<antcall target="searchwithFacetCondition" />
+		<antcall target="searchNewSortBy" />
+	</target>
+	
+	<target name="fullSearch" if="isFull" description="Selected test cases for Full Search">
+		<antcall target="searchSKU" />
+		<antcall target="searchRedirectToolURLMapping" />
+		<antcall target="searchwithFacetFiltering" />
+		<antcall target="searchwithFacetFilterCount" />
+		<antcall target="searchwithFacetFilteringPDPPageSearch" />
+		<antcall target="searchwithFacetCondition" />
+		<antcall target="searchNewAppleConfiguratorRedirection" />
+		<antcall target="searchNewEngravingtoPDPwithQTY" />
+		<antcall target="searchNewIpadEPPRedirection" />
+		<antcall target="searchNewVerifyPriceisDisplay" />
+		<antcall target="searchNewViewCountperPage" />
+		<antcall target="searchCategoryPageNextPage" />
+		<antcall target="searchNewSortBy" />
+		<antcall target="searchNewItemwithAddtoCartBtnCondition" />
+		<antcall target="searchOmnitureProperties" />
+		<antcall target="searchNewComparePageAddtoCartBtnCondition" />
+		<antcall target="searchRelatedContentSearchNotDisplay" />
+		<antcall target="categoryPageSearchRedirection" />
+		<antcall target="searchwithFacetPriceRange" />
+		<antcall target="searchNewVerifyFreeShippingPromoText" />
+	</target>
+
+	<!-- Shopping Cart Test Group -->
+	<target name="basicShoppingCart" if="isBasic" description="Selected test cases for Basic Shopping Cart">
+		<antcall target="shoppingCartCalculateShipping" />
+		<antcall target="shoppingCartAddESDSku" />
+		<antcall target="shoppingCartAddESDSkuMixedCart" />
+		<antcall target="shoppingCartAddESDviaQuickAdd" />
+		<antcall target="shoppingCartAddESDviaQuickAddMixedCart" />
+		<antcall target="shoppingCartClearCart" />
+		<antcall target="shoppingCartSavedCartAddtoCart" />
+		<antcall target="shoppingCartUpdateServicePlanQty" />
+		<antcall target="shoppingCartVerifyAvailableShippingMethod" />
+	</target>
+	
+	<target name="fullShoppingCart" if="isFull" description="Selected test cases for Full Shopping Cart">
+		<antcall target="shoppingCartSaveThisCart" />
+		<antcall target="shoppingCartCalculateShipping" />
+		<antcall target="shoppingCartSavedCartAddtoCart" />
+		<antcall target="shoppingCartClearCart" />
+		<antcall target="shoppingCartUpdateServicePlanQty" />
+		<antcall target="shoppingCartVerifyAvailableShippingMethod" />
+		<antcall target="shoppingCartSaveforLater" />
+		<antcall target="shoppingCartAddESDSkuviaSaveforLater" />
+		<antcall target="shoppingCartAddESDSkuviaSaveforLaterMixedCart" />
+		<antcall target="shoppingCartAddESDSku" />
+		<antcall target="shoppingCartAddESDSkuMixedCart" />
+		<antcall target="shoppingCartAddESDviaQuickAdd" />
+		<antcall target="shoppingCartAddESDviaQuickAddMixedCart" />
+		<antcall target="shoppingCartQuickAddSoldOutItem" />
+		<!-- <antcall target="shoppingCartMacConfiguratorAddedinCart" /> old configurator-->
+		<antcall target="shoppingCartNewConfiguratorAddedinCart" />
+		<antcall target="shoppingCartNewConfiguratorAddedinCartwithServicePlan" />
+		<antcall target="shoppingCartAppleCustomizationCodeInvalid" />
+		<antcall target="shoppingCartItemSavedonLoggedIn" />
+		<!--<antcall target="shoppingCartWeightLimitValidationviaPDPAddtoCart" /> No button to calculate, onkeypress is used -->
+		<antcall target="shoppingCartValidationviaQuickAdd" />
+		<antcall target="shoppingCartWeightLimitValidationviaSavedCartDetail" />
+		<antcall target="shoppingSavedCartDetailValidationviaQuickAdd" />
+		<antcall target="shoppingCartOmnitureProperties" />
+		<antcall target="shoppingSavedCartDetailValidationviaQuickAdd" />
+		<antcall target="shoppingCartVerifyCouponCodeDiscount" />
+		<!--<antcall target="shoppingCartCheckoutLogin" /> not redirecting to Verify Order when using automation-->
+	</target>
+	
+	<!-- Checkout test group -->
+	<target name="basicCheckout" if="isBasic" description="Selected test cases for Basic Checkout">
+		<antcall target="verifyOrderChangeAddressTax" />
+		<antcall target="verifyOrderItemPrice" />
+		<antcall target="verifyOrderITRPriceVerification" />
+		<antcall target="checkoutOrderConfirmationAmountandURL" />
+		<antcall target="checkoutVBVEnrolledCard" />
+	</target>
+	
+	<target name="fullCheckout" if="isFull" description="Selected test cases for Full Checkout">
+		<antcall target="verifyOrderExpressRecyclingFee" />  
+		<!--<antcall target="verifyOrderVerifyShippingBillingAddress2" /> -->
+		<antcall target="verifyOrderChangeAddressValidateShipMethodESD" /> 
+		<antcall target="checkoutPDPbySearchSKU" />
+		<antcall target="verifyOrderOmnitureProperties" />		
+		<antcall target="verifyOrderSavedCreditCard" />
+		<antcall target="checkoutpreferredActPDPbySearchSKU" />
+		<antcall target="verifyOrderRebatesPriceSubTotalUpdateQty" />
+		<antcall target="verifyOrderMIRPriceVerificationSaveforLaterinCart" />
+		<!--<antcall target="verifyOrderChangeAddressValidateShipMethod" /> Free Shipping test is added at verifyOrderCartCalculateShipping -->
+		<!--<antcall target="verifyOrderCreateSavedCreditCard" /> only 1 Credit card is now accepted in Unified checkout -->
+		<antcall target="verifyOrderChangeAddressTax" />
+		<antcall target="verifyOrderItemPrice" />
+		<antcall target="verifyOrderITRPriceVerification" />
+		<antcall target="verifyOrderCartCalculateShipping" />
+		<antcall target="verifyOrderAvailableShippingMethod" />
+		<antcall target="verifyOrderReviewQtyValidation" />
+		<antcall target="checkoutAppleCustomizationCode" />
+		<antcall target="checkoutOrderConfirmationAmountandURL" />
+		<antcall target="checkoutVBVEnrolledCard" />
+		<antcall target="verifyOrderShippingFeeUpdate" />
+		<antcall target="checkoutPayPalCredit" />
+		<antcall target="verifyOrderConfirmationScripts" />
+		
+		
+		<!--<antcall target="checkoutAPOAddWeightLimit" /> wont stop on execution - to investigate -->
+		<!--<antcall target="verifyOrderRecyclingFee" /> recycling fee is included in verifyOrderChangeAddressTax -->
+		<!--<antcall target="verifyOrderTax" /> -->
+	</target>
+	
+	<target name="CRF48050">
+		<antcall target="shoppingCartAppleCustomizationCodeInvalid" /> 
+		<antcall target="checkoutAppleCustomizationCode" /> 
+	</target>
+	
+	<!-- Create Account -->
+	<target name="createAccountInvalidDataValidation" description="createAccountInvalidDataValidation">
+		<dataDriven tableContainer="createAccountInvalidDataValidation.xls">
+			<ant antfile="test/createAccountInvalidDataValidation.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="createAccountValidData" description="createAccountValidData" unless="isProd">
+		<dataDriven tableContainer="createAccountValidData.xls">
+			<ant antfile="test/createAccountValidData.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="createAccountNewInvalidDataValidation" description="createAccountNewInvalidDataValidation">
+		<dataDriven tableContainer="createAccountNewInvalidDataValidation.xls">
+			<ant antfile="test/createAccountNewInvalidDataValidation.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<!-- Login -->
+	<target name="myAccountLogin" description="myAccountLogin">
+		<dataDriven tableContainer="myAccountLogin.xls">
+			<ant antfile="test/myAccountLogin.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="singleSignInLogin" description="singleSignInLogin">
+		<dataDriven tableContainer="singleSignInLogin.xls">
+			<ant antfile="test/singleSignInLogin.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<target name="realLogin" description="realLogin">
+		<dataDriven tableContainer="realLogin.xls">
+			<ant antfile="test/realLogin.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<target name="cartCheckoutLogin" description="cartCheckoutLogin">
+		<dataDriven tableContainer="cartCheckoutLogin.xls">
+			<ant antfile="test/cartCheckoutLogin.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="cartSavedEmailCartLogin" description="cartSavedEmailCartLogin">
+		<dataDriven tableContainer="cartSavedEmailCartLogin.xls">
+			<ant antfile="test/cartSavedEmailCartLogin.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="pdpReviewLogin" description="pdpReviewLogin">
+		<dataDriven tableContainer="pdpReviewLogin.xls">
+			<ant antfile="test/pdpReviewLogin.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="pdpPriceAlertLogin" description="pdpPriceAlertLogin">
+		<dataDriven tableContainer="pdpPriceAlertLogin.xls">
+			<ant antfile="test/pdpPriceAlertLogin.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<target name="resourcesVideoLibraryLogin" description="resourcesVideoLibraryLogin">
+		<dataDriven tableContainer="resourcesVideoLibraryLogin.xls">
+			<ant antfile="test/resourcesVideoLibraryLogin.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="resourceCenterLogin" description="resourceCenterLogin">
+		<dataDriven tableContainer="resourceCenterLogin.xls">
+			<ant antfile="test/resourceCenterLogin.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="myAccountLoginafterSessionExpires" description="myAccountLoginafterSessionExpires">
+		<dataDriven tableContainer="myAccountLoginafterSessionExpires.xls">
+			<ant antfile="test/myAccountLoginafterSessionExpires.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="loginSingleSignOn" description="loginSingleSignOn">
+		<dataDriven tableContainer="loginSingleSignOn.xls">
+			<ant antfile="test/loginSingleSignOn.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="swapAccountRedirect" description="swapAccountRedirect" if="isPCMOnly">
+		<dataDriven tableContainer="swapAccountRedirect.xls">
+			<ant antfile="test/swapAccountRedirect.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<!-- Logout -->
+	<target name="logout" description="logout">
+		<dataDriven tableContainer="myAccountLogin.xls">
+			<ant antfile="test/logout.xml"/>
+		</dataDriven>
+	</target>
+	
+	<!-- Homepage -->
+	<target name="subscribe" description="subscribe">
+		<dataDriven tableContainer="subscribe.xls">
+			<ant antfile="test/subscribe.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="forgotPassword" description="forgotPassword">
+		<dataDriven tableContainer="forgotPassword.xls">
+			<ant antfile="test/forgotPassword.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<target name="pcmStoredCodeCookies" description="pcmStoredCodeCookies">
+		<dataDriven tableContainer="pcmStoredCodeCookies.xls">
+			<ant antfile="test/pcmStoredCodeCookies.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="homePageMainMenuVerifyLinks" description="homePageMainMenuVerifyLinks">
+		<ant antfile="test/homePageMainMenuVerifyLinks.xml"/>
+	</target>
+	
+	<target name="homePageSideMenuFooterLinks" description="homePageSideMenuFooterLinks">
+		<ant antfile="test/homePageSideMenuFooterLinks.xml"/>
+	</target>
+	
+	
+	<target name="homepageAlive" description="homepageAlive">
+		<ant antfile="test/homepageAlive.xml"/>
+	</target>
+	
+	<target name="verifyLinksPCMSite" description="verifyLinksPCMSite">
+		<dataDriven tableContainer="verifyLinksPCMSite.xls">
+			<ant antfile="test/verifyLinksPCMSite.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="homepagePcmNotRedirecttoHome" description="homepagePcmNotRedirecttoHome">
+		<ant antfile="test/homepagePcmNotRedirecttoHome.xml"/>
+	</target>
+	
+	<target name="pdpDefaultTab" description="pdpDefaultTab">
+		<ant antfile="test/pdpDefaultTab.xml"/>
+	</target>
+	
+	<target name="orderStatusOrderLookup" description="orderStatusOrderLookup">
+		<dataDriven tableContainer="orderStatusOrderLookup.xls">
+			<ant antfile="test/orderStatusOrderLookup.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="homepageLastClickedTab" description="homepageLastClickedTab">
+		<ant antfile="test/homepageLastClickedTab.xml"/>
+	</target>
+	
+	<!-- Search-->
+	<target name="searchwithFacetFiltering" description="searchwithFacetFiltering">
+		<dataDriven tableContainer="searchwithFacetFiltering.xls">
+			<ant antfile="test/searchwithFacetFiltering.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchwithFacetFilterCount" description="searchwithFacetFilterCount">
+		<dataDriven tableContainer="searchwithFacetFilterCount.xls">
+			<ant antfile="test/searchwithFacetFilterCount.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchwithFacetFilteringPDPPageSearch" description="searchwithFacetFilteringPDPPageSearch">
+		<dataDriven tableContainer="searchwithFacetFilteringPDPPageSearch.xls">
+			<ant antfile="test/searchwithFacetFilteringPDPPageSearch.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchCategoryResult" description="searchCategoryResult"> <!-- not in used. replaced by searchwithFacetFilterCount -->
+		<dataDriven tableContainer="searchCategoryResult.xls">
+			<ant antfile="test/searchCategoryResult.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchwithFacetCondition" description="searchwithFacetCondition">
+		<dataDriven tableContainer="searchwithFacetCondition.xls">
+			<ant antfile="test/searchwithFacetCondition.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchSKU" description="searchSKU">
+		<dataDriven tableContainer="searchSKU.xls">
+			<ant antfile="test/searchSKU.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchResultPDPManufacturer" description="searchResultPDPManufacturer">
+		<dataDriven tableContainer="searchResultPDPManufacturer.xls">
+			<ant antfile="test/searchResultPDPManufacturer.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchRedirectToolURLMapping" description="searchRedirectToolURLMapping">
+		<dataDriven tableContainer="searchRedirectToolURLMapping.xls">
+			<ant antfile="test/searchRedirectToolURLMapping.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchCategoryPageNextPage" description="searchCategoryPageNextPage" if="isPCMOnly">
+		<dataDriven tableContainer="searchCategoryPageNextPage.xls">
+			<ant antfile="test/searchCategoryPageNextPage.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchURLRedirection" description="searchURLRedirection">
+		<dataDriven tableContainer="searchURLRedirection.xls">
+			<ant antfile="test/searchURLRedirection.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchRelatedContentSearchNotDisplay" description="searchRelatedContentSearchNotDisplay">
+		<dataDriven tableContainer="searchRelatedContentSearchNotDisplay.xls">
+			<ant antfile="test/searchRelatedContentSearchNotDisplay.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<!-- Search Redesign -->
+	<target name="searchNewViewCountperPage" description="searchNewViewCountperPage">
+		<dataDriven tableContainer="searchNewViewCountperPage.xls">
+			<ant antfile="test/searchNewViewCountperPage.xml"/>
+		</dataDriven>			
+	</target>
+	
+	<target name="searchNewVerifyPriceisDisplay" description="searchNewVerifyPriceisDisplay">
+		<dataDriven tableContainer="searchNewVerifyPriceisDisplay.xls">
+			<ant antfile="test/searchNewVerifyPriceisDisplay.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<target name="searchOmnitureProperties" description="searchOmnitureProperties">
+		<dataDriven tableContainer="searchOmnitureProperties.xls">
+			<ant antfile="test/searchOmnitureProperties.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchNewAppleConfiguratorRedirection" description="searchNewAppleConfiguratorRedirection">
+		<dataDriven tableContainer="searchNewAppleConfiguratorRedirection.xls">
+			<ant antfile="test/searchNewAppleConfiguratorRedirection.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchNewIpadEPPRedirection" description="searchNewIpadEPPRedirection">
+		<dataDriven tableContainer="searchNewIpadEPPRedirection.xls">
+			<ant antfile="test/searchNewIpadEPPRedirection.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<target name="searchNewEngravingtoPDPwithQTY" description="searchNewEngravingtoPDPwithQTY">
+		<dataDriven tableContainer="searchNewEngravingtoPDPwithQTY.xls">
+			<ant antfile="test/searchNewEngravingtoPDPwithQTY.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchNewSortBy" description="searchNewSortBy">
+		<dataDriven tableContainer="searchNewSortBy.xls">
+			<ant antfile="test/searchNewSortBy.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchNewItemwithAddtoCartBtnCondition" description="searchNewItemwithAddtoCartBtnCondition">
+		<dataDriven tableContainer="searchNewItemwithAddtoCartBtnCondition.xls">
+			<ant antfile="test/searchNewItemwithAddtoCartBtnCondition.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchNewComparePageAddtoCartBtnCondition" description="searchNewComparePageAddtoCartBtnCondition">
+		<dataDriven tableContainer="searchNewComparePageAddtoCartBtnCondition.xls">
+			<ant antfile="test/searchNewComparePageAddtoCartBtnCondition.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchCategoryNewRedirection" description="searchCategoryNewRedirection">
+		<dataDriven tableContainer="searchCategoryNewRedirection.xls">
+			<ant antfile="test/searchCategoryNewRedirection.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchTypeAheadContent" description="searchTypeAheadContent">
+		<dataDriven tableContainer="searchTypeAheadContent.xls">
+			<ant antfile="test/searchTypeAheadContent.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="categoryPageSearchRedirection" description="categoryPageSearchRedirection">
+		<dataDriven tableContainer="categoryPageSearchRedirection.xls">
+			<ant antfile="test/categoryPageSearchRedirection.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchwithFacetPriceRange" description="searchwithFacetPriceRange">
+		<dataDriven tableContainer="searchwithFacetPriceRange.xls">
+			<ant antfile="test/searchwithFacetPriceRange.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="searchNewVerifyFreeShippingPromoText" description="searchNewVerifyFreeShippingPromoText" if="isPCMOnly" >
+		<dataDriven tableContainer="searchNewVerifyFreeShippingPromoText.xls">
+			<ant antfile="test/searchNewVerifyFreeShippingPromoText.xml"/>
+		</dataDriven>
+	</target>
+	
+	<!-- PDP -->
+	<target name="pdpGetTotalPriceEstimate" description="pdpGetTotalPriceEstimate">
+		<dataDriven tableContainer="pdpGetTotalPriceEstimate.xls">
+			<ant antfile="test/pdpGetTotalPriceEstimate.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="pdpMaxQty" description="pdpMaxQty">
+			<ant antfile="test/pdpMaxQty.xml"/>		
+	</target>
+	
+	<target name="pdpIpadtoPCMBDLite" description="pdpIpadtoPCMBDLite" unless="isPCMOnly">
+		<dataDriven tableContainer="pdpIpadtoPCMBDLite.xls">
+			<ant antfile="test/pdpIpadtoPCMBDLite.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="pdpPriceRebateVerification" description="pdpPriceRebateVerification">
+		<dataDriven tableContainer="pdpPriceRebateVerification.xls">
+			<ant antfile="test/pdpPriceRebateVerification.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="pdpInvalidQTYValidation" description="pdpInvalidQTYValidation">
+			<ant antfile="test/pdpInvalidQTYValidation.xml"/>		
+	</target>
+	
+	<target name="pdpPromoCodeCouponBox" description="pdpPromoCodeCouponBox">
+		<dataDriven tableContainer="pdpPromoCodeCouponBox.xls">
+			<ant antfile="test/pdpPromoCodeCouponBox.xml"/>
+		</dataDriven>
+	</target>
+	
+	<!-- Shopping Cart-->
+	<target name="shoppingCartAddItem" description="shoppingCartAddItem">
+		<dataDriven tableContainer="shoppingCartAddItem.xls">
+			<ant antfile="test/shoppingCartAddItem.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartCalculateShipping" description="shoppingCartCalculateShipping">
+		<dataDriven tableContainer="shoppingCartCalculateShipping.xls">
+			<ant antfile="test/shoppingCartCalculateShipping.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<target name="shoppingCartSaveThisCart" description="shoppingCartSaveThisCart">
+		<dataDriven tableContainer="shoppingCartSaveThisCart.xls">
+			<ant antfile="test/shoppingCartSaveThisCart.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartClearCart" description="shoppingCartClearCart">
+		<dataDriven tableContainer="shoppingCartClearCart.xls">
+			<ant antfile="test/shoppingCartClearCart.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartUpdateServicePlanQty" description="shoppingCartUpdateServicePlanQty">
+		<dataDriven tableContainer="shoppingCartUpdateServicePlanQty.xls">
+			<ant antfile="test/shoppingCartUpdateServicePlanQty.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<target name="shoppingCartSavedCartAddtoCart" description="shoppingCartSavedCartAddtoCart">
+		<dataDriven tableContainer="shoppingCartSavedCartAddtoCart.xls">
+			<ant antfile="test/shoppingCartSavedCartAddtoCart.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartSaveforLater" description="shoppingCartSaveforLater">
+			<ant antfile="test/shoppingCartSaveforLater.xml"/>
+	</target>
+	
+	<target name="shoppingCartAddESDSku" description="shoppingCartAddESDSku" unless="isAllowMixedCart">
+		<dataDriven tableContainer="shoppingCartAddESDSku.xls">
+			<ant antfile="test/shoppingCartAddESDSku.xml"/>
+		</dataDriven>	
+	</target>
+	
+	<target name="shoppingCartAddESDSkuMixedCart" description="shoppingCartAddESDSkuMixedCart" if="isAllowMixedCart">
+		<dataDriven tableContainer="shoppingCartAddESDSku.xls">
+			<ant antfile="test/shoppingCartAddESDSkuMixedCart.xml"/>
+		</dataDriven>	
+	</target>
+	
+	
+	<target name="shoppingCartAddESDSkuviaSaveforLater" description="shoppingCartAddESDSkuviaSaveforLater" unless="isAllowMixedCart">
+		<dataDriven tableContainer="shoppingCartAddESDSku.xls">
+			<ant antfile="test/shoppingCartAddESDSkuviaSaveforLater.xml"/>
+		</dataDriven>	
+	</target>
+	
+	<target name="shoppingCartAddESDSkuviaSaveforLaterMixedCart" description="shoppingCartAddESDSkuviaSaveforLaterMixedCart" if="isAllowMixedCart">
+		<dataDriven tableContainer="shoppingCartAddESDSku.xls">
+			<ant antfile="test/shoppingCartAddESDSkuviaSaveforLaterMixedCart.xml"/>
+		</dataDriven>	
+	</target>
+	
+	
+	<target name="shoppingCartAddESDviaQuickAdd" description="shoppingCartAddESDviaQuickAdd" unless="isAllowMixedCart">
+		<dataDriven tableContainer="shoppingCartAddESDSku.xls">
+			<ant antfile="test/shoppingCartAddESDviaQuickAdd.xml"/>
+		</dataDriven>	
+	</target>
+	
+	<target name="shoppingCartAddESDviaQuickAddMixedCart" description="shoppingCartAddESDviaQuickAddMixedCart" if="isAllowMixedCart">
+		<dataDriven tableContainer="shoppingCartAddESDSku.xls">
+			<ant antfile="test/shoppingCartAddESDviaQuickAddMixedCart.xml"/>
+		</dataDriven>	
+	</target>
+	
+	
+	<target name="shoppingCartQuickAddSoldOutItem" description="shoppingCartQuickAddSoldOutItem">
+			<ant antfile="test/shoppingCartQuickAddSoldOutItem.xml"/>
+	</target>
+	
+	<target name="shoppingCartMacConfiguratorAddedinCart" description="shoppingCartMacConfiguratorAddedinCart">
+			<ant antfile="test/shoppingCartMacConfiguratorAddedinCart.xml"/>
+	</target>
+	
+	<target name="shoppingCartNewConfiguratorAddedinCart" description="shoppingCartNewConfiguratorAddedinCart">
+		<dataDriven tableContainer="shoppingCartNewConfiguratorAddedinCart.xls">
+			<ant antfile="test/shoppingCartNewConfiguratorAddedinCart.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartNewConfiguratorAddedinCartwithServicePlan" description="shoppingCartNewConfiguratorAddedinCartwithServicePlan">
+		<dataDriven tableContainer="shoppingCartNewConfiguratorAddedinCartwithServicePlan.xls">
+			<ant antfile="test/shoppingCartNewConfiguratorAddedinCartwithServicePlan.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<target name="shoppingCartCheckoutLogin" description="shoppingCartCheckoutLogin">
+		<dataDriven tableContainer="shoppingCartCheckoutLogin.xls">
+			<ant antfile="test/shoppingCartCheckoutLogin.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartAddESDSkuviaSearch" description="shoppingCartAddESDSkuviaSearch">
+		<dataDriven tableContainer="shoppingCartAddESDSku.xls">
+			<ant antfile="test/shoppingCartAddESDSkuviaSearch.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartSavedCartAddtoCartESD" description="shoppingCartSavedCartAddtoCartESD">
+		<dataDriven tableContainer="shoppingCartAddESDSku.xls">
+			<ant antfile="test/shoppingCartSavedCartAddtoCartESD.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartAppleCustomizationCodeInvalid" if="isAPPCustomizationPage" description="shoppingCartAppleCustomizationCodeInvalid">
+		<dataDriven tableContainer="shoppingCartAppleCustomizationCodeInvalid.xls">
+			<ant antfile="test/shoppingCartAppleCustomizationCodeInvalid.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartItemSavedonLoggedIn" description="shoppingCartItemSavedonLoggedIn">
+		<dataDriven tableContainer="shoppingCartItemSavedonLoggedIn.xls">
+			<ant antfile="test/shoppingCartItemSavedonLoggedIn.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartWeightLimitValidationviaPDPAddtoCart" description="shoppingCartWeightLimitValidationviaPDPAddtoCart">
+		<dataDriven tableContainer="shoppingCartWeightLimitValidationviaPDPAddtoCart.xls">
+			<ant antfile="test/shoppingCartWeightLimitValidationviaPDPAddtoCart.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartValidationviaQuickAdd" description="shoppingCartValidationviaQuickAdd">
+		<dataDriven tableContainer="shoppingCartValidationviaQuickAdd.xls">
+			<ant antfile="test/shoppingCartValidationviaQuickAdd.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartWeightLimitValidationviaSavedCartDetail" description="shoppingCartWeightLimitValidationviaSavedCartDetail">
+		<dataDriven tableContainer="shoppingCartWeightLimitValidationviaSavedCartDetail.xls">
+			<ant antfile="test/shoppingCartWeightLimitValidationviaSavedCartDetail.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingSavedCartDetailValidationviaQuickAdd" description="shoppingSavedCartDetailValidationviaQuickAdd">
+		<dataDriven tableContainer="shoppingSavedCartDetailValidationviaQuickAdd.xls">
+			<ant antfile="test/shoppingSavedCartDetailValidationviaQuickAdd.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartVerifyAvailableShippingMethod" description="shoppingCartVerifyAvailableShippingMethod">
+		<dataDriven tableContainer="shoppingCartVerifyAvailableShippingMethod.xls">
+			<ant antfile="test/shoppingCartVerifyAvailableShippingMethod.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartVerifyCouponCodeDiscount" description="shoppingCartVerifyCouponCodeDiscount">
+		<dataDriven tableContainer="shoppingCartVerifyCouponCodeDiscount.xls">
+			<ant antfile="test/shoppingCartVerifyCouponCodeDiscount.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="shoppingCartOmnitureProperties" description="shoppingCartOmnitureProperties">
+		<ant antfile="test/shoppingCartOmnitureProperties.xml"/>
+	</target>
+	
+	
+	
+	<!--My Account-->
+	<target name="myAccountChangePassword" description="myAccountChangePassword">
+		<dataDriven tableContainer="myAccountChangePassword.xls">
+			<ant antfile="test/myAccountChangePassword.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="myAccountSubscribeUnsubscribe" description="myAccountSubscribeUnsubscribe">
+		<ant antfile="test/myAccountSubscribeUnsubscribe.xml"/>
+	</target>
+	
+	<target name="myAccountVerifyOrderStatus" description="myAccountVerifyOrderStatus" if="isProd">
+		<ant antfile="test/myAccountVerifyOrderStatus.xml"/>
+	</target>
+	
+	<target name="myAccountAddressBookCreateShipAdd" description="myAccountAddressBookCreateShipAdd">
+		<dataDriven tableContainer="myAccountAddressBookCreateShipAdd.xls">
+			<ant antfile="test/myAccountAddressBookCreateShipAdd.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="myAccountAccountSettingsCreateShipAdd" description="myAccountAccountSettingsCreateShipAdd">
+		<dataDriven tableContainer="myAccountAccountSettingsCreateShipAdd.xls">
+			<ant antfile="test/myAccountAccountSettingsCreateShipAdd.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="myAccountAccountSettingsCreateBillAdd" description="myAccountAccountSettingsCreateBillAdd">
+		<dataDriven tableContainer="myAccountAccountSettingsCreateBillAdd.xls">
+			<ant antfile="test/myAccountAccountSettingsCreateBillAdd.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="myAccounttoShoppingCart" description="myAccounttoShoppingCart">
+		<ant antfile="test/myAccounttoShoppingCart.xml"/>
+	</target>
+	
+	<target name="myAccountAccountSettingsCreateShipAddInvalid" description="myAccountAccountSettingsCreateShipAddInvalid">
+		<dataDriven tableContainer="myAccountAccountSettingsCreateShipAddInvalid.xls">
+			<ant antfile="test/myAccountAccountSettingsCreateShipAddInvalid.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="myAccountAddressBookDeleteShipAdd" description="myAccountAddressBookDeleteShipAdd">
+		<ant antfile="test/myAccountAddressBookDeleteShipAdd.xml"/>
+	</target>
+	
+	<!-- Category Page -->
+	<target name="categoryNewPageAddtoCart" description="categoryNewPageAddtoCart">
+		<dataDriven tableContainer="categoryNewPageAddtoCart.xls">
+			<ant antfile="test/categoryNewPageAddtoCart.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<!-- Checkout-->
+	<target name="verifyOrderRecyclingFee" description="verifyOrderRecyclingFee">
+		<dataDriven tableContainer="verifyOrderRecyclingFee.xls">
+			<ant antfile="test/verifyOrderRecyclingFee.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="verifyOrderExpressRecyclingFee" description="verifyOrderExpressRecyclingFee">
+		<dataDriven tableContainer="verifyOrderExpressRecyclingFee.xls">
+			<ant antfile="test/verifyOrderExpressRecyclingFee.xml"/>
+		</dataDriven>
+	</target>
+
+	<target name="verifyOrderTax" description="verifyOrderTax">
+		<dataDriven tableContainer="verifyOrderTax.xls">
+			<ant antfile="test/verifyOrderTax.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="verifyOrderTaxESDSku" description="verifyOrderTaxESDSku">
+		<dataDriven tableContainer="verifyOrderTaxESDSku.xls">
+			<ant antfile="test/verifyOrderTaxESDSku.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<target name="verifyOrderItemPrice" description="verifyOrderItemPrice">
+		<dataDriven tableContainer="verifyOrderItemPrice.xls">
+			<ant antfile="test/verifyOrderItemPrice.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<target name="checkoutPDPbySearchSKU" description="checkoutPDPbySearchSKU">
+		<dataDriven tableContainer="checkoutPDPbySearchSKU.xls">
+			<ant antfile="test/checkoutPDPbySearchSKU.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="checkoutAddNewShippingAddress" description="checkoutAddNewShippingAddress">
+		<dataDriven tableContainer="checkoutAddNewShippingAddress.xls">
+			<ant antfile="test/checkoutAddNewShippingAddress.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="checkoutExpressPDPbySearchSKU" description="checkoutExpressPDPbySearchSKU">
+		<dataDriven tableContainer="checkoutExpressPDPbySearchSKU.xls">
+			<ant antfile="test/checkoutExpressPDPbySearchSKU.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="checkoutpreferredActPDPbySearchSKU" description="checkoutpreferredActPDPbySearchSKU">
+		<ant antfile="test/checkoutpreferredActPDPbySearchSKU.xml"/>
+	</target>
+	
+	<target name="checkoutVerifyDefaultBillAddress" description="checkoutVerifyDefaultBillAddress">
+		<ant antfile="test/checkoutVerifyDefaultBillAddress.xml"/>
+	</target>
+	
+	<target name="verifyOrderMIRPriceVerification" description="verifyOrderMIRPriceVerification">
+		<dataDriven tableContainer="verifyOrderMIRPriceVerification.xls">
+			<ant antfile="test/verifyOrderMIRPriceVerification.xml"/>
+		</dataDriven>	
+	</target>
+	
+	<target name="verifyOrderRebatesPriceSubTotalUpdateQty" description="verifyOrderRebatesPriceSubTotalUpdateQty">
+		<dataDriven tableContainer="verifyOrderRebatesPriceSubTotalUpdateQty.xls">
+			<ant antfile="test/verifyOrderRebatesPriceSubTotalUpdateQty.xml"/>
+		</dataDriven>	
+	</target>
+	
+	<target name="verifyOrderMIRPriceVerificationSaveforLaterinCart" description="verifyOrderMIRPriceVerificationSaveforLaterinCart">
+		<dataDriven tableContainer="verifyOrderMIRPriceVerificationSaveforLaterinCart.xls">
+			<ant antfile="test/verifyOrderMIRPriceVerificationSaveforLaterinCart.xml"/>
+		</dataDriven>	
+	</target>
+	
+	<target name="verifyOrderITRPriceVerification" description="verifyOrderITRPriceVerification">
+		<ant antfile="test/verifyOrderITRPriceVerification.xml"/>
+	</target>
+	
+	<target name="checkoutAPOAddWeightLimit" description="checkoutAPOAddWeightLimit">
+		<dataDriven tableContainer="checkoutAPOAddWeightLimit.xls">
+			<ant antfile="test/checkoutAPOAddWeightLimit.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="verifyOrderChangeAddressTax" description="verifyOrderChangeAddressTax">
+		<dataDriven tableContainer="verifyOrderChangeAddressTax.xls">
+			<ant antfile="test/verifyOrderChangeAddressTax.xml"/>
+		</dataDriven>	
+	</target>
+	
+	<target name="verifyOrderChangeAddressValidateShipMethod" description="verifyOrderChangeAddressValidateShipMethod">
+		<dataDriven tableContainer="verifyOrderChangeAddressValidateShipMethod.xls">
+			<ant antfile="test/verifyOrderChangeAddressValidateShipMethod.xml"/>
+		</dataDriven>	
+	</target>
+	
+	<target name="verifyOrderVerifyShippingBillingAddress2" description="verifyOrderVerifyShippingBillingAddress2">
+		<ant antfile="test/verifyOrderVerifyShippingBillingAddress2.xml"/>
+	</target>
+	
+	<target name="verifyOrderChangeAddressValidateShipMethodESD" description="verifyOrderChangeAddressValidateShipMethodESD">
+		<dataDriven tableContainer="verifyOrderChangeAddressTaxESD.xls">
+			<ant antfile="test/verifyOrderChangeAddressValidateShipMethodESD.xml"/>
+		</dataDriven>	
+	</target>
+	
+	<target name="verifyOrderShippingFeeUpdate" description="verifyOrderShippingFeeUpdate">
+		<dataDriven tableContainer="verifyOrderShippingFeeUpdate.xls">
+			<ant antfile="test/verifyOrderShippingFeeUpdate.xml"/>
+		</dataDriven>	
+	</target>
+	
+	<target name="verifyOrderDeletedItemUpdatedComputation" description="verifyOrderDeletedItemUpdatedComputation">
+		<dataDriven tableContainer="verifyOrderDeletedItemUpdatedComputation.xls">
+			<ant antfile="test/verifyOrderDeletedItemUpdatedComputation.xml"/>
+		</dataDriven>	
+	</target>
+	
+	<target name="checkoutAppleCustomizationCode" if="isAPPCustomizationPage" description="checkoutAppleCustomizationCode">
+		<dataDriven tableContainer="checkoutAppleCustomizationCode.xls">
+			<ant antfile="test/checkoutAppleCustomizationCode.xml"/>
+		</dataDriven>	
+	</target>
+	
+		<target name="verifyOrderCreateSavedCreditCard" description="verifyOrderCreateSavedCreditCard">
+		<dataDriven tableContainer="verifyOrderCreateSavedCreditCard.xls">
+			<ant antfile="test/verifyOrderCreateSavedCreditCard.xml"/>
+		</dataDriven>	
+	</target>
+	
+	<target name="checkoutOrderConfirmationAmountandURL" unless="isProd" description="checkoutOrderConfirmationAmountandURL">
+		<dataDriven tableContainer="checkoutOrderConfirmationAmountandURL.xls">
+			<ant antfile="test/checkoutOrderConfirmationAmountandURL.xml"/>
+		</dataDriven>	
+	</target>
+	
+	<target name="checkoutOrderConfirmationTrackingScripts" unless="isProd" description="checkoutOrderConfirmationTrackingScripts">
+		<dataDriven tableContainer="checkoutOrderConfirmationTrackingScripts.xls">
+			<ant antfile="test/checkoutOrderConfirmationTrackingScripts.xml"/>
+		</dataDriven>	
+	</target>
+	
+	<target name="checkoutCreateShipAdd" description="checkoutCreateShipAdd">
+		<dataDriven tableContainer="checkoutCreateShipAdd.xls">
+			<ant antfile="test/checkoutCreateShipAdd.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="checkoutCreateBillAdd" description="checkoutCreateBillAdd">
+		<dataDriven tableContainer="checkoutCreateBillAdd.xls">
+			<ant antfile="test/checkoutCreateBillAdd.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="checkoutVBVEnrolledCard" description="checkoutVBVEnrolledCard" unless="isProd">
+		<dataDriven tableContainer="checkoutVBVEnrolledCard.xls">
+			<ant antfile="test/checkoutVBVEnrolledCard.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="checkoutPayPalCredit" description="checkoutPayPalCredit" >
+		<dataDriven tableContainer="checkoutPayPalCredit.xls">
+			<ant antfile="test/checkoutPayPalCredit.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<!-- Unified Checkout -->
+	<target name="unifiedcheckoutShipBillAddressValidation" description="unifiedcheckoutShipBillAddressValidation">
+		<dataDriven tableContainer="unifiedcheckoutShipBillAddressValidation.xls">
+			<ant antfile="test/unifiedcheckoutShipBillAddressValidation.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="unifiedcheckoutNewCustomerPlaceOrder" description="unifiedcheckoutNewCustomerPlaceOrder">
+		<dataDriven tableContainer="unifiedcheckoutNewCustomerPlaceOrder.xls">
+			<ant antfile="test/unifiedcheckoutNewCustomerPlaceOrder.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="unifiedcheckoutVerifyShipMethod" description="unifiedcheckoutVerifyShipMethod">
+		<dataDriven tableContainer="unifiedcheckoutVerifyShipMethod.xls">
+			<ant antfile="test/unifiedcheckoutVerifyShipMethod.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="verifyOrderCartCalculateShipping" description="verifyOrderCartCalculateShipping">
+		<dataDriven tableContainer="verifyOrderCartCalculateShipping.xls">
+			<ant antfile="test/verifyOrderCartCalculateShipping.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="verifyOrderAvailableShippingMethod" description="verifyOrderAvailableShippingMethod">
+		<dataDriven tableContainer="verifyOrderAvailableShippingMethod.xls">
+			<ant antfile="test/verifyOrderAvailableShippingMethod.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="verifyOrderReviewQtyValidation" description="verifyOrderReviewQtyValidation">
+		<dataDriven tableContainer="verifyOrderReviewQtyValidation.xls">
+			<ant antfile="test/verifyOrderReviewQtyValidation.xml"/>
+		</dataDriven>
+	</target>
+	
+	<target name="verifyOrderOmnitureProperties" description="verifyOrderOmnitureProperties">
+		<ant antfile="test/verifyOrderOmnitureProperties.xml"/>
+	</target>
+	
+	<target name="verifyOrderSavedCreditCard" description="verifyOrderSavedCreditCard" if="isProd">
+		<dataDriven tableContainer="verifyOrderSavedCreditCard.xls">
+			<ant antfile="test/verifyOrderSavedCreditCard.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<target name="verifyOrderConfirmationScripts" description="verifyOrderConfirmationScripts" unless="isProd">
+		<dataDriven tableContainer="verifyOrderConfirmationScripts.xls">
+			<ant antfile="test/verifyOrderConfirmationScripts.xml"/>
+		</dataDriven>
+	</target>
+	
+	
+	<!-- PCMG -->
+	<target name="pcmgCreateAccountValidData" description="pcmgCreateAccountValidData">
+		<dataDriven tableContainer="pcmgCreateAccountValidData.xls">
+			<ant antfile="test/pcmgCreateAccountValidData.xml"/>
+		</dataDriven>
+	</target>
+	
+	<!-- test -->
+	<target name="test" description="test">
+		<ant antfile="test/test.xml"/>
+	</target>
+	
+	
+	
+	
+	
+	
+</project>

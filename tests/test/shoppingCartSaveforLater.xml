@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartSaveforLater">
+
+	<target name="shoppingCartSaveforLater">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: Saved for Later item can be moved back to cart.">
+			
+			&config;
+			
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${${pcmHost}.username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+			
+			
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			<storeProperty name="cartDPNo.dynamic" value="#{sku.dynamic}" description="Define Sku to get the PDP No" />
+			&getEDPofCartDPNo;
+			
+			<group description="Save For Later">
+				<clickLink xpath="//a[contains(@onclick,'javascript:saveForLater') and contains(@onclick,'#{cartEDPNo}')]" description="Click Save For Later for Item with Shipping" />
+				<verifyText text="Your Shopping Cart is empty." />
+				<not description="Verify the qty field of the item is not in cart">
+					<verifyXPath xpath="id('cartStaticQty_#{cartEDPNo}')" description="Verify the qty box of the item appears in shopping cart"/>
+				</not>	
+			</group>
+			
+			<group description="Move to Cart">
+				
+				<clickElement xpath="//a[contains(@href,'javascript:moveItemsToCart') and contains(@href,'#{cartEDPNo}')]" description="Click Move to Cart" />
+				<verifyXPath xpath="id('cartStaticQty_#{cartEDPNo}')" description="Verify the qty box of the item appears in shopping cart"/> 
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

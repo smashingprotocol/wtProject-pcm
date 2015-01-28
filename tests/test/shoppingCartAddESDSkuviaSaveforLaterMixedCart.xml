@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartAddESDSkuviaSaveforLaterMixedCart">
+
+	<target name="shoppingCartAddESDSkuviaSaveforLaterMixedCart">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: Saved for Later ESD item can be moved back to cart with shipping item.">
+			
+			&config;
+			
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${${pcmHost}.username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="cartDPNo.dynamic" value="${sku.nonesd}" description="Store the SKU to get Its EDP No" />
+			&myAccountLogin;
+			&clearCart;
+			
+			
+			<group description="Add cart and Save For Later Item with Shipping">
+				<storeProperty name="sku.dynamic" value="${sku.nonesd}" description="Define Sku to checkout" />
+				&addtoCartPDPSearchSKU;
+				
+				<storeProperty name="cartDPNo.dynamic" value="${sku.nonesd}" description="Store the SKU to get Its EDP No" />
+				&getEDPofCartDPNo;
+				<storeProperty name="nonesd.dpno" value="#{cartEDPNo}" description="Store the SKU to get Its EDP No" />
+
+				<clickLink xpath="//a[contains(@onclick,'javascript:saveForLater') and contains(@onclick,'#{nonesd.dpno}')]" description="Click Save For Later for Item with Shipping" />
+				<not description="Verify the qty field is not in cart">
+					<verifyXPath xpath="id('cartStaticQty_#{nonesd.dpno}')" description="Verify the qty box of the item appears in shopping cart"/>
+				</not>		
+			</group>
+			
+			<group description="Add cart and Save For Later ESD">
+				<storeProperty name="sku.dynamic" value="${sku.esd}" description="Define Sku to checkout" />
+				&addtoCartPDPSearchSKU;
+				
+				<storeProperty name="cartDPNo.dynamic" value="${sku.esd}" description="Store the SKU to get Its EDP No" />
+				&getEDPofCartDPNo;
+				<storeProperty name="esd.dpno" value="#{cartEDPNo}" description="Store the SKU to get Its EDP No" />
+				
+				<clickLink xpath="//a[contains(@onclick,'javascript:saveForLater') and contains(@onclick,'#{esd.dpno}')]" description="Click Save For Later for Item with Shipping" />
+				<not description="Verify the qty field of the item is not in cart">
+					<verifyXPath xpath="id('cartStaticQty_#{esd.dpno}')" description="Verify the qty box of the item appears in shopping cart"/>
+				</not>
+			</group>
+			
+			<group description="Move to Cart first the Shipping item">
+				
+				<clickElement xpath="//a[contains(@href,'javascript:moveItemsToCart') and contains(@href,'#{nonesd.dpno}')]" description="Click Move to Cart" />
+				<verifyXPath xpath="id('cartStaticQty_#{nonesd.dpno}')" description="Verify the qty box of the item appears in shopping cart"/> 
+			</group>
+			
+			<group description="Move to Cart the ESD">
+				<clickElement xpath="//a[contains(@href,'javascript:moveItemsToCart') and contains(@href,'#{esd.dpno}')]" description="Click Move to Cart" />
+				<verifyXPath xpath="id('cartStaticQty_#{esd.dpno}')" description="Verify the qty box of the item appears in shopping cart"/> 
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

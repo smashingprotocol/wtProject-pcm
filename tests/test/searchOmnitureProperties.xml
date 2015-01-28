@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchOmnitureProperties">
+
+	<target name="searchOmnitureProperties">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title} - ${keyword}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />	
+			&searchKeyword;
+			
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+			</not>
+				
+			<group description="Verify the Omniture values are present in source code.">
+				<verifyXPath xpath="//script[contains(text(),'s.events=&#34;event1&#34;')]" description="s.events" />
+				<verifyXPath xpath="//script[contains(text(),'s.eVar1=&#34;#{search.keyword}&#34;')]" description="s.eVar1" />
+				<verifyXPath xpath="//script[contains(text(),'s.eVar3=&#34;search&#34;')]" description="s.eVar3" />
+			</group>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

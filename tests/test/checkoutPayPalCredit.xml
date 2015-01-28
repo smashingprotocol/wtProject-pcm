@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="checkoutPayPalCredit">
+
+	<target name="checkoutPayPalCredit">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="CHECKOUT: User able to checkout using PayPal Credit [${preferred.username}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="${preferred.username}" description="Define preferred account username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${default.sku}" description="Define Sku to checkout" />
+			<storeProperty name="placeOrder.dynamic" value="true" description="Define if proceed to order checkout" />
+			<storeProperty name="ppcMonth.dynamic" value="${ppc.month}" description="Define PayPal Credit Month" />
+			<storeProperty name="ppcDay.dynamic" value="${ppc.day}" description="Define PayPal Credit Day" />
+			<storeProperty name="ppcYear.dynamic" value="${ppc.year}" description="Define PayPal Credit Year" />
+			<storeProperty name="ppcSSN.dynamic" value="${ppc.ssn}" description="Define PayPal Credit SSN" />
+			
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			<ifStep description="Select version if Legacy or Unified">
+				<condition>
+					<verifyProperty property="version.selected" value="unified" propertyType="ant" />
+				</condition>
+				<then description="Unified">
+					&unifiedCheckoutPreferredAct;
+				</then>
+				<else description="Legacy">
+					&proceedtoCheckoutShippingAddress;
+					&proceedtoCheckoutShipMethod;
+					&checkoutBillingPaymentPayPalCredit;
+				</else>
+			</ifStep>
+			
+			<verifyXPath xpath="//p[@class='txtshipBillPayment' and contains(text(),'PayPal Credit')]" description="Verify the PayPal Credit verbiage in Verify Order Page" />
+			
+		</webtest>
+		
+	</target>
+</project>

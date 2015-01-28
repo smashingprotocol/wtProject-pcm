@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartSaveThisCart">
+
+	<target name="shoppingCartSaveThisCart">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: ${title} [${host}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+			<storeProperty name="cartName.dynamic" value="${now} Saved Cart" description="Define username to login" />
+			&myAccountLogin;
+			&addtoCartPDPSearchSKU;
+			&cartSavedThisCart;
+		
+		
+			<group description="Verify Shopping Cart is empty">
+				<clickLink href="/n/Shopping-Cart/msc-cart" description="Click the View Cart" />
+				<verifyText text="empty" description="Cart should be empty" />
+			</group>
+			
+			<group description="Verify Cart is Added in Saved Carts">
+				<clickLink href="msc-257" description="Click the Saved Cart" />
+								
+				<verifyXPath xpath="//span[contains(text(),'#{cartName.dynamic}')]" description="Verify the Saved Cart Name is on the redesigned Saved Cart List" />
+				
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

@@ -1,0 +1,81 @@
+<group description="Open PDP by SKU Search">
+		<storeProperty property="search.keyword" value="#{sku.dynamic}" propertyType="dynamic" description="Enter sku in Search field." />
+		&searchKeyword;
+		
+		<ifStep description="If the search shows multiple results, look for the one with sku as search keyword">
+			<condition>
+				<verifyXPath xpath="//input[contains(@onclick,'return addToShoppingCart(#{search.keyword})')]" description="Verify the Add to Cart button of the sku in Search result." /> 
+			</condition>
+			<then>
+				<clickElement xpath="//a[contains(@href,'#{search.keyword}')]" description="Click Image or description to go to PDP." /> 
+			</then>
+		</ifStep>
+		
+		<ifStep description="If the sku appears in the search result">
+			<condition>
+				<verifyXPath xpath="//input[contains(@onclick,'return addToShoppingCart(#{search.keyword})')]" description="Verify the Add to Cart button of the sku in Search result." /> 
+			</condition>
+			<then>
+				<clickElement xpath="//a[contains(@href,'#{search.keyword}')]" description="Click Image or description to go to PDP." /> 
+			</then>
+		</ifStep>
+</group>
+
+<group description="PDP: Add to Cart">
+
+		<ifStep description="Verify PCM Part No if redesign else on old PDP">
+			<condition>
+				<verifyXPath xpath="//div[@class='pcmallpartupc']" text="Part#: #{sku.dynamic}" regex="true" description="Verify the Sku number in PDP" />
+			</condition>
+			<else>
+				<verifyXPath xpath="//b[contains(text(),'#{sku.dynamic}')]" description="Verify the Sku number in PDP Breadcrumbs" />	
+			</else>
+		</ifStep>	
+		
+		<ifStep description="Change qty if define">
+			<condition>
+					<verifyProperty property="qty.dynamic" propertyType="dynamic" description="Verify if qty is define" />	
+			</condition>
+			<then>
+				<setInputField name="selectedDPNoQuantity" value="#{qty.dynamic}" description="Enter QTY" />
+			</then>
+		</ifStep>
+			
+		<ifStep description="If PDP is not redesign, Store Final Price, else PDP is redesign">
+			<condition>
+				<storeXPath xpath="//td[contains(@class,'wt15')]" property="pdp.finalprice" propertyType="dynamic" description="Store the Final Price of PDP Old" />
+			</condition>
+			<else>
+				<storeXPath xpath="//p[@itemprop='price']" property="pdp.finalprice" propertyType="dynamic" description="Store the Final Price of PDP Redesign" />
+			</else>
+		</ifStep>	
+		
+		<clickElement xpath="${pdp.btnbuycustomize}" description="PDP: Click Buy-Customize button" />
+		<clickLink xpath="//a[contains(@href,'addToCart')]" description="Click Add to Cart" />
+		<setRadioButton name="radio_#{sku.dynamic}" value="#{serviceplansku.dynamic}" description="Select a Service Plan" />
+		<clickLink xpath="//a[contains(@href,'submitServicePlansSelection')]" description="Click Next in Service Plan selection" />
+		<clickLink href="/n/Shopping-Cart/msc-cart" description="Click Proceed to Cart" />
+		
+		<retry maxCount="3" description="Retry to wait if the page is still in PDP">
+			<sleep seconds="10" />
+			<not>
+				<verifyXPath xpath="${pdp.btnaddtocart}" description="Add to Cart button" />
+			</not>
+		</retry>
+		
+		<ifStep description="If page is msc-194">
+			<condition>
+				<verifyDocumentURL text="http://${host}/n/Shopping-Cart/msc-194" regex="true" description="Verify page is Shopping Cart"/>
+			</condition>
+			<then>
+				<clickLink href="/n/Shopping-Cart/msc-cart"  description="Click Proceed to Cart"/>
+				<sleep seconds="10" />
+			</then>
+		</ifStep>
+				
+		<not>
+			<verifyText text="Your shopping cart is currently empty!" />
+		</not>
+			
+</group>
+&verifyStoreCookies;

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartWeightLimitValidationviaPDPAddtoCart">
+
+	<target name="shoppingCartWeightLimitValidationviaPDPAddtoCart">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: ${title}">
+			
+			&config;
+			
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="${${pcmHost}.username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${sku.weightlimit}" propertyType="dynamic" description="Define Sku" />
+			<storeProperty name="qty.dynamic" value="${qty}" propertyType="dynamic" description="Define Qty" />
+			<storeProperty name="zipcode.dynamic" value="${zipcode}" propertyType="dynamic" description="Define Zipcode" />
+			
+			
+
+			&addtoCartPDPSearchSKU;
+			
+			<group description="Enter zipcode and calculate shipping">
+				<setInputField xpath="id('zipCode')" value="#{zipcode.dynamic}" description="Enter the Zip Code" />
+				<clickElement xpath="id('btnZipCodeGo')" description="Click Go button" />
+			</group>
+			
+			<group description="Verify Validation message for weightlimit">
+			
+				<verifyXPath xpath="//div[@class='errorMessageBox']" description="Verify the message box appears" />
+				
+				<ifStep description="If the message is for non apo weight limit">
+					<condition>
+						<verifyProperty property="message.id" value="nonapo" propertyType="ant" description="excel dynamic data" />
+					</condition>
+					<then>
+						<verifyXPath xpath="//span[text()='Total weight of your order exceeds maximum weight limit. Please contact PCM to place your order. Thank you.']" description="Verify the weight limit message - non APO" />
+					</then>
+				</ifStep>
+
+				<ifStep description="If the message is for apo weight limit">
+					<condition>
+						<verifyProperty property="message.id" value="apo" propertyType="ant" description="excel dynamic data" />
+					</condition>
+					<then>
+						<verifyXPath xpath="//span[text()='Your total order weight exceeds the 70 lbs maximum weight for APO/FPO shipments. To process this order, please modify your order details or change your shipping address.']" description="Verify the weight limit message - APO" />
+					</then>
+				</ifStep>
+				
+				<verifyXPath xpath="${cart.stopsignimg}" description="Verify the Stop icon appears" />		
+				
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

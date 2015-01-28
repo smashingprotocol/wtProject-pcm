@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartAddESDviaQuickAddMixedCart">
+
+	<target name="shoppingCartAddESDviaQuickAddMixedCart">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: Able to mixed cart with ESD and Non ESD via Quick Add [ESD: ${sku.esd}].">
+			
+			&config;
+			
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${${pcmHost}.username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${sku.nonesd}" propertyType="dynamic" description="Define Sku to checkout" />
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			<group description="Add ESD SKU via Quick Add">
+				<setInputField name="cartSku" value="${sku.esd}" description="Enter ESD SKU" />
+				<clickElement xpath="${cart.btnquickadd}" description="Click Quick Add" />
+				<not description="Mixed Cart message should not be display">
+					<verifyText text="We are unable to process orders which have both software downloads and products that require shipping" />
+				</not>
+			</group>
+			
+			<group description="Verify the QTY Box of the Non ESD is shown">
+				<storeProperty name="cartDPNo.dynamic" value="${sku.nonesd}" propertyType="dynamic" description="Define Sku to checkout" />
+				&getEDPofCartDPNo;
+				<verifyXPath xpath="id('cartStaticQty_#{cartEDPNo}')" description="Verify Quantity field of the Non ESD sku" />
+			</group>
+			
+			<group description="Verify the QTY Box of the ESD is shown">
+				<storeProperty name="cartDPNo.dynamic" value="${sku.esd}" propertyType="dynamic" description="Define Sku to checkout" />
+				&getEDPofCartDPNo;
+				<verifyXPath xpath="id('cartStaticQty_#{cartEDPNo}')" description="Verify Quantity field of the ESD sku" />
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

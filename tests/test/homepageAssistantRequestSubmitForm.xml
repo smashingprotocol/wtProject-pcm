@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="homepageAssistantRequestSubmitForm">
+
+	<target name="homepageAssistantRequestSubmitForm">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="CHECKOUT: ${title}">
+			
+			&config;
+			<invoke url="${url}" description="Go to PCMall Homepage"/>
+
+			<group description="Define properties">
+					<setInputField name="businessName.dynamic" value="${businessName}" description="Business Name" />
+					<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+					<storeProperty name="sku.dynamic" value="${sku.withapplecare}" description="Define Sku to checkout" />
+					<storeProperty name="serviceplansku.dynamic" value="${sku.withcustomcode}" description="Define Sku to checkout" />
+			</group>
+		
+			
+		</webtest>
+		
+	</target>
+</project>

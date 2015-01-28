@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="singleSignInLogin">
+
+	<target name="singleSignInLogin">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SINGLE SIGN IN: ${title} ${login.entry}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="site.dynamic" value="${site}" description="Define URL to login" />
+			&loginHeader;
+			
+			<ifStep description="Verify User should be login or not">
+				<condition>
+					<verifyProperty name="login" text="true" propertyType="ant" description="To select consumer" />
+				</condition>
+				<then>
+						<not description="Login textbox should not be display">
+							<setInputField xpath="id('emailAddress385')" value="#{username.dynamic}" description="Enter Username" />
+						</not>
+						
+						<ifStep description="Verify the landing site of the user">
+							<condition>
+								<verifyProperty name="site" text="consumer" propertyType="ant" description="To select consumer" />
+							</condition>
+							<then>
+								<clickLink href="/home?op=common.signInLink.signInLink&amp;reqOp=logOut" description="User can logout after sucessful login" />
+							</then>
+							<else>
+								<verifyDocumentURL text="http://bd.pcm.com/home" description="BD Site" />
+							</else>
+						</ifStep>
+				</then>
+				<else>
+					<setInputField xpath="id('emailAddress385')" value="#{username.dynamic}" description="Enter Username" />
+				</else>
+			</ifStep>
+			
+			
+			
+		</webtest>
+		
+	</target>
+</project>

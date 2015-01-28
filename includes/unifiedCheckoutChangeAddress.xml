@@ -1,0 +1,29 @@
+<group description="Change Shipping Address">
+	<clickElement xpath="${unifiedCheckout.linkChangeShipAdd}" description="Click the Change Button"/>
+			
+	<storeXPath xpath="count(//a[text()='Set as Primary'])" property="shipaddcount" propertyType="dynamic" description="Store the option in Shipping Address" />
+	<repeat count="#{shipaddcount}" counterName="setPrimaryCtr" startCount="1">
+		<ifStep>
+			<condition>
+				<verifyDocumentURL text="https://${host}/o/unifiedWidget-2" description="Verify Checkout Address Book URL" />
+				<not>
+					<VerifyXPath xpath="//div[@class='selectedAddress']//p[contains(text(),'#{city.dynamic}')]" description="The City is selected as Default Ship Address"/>
+				</not>	
+			</condition>
+			<then>
+				<clickElement xpath="(//a[text()='Set as Primary']) [position()=#{setPrimaryCtr}]" description="Click Set to Primary" />
+				
+			</then>
+			<else>
+				<ifStep descripton="If page is still in Address book">
+					<condition>
+						<verifyDocumentURL text="https://${host}/o/unifiedWidget-2" description="Verify Checkout Address Book URL" />
+					</condition>
+					<then>
+						<clickElement xpath="//div[@class='selectedAddress']/a[@class='buttonShipToAddress']" description="Set the Primary Adress as Shipping address" />
+					</then>
+				</ifStep>
+			</else>
+		</ifStep>
+	</repeat>	
+</group>

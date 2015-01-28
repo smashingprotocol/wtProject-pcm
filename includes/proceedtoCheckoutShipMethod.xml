@@ -1,0 +1,20 @@
+<group description="Proceed to Checkout: 2. Shipping Method">
+	<ifStep description="If item is ESD, skip Shipping method">
+		<condition>
+			<verifyProperty name="shippingMethod.dynamic" value="esd" description="Verify the esd shipping method" />
+		</condition>
+		<else>
+			<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Shipping Method" regex="true" description="Verify breadcrumbs is Shipping Method page" />
+			<ifStep description="Verify if a shipping method is already selected">
+				<condition>
+					<verifyXPath xpath="//input[@name='shipMethodRadio' and @checked='checked']" description="Ship method radiod button is selected" />
+				</condition>
+				<else>
+					<setRadioButton xpath="//input[@name='shipMethodRadio']" description="Select the first shipment method" />
+				</else>
+			</ifStep>
+			<clickElement xpath="id('subShipBut')" description="Enter Continue" />
+		</else>
+	</ifStep>
+</group>
+

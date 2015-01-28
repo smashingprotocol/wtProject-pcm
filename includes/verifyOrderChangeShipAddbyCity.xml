@@ -1,0 +1,26 @@
+<group description="Unified Checkout  - Get All Ship ID in Address Book">
+	
+	<ifStep description="If city is already selected as default">
+		<condition>
+			<verifyXPath xpath="(//div[@class='boxCon']) [position()=1]//td[contains(text(),'#{city.dynamic}')]" description="Shipping Address 1" />
+		</condition>
+		<else>
+			<clickLink xpath="${verifyorder.shipchangelink}" description="Click Change link"/>
+	
+			<storeXPath xpath="count(//a[@class='buttonShipToAddress'])" property="shipaddcount" propertyType="dynamic" description="Stor the number of Ship to this Address" />
+			<repeat count="#{shipaddcount}" counterName="ctr" startCount="1">
+				<ifStep description="Look for the Ship to Address button tha matches the #{city.dynamic}">
+					<condition>
+						<verifyDocumentURL text="https://${host}/o/unifiedWidget-2" description="URL is Address Book" />
+						<verifyXPath xpath="(//div[@class='shippingAddressBlock']) [position()=#{ctr}]//p[contains(text(),'#{city.dynamic}')]" description="Verify that contains the #{city.dynamic}" />
+					</condition>
+					<then>
+						<storeXPath xpath="(//a[@class='buttonShipToAddress' and @title='Ship to this Address']) [position()=#{ctr}]/@shipid" property="#{city.dynamic}.shipid" propertyType="dynamic" description="Store the Ship ID" />
+						<clickLink xpath="//a[@class='buttonShipToAddress' and @shipid='#{#{city.dynamic}.shipid}']" description="Click Ship to this address" />
+					</then>
+				</ifStep>
+			</repeat>
+		</else>
+	</ifStep>
+	
+</group>

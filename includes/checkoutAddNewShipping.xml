@@ -1,0 +1,23 @@
+<group description="Proceed to Checkout: 1. Shipping Address">
+	<clickElement xpath="//img[@src='/mall/widgetti/images/checkOut/newLook/proceedcheckbtn.jpg']" description="Click Proceed to Checkout" />
+	<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Shipping Address" regex="true" description="Verify breadcrumbs is Shipping Address page" />
+	<clickElement xpath="id('changeAddbut')" description="Click Change button" />
+	<setRadioButton xpath="id('newShipAddRadioBut')" description="Select New Shipping Address Radio button" />
+	<clickElement xpath="id('subDefShipBut')" description="Click Continue button" />
+	<setInputField xpath="id('shipToAptCompanySuite')" value="#{company.dynamic}" description="Enter Company Name" />
+	<setInputField xpath="id('shipToStreetAddress')" value="#{address1.dynamic}" description="Enter Address 1" />
+	<setInputField xpath="id('shipToCity_orig')" value="#{city.dynamic}" description="Enter City" />
+	<setSelectField xpath="id('shipToState_orig')" value="#{state.dynamic}" description="Select State" />
+	<setInputField xpath="id('shipToZipCode')" value="#{zipCode.dynamic}" description="Enter zip code" />
+	
+	<setInputField xpath="id('shipToFirstName')" value="#{firstname.dynamic}" description="Enter First Name" />
+	<setInputField xpath="id('shipToMiddleName')" value="#{mi.dynamic}" description="Enter Middle Initial" />
+	<setInputField xpath="id('shipToLastName')" value="#{lastname.dynamic}" description="Enter Last Name" />
+	<setInputField xpath="id('shipToDayAreaCode')" value="#{areacode.dynamic}" description="Enter Phone Area Code" />
+	<setInputField xpath="id('shipToDayPhone')" value="#{phone.dynamic}" description="Enter Phone " />
+	<setInputField xpath="id('shipToDayExtension')" value="#{extension.dynamic}" description="Enter Phone extension" />
+	
+	<clickElement xpath="id('subDefShipBut')" description="Click Continue button" />
+	<previousResponse/>
+</group>
+

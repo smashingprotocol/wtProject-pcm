@@ -1,0 +1,80 @@
+<group description="Checkout Billing and Payment Form">
+
+	<retry maxCount="6" description="Wait for the Billing and Payment page to appear">
+		<sleep seconds="10"/>
+		<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Billing And Payment" regex="true" description="Verify breadcrumbs is Billing And Payment page" />
+	</retry>
+	
+	<ifStep description="If form is create or Edit">
+			<condition>
+				<verifyProperty property="formmode.dynamic" value="edit" description="Flag Create New Add" />
+			</condition>
+			<then>
+				<storeProperty property="billaddmessage" value="Billing address changed successfully" propertyType="dynamic" description="Store the message to expect when edit bill add"/>
+				
+				<clickElement xpath="${checkout.linkEditBillAdd}" description="Click Edit Address" />
+				
+				<setInputField xpath="id('billToAptCompanySuite')" value="#{companyName.dynamic}" description="Enter companyName" />
+				<setInputField xpath="id('billToStreetAddress')" value="#{addressOne.dynamic}" description="Enter addressOne" />
+				<setInputField xpath="id('billToAddressTwo')" value="#{addressTwo.dynamic}" description="Enter addressTwo" />
+				<setInputField xpath="id('billToCity')" value="#{city_orig.dynamic}" description="Enter city_orig" />
+				<setSelectField xpath="id('billToState')" value="#{state_orig.dynamic}" description="Enter state_orig" />
+				<setInputField xpath="id('billToZipCode')" value="#{zipCode.dynamic}" description="Enter zipCode" />
+				
+				<setInputField xpath="id('saveAsToMyAccount')" value="#{saveAsToMyAccount.dynamic}" description="Enter zipCode" />
+				
+				<setInputField xpath="id('billToFirstName')" value="#{firstName.dynamic}" description="Enter First Name" />
+				<setInputField xpath="id('billToMiddleName')" value="#{middleInitial.dynamic}" description="Enter Middle Initial" />
+				<setInputField xpath="id('billToLastName')" value="#{lastName.dynamic}" description="Enter Last Name" />
+				
+				<setInputField xpath="id('billToDayAreaCode')" value="#{dayAreaCode.dynamic}" description="Enter dayAreaCode" />
+				<setInputField xpath="id('billToDayPhone')" value="#{dayPhone1.dynamic}" description="Enter dayPhone1" />
+				<setInputField xpath="id('billToDayExtension')" value="#{dayPhone2.dynamic}" description="Enter dayPhone2" />
+				<setInputField xpath="id('billToEveAreaCode')" value="#{eveAreaCode.dynamic}" description="Enter eveAreaCode" />
+				<setInputField xpath="id('billToEvePhone')" value="#{evePhone1.dynamic}" description="Enter evePhone1" />
+				<setInputField xpath="id('billToEveExtension')" value="#{evePhone2.dynamic}" description="Enter evePhone2" />
+
+				 <expectDialogs description="set up dialog expectations">
+					<alert description="expect alert with save of dialog message" saveProperty="dialogAlertValidation" />
+				</expectDialogs>
+					
+				<clickElement xpath="${checkout.btnPopupEditBillAddCont}" description="Click Continue Button" />
+				
+			</then>
+			<else>
+				
+				<storeProperty property="billaddmessage" value="New shipping address added successfully" propertyType="dynamic" description="Store the message to expect when edit bill add"/>
+				
+				<setRadioButton xpath="id('newBillAddRadioBut')" description="Select New Billing Address" />
+				<sleep seconds="10" />
+				<clickElement xpath="id('conCheckBut')" description="Click Continue Button" />
+				
+				<setInputField xpath="id('createNewBillAdd')//input[@id='newBillToAptCompanySuite']" value="#{companyName.dynamic}" description="Enter companyName" />
+				<setInputField xpath="id('createNewBillAdd')//input[@id='newBillToStreetAddress']" value="#{addressOne.dynamic}" description="Enter addressOne" />
+				<setInputField xpath="id('createNewBillAdd')//input[@id='newBillToAddressTwo']" value="#{addressTwo.dynamic}" description="Enter addressTwo" />
+				<setInputField xpath="id('createNewBillAdd')//input[@id='newBillToCity']" value="#{city_orig.dynamic}" description="Enter city_orig" />
+				<setSelectField xpath="id('createNewBillAdd')//select[@id='newBillToState']" value="#{state_orig.dynamic}" description="Enter state_orig" />
+				<setInputField xpath="id('createNewBillAdd')//input[@id='newBillToZipCode']" value="#{zipCode.dynamic}" description="Enter zipCode" />
+				
+				<setInputField xpath="id('createNewBillAdd')//input[@id='saveAsToMyAccount']" value="#{saveAsToMyAccount.dynamic}" description="Enter zipCode" />
+				
+				<setInputField xpath="id('createNewBillAdd')//input[@id='newBillToFirstName']" value="#{firstName.dynamic}" description="Enter First Name" />
+				<setInputField xpath="id('createNewBillAdd')//input[@id='newBillToMiddleName']" value="#{middleInitial.dynamic}" description="Enter Middle Initial" />
+				<setInputField xpath="id('createNewBillAdd')//input[@id='newBillToLastName']" value="#{lastName.dynamic}" description="Enter Last Name" />
+				
+				<setInputField xpath="id('createNewBillAdd')//input[@id='newBillToDayAreaCode']" value="#{dayAreaCode.dynamic}" description="Enter dayAreaCode" />
+				<setInputField xpath="id('createNewBillAdd')//input[@id='newBillToDayPhone']" value="#{dayPhone1.dynamic}" description="Enter dayPhone1" />
+				<setInputField xpath="id('createNewBillAdd')//input[@id='newBillToDayExtension']" value="#{dayPhone2.dynamic}" description="Enter dayPhone2" />
+				<setInputField xpath="id('createNewBillAdd')//input[@id='newBillToEveAreaCode']" value="#{eveAreaCode.dynamic}" description="Enter eveAreaCode" />
+				<setInputField xpath="id('createNewBillAdd')//input[@id='newBillToEvePhone']" value="#{evePhone1.dynamic}" description="Enter evePhone1" />
+				<setInputField xpath="id('createNewBillAdd')//input[@id='newBillToEveExtension']" value="#{evePhone2.dynamic}" description="Enter evePhone2" />
+				
+				 <expectDialogs description="set up dialog expectations">
+					<alert description="expect alert with save of dialog message" saveProperty="dialogAlertValidation" />
+				</expectDialogs>
+				
+				<clickElement xpath="id('conCheckBut')" description="Click Continue Button" />
+			</else>
+	</ifStep>	
+
+</group>

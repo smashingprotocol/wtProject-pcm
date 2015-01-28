@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="checkoutAddNewShippingAddress">
+
+	<target name="checkoutAddNewShippingAddress">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="CHECKOUT: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${sku.withServicePlan}" description="Define Sku to checkout" />
+			&myAccountLogin;
+			&deleteAllIteminCart;
+			&addtoCartPDPSearchSKU;
+			
+			<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+			<storeProperty name="ccey.dynamic" value="2014" description="Define Credit Card Year" />
+			<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+			<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+			<storeProperty name="cardSecCode.dynamic" value="123" description="Define Credit Card Number" />
+			<storeProperty name="placeOrder.dynamic" value="true" description="Define Credit Card Number" />
+			
+			<storeProperty name="company.dynamic" value="${now} Company" description="Enter Company Name" />
+			<storeProperty name="address1.dynamic" value="${now} Mountain Dew" description="Enter Address 1" />
+			<storeProperty name="city.dynamic" value="ANAHEIM" description="Enter City" />
+			
+			<storeProperty name="state.dynamic" value="CA" description="Select State" />
+			<storeProperty name="zipCode.dynamic" value="928062009" description="Enter zip code" />
+			
+			<storeProperty name="firstname.dynamic" value="Marlon" description="Enter First Name" />
+			<storeProperty name="mi.dynamic" value="G" description="Enter Middle Initial" />
+			<storeProperty name="lastname.dynamic" value="Palo" description="Enter Last Name" />
+			<storeProperty name="areacode.dynamic" value="331" description="Enter Phone Area Code" />
+			<storeProperty name="phone.dynamic" value="554" description="Enter Phone " />
+			<storeProperty name="extension.dynamic" value="5100" description="Enter Phone extension" />
+			
+			
+			&checkoutAddNewShipping;
+			
+		</webtest>
+		
+	</target>
+</project>

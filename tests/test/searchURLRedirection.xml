@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchURLRedirection">
+
+	<target name="searchURLRedirection">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			
+			<storeProperty name="mainmenu.dynamic" value="${category.href}" description="Define Main Menu Category" />
+			<storeProperty name="isBrand.dynamic" value="${isBrand}" description="If to select Brands" />
+			<storeProperty name="isPriceRange.dynamic" value="${isPriceRange}" description="If to select Price Range" />
+			<storeProperty name="isCondition.dynamic" value="${isCondition}" description="If to select Condition" />
+			
+			
+			<invoke url="#{mainmenu.dynamic}" description="This will click Main Menu under Categories Header Menu"/>
+		
+			<ifStep description="If to select Brands">
+				<condition>
+					<verifyProperty property="isBrand.dynamic" value="true" description="If isBrand is set to true" />
+				</condition>
+				<then>
+					<storeXPath xpath="//a[contains(@onclick,'setMan')]" property="facetlink" description="Store the link" />
+					<clickElement xpath="//a[contains(@onclick,'setMan')]" description="CLick the 1st link under Brand" />
+					
+					<echo message="#{facetlink}" />
+					<not description="No Product found page should not be display">
+						<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+						<verifyXPath xpath="//span[contains(text(),'No products found for keyword')]" description="XPath for No product found page"  />
+					</not>
+					<verifyXPath xpath="count(//div[@class='itemlist lst'])" text="25" description="Item on list are 25"/>
+				</then>
+			</ifStep>
+			
+			<ifStep description="If to select Price range">
+				<condition>
+					<verifyProperty property="isPriceRange.dynamic" value="true" description="If isPriceRange is set to true" />
+				</condition>
+				<then>
+					<clickElement xpath="//a[contains(@onclick,'setPrc')]" description="CLick the 1st link under Price range" />
+					<not description="No Product found page should not be display">
+						<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+						<verifyXPath xpath="//span[contains(text(),'No products found for keyword')]" description="XPath for No product found page"  />
+					</not>
+					<verifyXPath xpath="count(//div[@class='itemlist lst'])" text="25" description="Item on list are 25"/>
+				</then>
+			</ifStep>
+			
+			
+			<clickElement xpath="id('toolbarNextPage')" description="click next page" />
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+				<verifyXPath xpath="//span[contains(text(),'No products found for keyword')]" description="XPath for No product found page"  />
+			</not>
+			
+			<verifyXPath xpath="count(//div[@class='itemlist lst'])" text="25" description="Item on list are 25"/>
+			
+		</webtest>
+		
+	</target>
+</project>

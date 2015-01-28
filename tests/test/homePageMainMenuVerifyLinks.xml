@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="homePageMainMenuVerifyLinks">
+
+	<target name="homePageMainMenuVerifyLinks">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="HOMEPAGE: Check MAIN MENU Links with Page Not Found and PC Mall wordings [${host}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			
+			<group description="Sub Header: Brands, Products Header, Services, Financing and Why PCM">
+					<storeXPath xpath="count(//a[contains(@id,'mainMenu')])" property="mainLinkCount" propertyType="dynamic" />
+					<storeProperty property="mainerrorctr" value="0" propertyType="dynamic" description="Initialize value for mainerrorctr" />	
+					<repeat	count="#{mainLinkCount}" startCount="1" counterName="mainlinkctr">
+						<storeXPath xpath="(//a[contains(@id,'mainMenu')]) [position()=#{mainlinkctr}]" property="mainlinkdescription" propertyType="dynamic" description="Click Link"/>
+						
+						<clickElement xpath="(//a[contains(@id,'mainMenu')]) [position()=#{mainlinkctr}]" description="#{mainlinkdescription}"/>
+						
+						<ifStep description="If Page Not  Found">
+							<condition>
+								<verifyXPath xpath="//span[contains(text(),'we were unable to find the page you requested.')]" />
+							</condition>
+							<then>
+								<echo message="PAGE NOT FOUND" />
+								<storeProperty property="mainerrorctr" value="#{mainerrorctr} + 1" eval="true" propertyType="dynamic" description="Increment ctr by 1" />
+								<storeProperty property="mainpagewitherror#{mainerrorctr}" value="#{mainlinkctr} - #{mainlinkdescription}" description="Store the link with error." />
+							</then>
+							<else>
+								<ifStep description="If PC Mall wordings is found">
+									<condition>
+										<verifyText text="PC Mall" regex="true" description="Look for PC Mall wordings" />
+										<verifyText text="PCMall" regex="true" description="Look for PC Mall wordings" />
+									</condition>
+									<then>
+										<echo message="PC Mall wording found" />
+										<storeProperty property="mainerrorctr" value="#{mainerrorctr} + 1" eval="true" propertyType="dynamic" description="Increment ctr by 1" />
+										<storeProperty property="mainpagewitherror#{mainerrorctr}" value="#{mainlinkctr} - #{mainlinkdescription}" description="Store the link with error." />
+									</then>		
+								</ifStep>
+							</else>
+						</ifStep>
+					</repeat>	
+			</group>
+			
+			<repeat	count="#{mainerrorctr}" startCount="1" counterName="mainerrctr" description="Sub Headers Page with Errors">
+				<echo message="#{mainpagewitherror#{mainerrctr}}" />
+			</repeat>
+			
+			<!-- Not applicable in the new header
+			<group description="Sub Item: Products and Services">
+					<storeXPath xpath="count(//li[@class='subItem']/a)" property="linkCount" propertyType="dynamic" />
+					<storeProperty property="errorctr" value="0" propertyType="dynamic" description="Initialize value for errorctr" />	
+					<repeat	count="#{linkCount}" startCount="1" counterName="linkctr">
+						<storeXPath xpath="(//li[@class='subItem']/a) [position()=#{linkctr}]" property="linkdescription" propertyType="dynamic" description="Click Link"/>
+						
+						<clickElement xpath="(//li[@class='subItem']/a) [position()=#{linkctr}]" description="#{linkdescription}"/>
+						
+						<ifStep description="If Page Not  Found">
+							<condition>
+								<verifyXPath xpath="//span[contains(text(),'we were unable to find the page you requested.')]" />
+							</condition>
+							<then>
+								<echo message="PAGE NOT FOUND" />
+								<storeProperty property="errorctr" value="#{errorctr} + 1" eval="true" propertyType="dynamic" description="Increment ctr by 1" />
+								<storeProperty property="pagewitherror#{errorctr}" value="#{linkctr} - #{linkdescription}" description="Store the link with error." />
+							</then>
+							<else>
+								<ifStep description="If PC Mall wordings is found">
+									<condition>
+										<verifyText text="PC Mall" regex="true" description="Look for PC Mall wordings" />
+										<verifyText text="PCMall" regex="true" description="Look for PC Mall wordings" />
+									</condition>
+									<then>
+										<echo message="PC Mall wording found" />
+										<storeProperty property="errorctr" value="#{errorctr} + 1" eval="true" propertyType="dynamic" description="Increment ctr by 1" />
+										<storeProperty property="pagewitherror#{errorctr}" value="#{linkctr} - #{linkdescription}" description="Store the link with error." />
+									</then>		
+								</ifStep>
+							</else>
+						</ifStep>
+					</repeat>	
+				
+			</group>
+			
+			<repeat	count="#{errorctr}" startCount="1" counterName="errctr" description="Sub Items Page with Errors">
+				<echo message="#{pagewitherror#{errctr}}" />
+			</repeat>
+			-->
+		</webtest>
+		
+	</target>
+</project>

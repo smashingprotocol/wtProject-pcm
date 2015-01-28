@@ -1,0 +1,54 @@
+<group description="Billing Address Fillup Form">
+	<setInputField xpath="id('billingEmail')" value="#{billingEmail.dynamic}" description="userEmail" />
+	<setInputField xpath="id('billingConfirmEmail')" value="#{billingEmail.dynamic}" description="Confirmed Email" />
+	<setInputField xpath="id('billingPassword')" value="#{billingPassword.dynamic}" description="Password" />
+	<setInputField xpath="id('billingConfirmPassword')" value="#{billingPassword.dynamic}" description="Confirmed Password" />
+	<setInputField xpath="id('billingFname')" value="#{firstName.dynamic}" description="Enter First Name" />
+	<setInputField xpath="id('billingLname')" value="#{lastName.dynamic}" description="Enter Last Name" />
+	<setInputField xpath="id('billingCompany')" value="#{companyName.dynamic}" description="Enter companyName" />
+	<setInputField xpath="id('billingAddress')" value="#{addressOne.dynamic}" description="Enter addressOne" />
+	<setInputField xpath="id('billingAddress_2')" value="#{addressTwo.dynamic}" description="Enter addressTwo" />
+	<setInputField xpath="id('billingZip')" value="#{zipCode.dynamic}" description="Enter zipCode" />
+	<sleep seconds="3"/>
+	<setInputField xpath="id('billingCity')" value="#{city_orig.dynamic}" description="Enter city_orig" />
+	<setSelectField xpath="id('billingStateSelect')" value="#{billingStateSelect.dynamic}" description="Enter state_orig" />
+	<setInputField xpath="id('billingTelephone')" value="#{billingTelephone.dynamic}" description="Enter Telephone Number" />
+	<setInputField xpath="id('billingMobile')" value="#{billingMobile.dynamic}" description="Enter Mobile Number" />
+</group>
+
+<ifStep description="Shipping Address">
+		<condition>
+			<not>
+				<verifyProperty property="sameAsBilling.dynamic" value="true" propertyType="dynamic" description="is Same as Billing"/>
+			</not>	
+		</condition>
+		<then>
+			<setInputField xpath="id('shippingFname')" value="#{shippingFname.dynamic}" description="Enter First Name" />
+			<setInputField xpath="id('shippingLname')" value="#{shippingLname.dynamic}" description="Enter Last Name" />
+			<setInputField xpath="id('shippingCompany')" value="#{shippingCompany.dynamic}" description="Enter companyName" />
+			<setInputField xpath="id('shippingAddress')" value="#{shippingAddress.dynamic}" description="Enter addressOne" />
+			<setInputField xpath="id('shippingAddress_2')" value="#{shippingAddress_2.dynamic}" description="Enter addressTwo" />
+			<setInputField xpath="id('shippingZip')" value="#{shippingZip.dynamic}" description="Enter zipCode" />
+			
+			<ifStep description="If Shipping is Non APO">
+				<condition>
+					<verifyProperty property="isApo.dynamic" value="true"  propertyType="dynamic" description="is APO"/>
+				</condition>
+				<then>
+					<clickElement xpath="//a[@class='fBold apoAddressButton']" description="Click APO link" />
+					<setSelectField xpath="id('shippingCityApoSelect')" text="#{shippingCity.dynamic}" description="Enter APO City" />
+					<setSelectField xpath="id('shippingStateApoSelect')" text="#{shippingStateSelect.dynamic}" description="Enter APO state_orig" />
+				</then>
+				<else>
+					<setInputField xpath="id('shippingCity')" value="#{shippingCity.dynamic}" description="Enter City" />
+					<setSelectField xpath="id('shippingStateSelect')" value="#{shippingStateSelect.dynamic}" description="Enter state_orig" />
+				</else>
+			</ifStep>
+			
+			<setInputField xpath="id('shippingTelephone')" value="#{shippingTelephone.dynamic}" description="Enter Telephone Number" />
+			<setInputField xpath="id('shippingMobile')" value="#{shippingMobile.dynamic}" description="Enter Mobile Number" />
+		</then>
+		<else>
+			<setCheckbox xpath="id('sameAsBilling')" description="Checkbox Same as Billing Address" />
+		</else>
+</ifStep>

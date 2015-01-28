@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderShippingFeeUpdate">
+
+	<target name="verifyOrderShippingFeeUpdate">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title}.">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			
+			<storeProperty name="shippingMethod.dynamic" value="${shippingMethod}" description="Define Shipping method" />
+			&myAccountLogin;
+			&clearCart;
+			<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Default Sku to checkout" />
+			&addtoCartPDPSearchSKU;
+			<storeProperty name="sku.dynamic" value="${sku.freeshipping}" description="Define Default Sku to checkout" />
+			&addtoCartPDPSearchSKU;
+			
+			<storeProperty name="cartDPNo.dynamic" value="${defaultSku}" description="Define Sku to get the PDP No" />
+			&getEDPofCartDPNo;
+			
+			<storeProperty name="cctype.dynamic" value="vi" description="Define Credit Card Month" />
+			<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+			<storeProperty name="ccey.dynamic" value="2015" description="Define Credit Card Year" />
+			<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+			<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+			<storeProperty name="cardSecCode.dynamic" value="123" description="Define Credit Card Number" />
+	
+			
+			&unifiedProceedtoCheckout;
+			
+			<not description="Verify the Shipping Fee is not 0">
+				<verifyXPath xpath="//p[@id='shipFee' and (text()='$0.00' or text()='Free')]" description="Verify the Shipping Fee is 0" />
+			</not>
+			
+			<group description="Delete the item with Shipping amount">
+			
+				<clickElement xpath="//a[@id='editYourCart']" description="Click Edit your cart" />
+				<sleep seconds="3"/>
+				<clickLink xpath="//a[@id='orRemove_#{cartEDPNo}']" description="Click the delete link of the item." />
+				<retry maxCount="3" description="Wait for the item to be deleted.">
+					<sleep seconds="10" />
+					<not description="Verify item should not be in the item">
+						<verifyXPath xpath="//input[@id='orQty_#{cartEDPNo}']" description="Input Field of the item" />
+					</not>
+				</retry>
+
+				<verifyXPath xpath="//p[@id='shipFee' and (text()='$0.00' or text()='Free')]" description="Verify the Shipping Fee is 0" />
+				
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

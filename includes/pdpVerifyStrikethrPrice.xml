@@ -1,0 +1,26 @@
+<ifStep description="PDP Verify Strikethrough Price">
+	<condition>
+		<verifyXPath xpath="//p[@itemprop='price']" description="verify the Final Price of PDP Redesign" />
+	</condition>
+	<then>
+		<storeXPath xpath="${pdp.finalPrice}" property="pdp.finalprice" propertyType="dynamic" description="Store the Final Price of PDP Redesign" />
+		<scriptStep description="Convert price text to digit" language="javascript">
+			var strPrice = step.getWebtestProperty('pdp.finalprice');
+			var strPrice = strPrice.replaceAll("[A-Za-z,$,:,(,),',;,_]", "");
+			step.setWebtestProperty('finalPriceNum',strPrice);
+		</scriptStep>
+		<echo message="#{finalPriceNum}" description="Display final price in number"/>
+		
+		<storeXPath xpath="${pdp.strikethrPrice}" property="pdp.strikethrprice" propertyType="dynamic" description="Store the Strikethrough Price of PDP Redesign" />
+		<scriptStep description="Convert price text to digit" language="javascript">
+			var strPrice = step.getWebtestProperty('pdp.strikethrprice');
+			var strPrice = strPrice.replaceAll("[A-Za-z,$,:,(,),',;,_]", "");
+			step.setWebtestProperty('finalStrikethrPriceNum',strPrice);
+		</scriptStep>
+		<echo message="#{finalStrikethrPriceNum}" description="Display final price in number"/>
+		
+		<storeProperty name="adjusted" value="(#{finalPriceNum} - #{finalStrikethrPriceNum})" eval="true" description="Subtract Final Price with strikethrough price" />
+		<echo message="#{adjusted}" description="Results of Final Price - Strikethrough price"/>
+		<verifyProperty property="adjusted" text="-" regex="true" description="Verify results has negative, which means strikethrough price is higher"/>
+	</then>
+</ifStep>	

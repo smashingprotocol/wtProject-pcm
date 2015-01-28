@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="pcmgCreateAccountValidData">
+
+	<target name="pcmgCreateAccountValidData">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhm" />
+		</tstamp>
+		
+		<webtest name="CREATE NEW ACCOUNT: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<clickLink href="/o/Sign-In/msc-login" description="Click PCMG Account Login" />
+			<clickLink href="/o/Create-New-Account-With-Billing-and-Shipping/msc-135?returnUrl=msc-home" description="Click PCMG Account Login" />
+			
+			
+			<expectDialogs description="set up dialog expectations">
+					<alert description="expect alert with save of dialog message"
+						saveProperty="alertValidationMsg" />
+				</expectDialogs>
+			
+			<storeRandom property="random.affiliate" choice="WEB36D,WEB37F,WEB36G,WEB37H,WEB36H,WEB54C" description="Select a random affiliate" />
+			<storeProperty name="sourceCode" value="#{random.affiliate}" description="sourceCode" />
+			
+			<storeProperty name="firstName" value="${firstName}" description="firstName" />
+			<storeProperty name="middleName" value="${middleName}" description="middleName" />
+			<storeProperty name="lastName" value="${pcmHost}${lastName}" description="lastName" />
+			<storeProperty name="userEmail" value="manilaqa+${pcmHost}#{random.affiliate}${now}@gmail.com" description="userEmail" />
+			<storeProperty name="reEnteruserEmail" value="#{userEmail}" description="userEmail" />
+			<storeProperty name="userPassword" value="${userPassword}" description="userPassword" />
+			<storeProperty name="userPasswordReenter" value="${userPasswordReenter}" description="userPasswordReenter" />
+			
+			
+			<storeProperty name="billToFirstName" value="${billToFirstName}" description="billToFirstName" />
+			<storeProperty name="billToMiddleName" value="${billToMiddleName}" description="billToMiddleName" />
+			<storeProperty name="billToLastName" value="${billToLastName}" description="billToLastName" />
+			<storeProperty name="billToAptCompanySuite" value="${billToAptCompanySuite}" description="billToAptCompanySuite" />
+			<storeProperty name="billToStreetAddress" value="${billToStreetAddress}" description="billToStreetAddress" />
+			<storeProperty name="billToAddressTwo" value="${billToAddressTwo}" description="billToAddressTwo" />
+			<storeProperty name="billToCity" value="${billToCity}" description="billToCity" />
+			
+			<storeProperty name="billToState" value="${billToState}" description="billToState" />
+			<storeProperty name="billToZipCode" value="${billToZipCode}" description="billToZipCode" />
+			<storeProperty name="billToDayAreaCode" value="${billToDayAreaCode}" description="billToDayAreaCode" />
+			<storeProperty name="billToDayPhone" value="${billToDayPhone}" description="billToDayPhone" />
+			<storeProperty name="billToDayExtension" value="${billToDayExtension}" description="billToDayExtension" />
+			<storeProperty name="billToEveAreaCode" value="${billToEveAreaCode}" description="billToEveAreaCode" />
+			<storeProperty name="billToEvePhone" value="${billToEvePhone}" description="billToEvePhone" />
+			<storeProperty name="billToEveExtension" value="${billToEveExtension}" description="billToEveExtension" />
+			
+			<storeProperty name="copyToShipping" value="${copyToShipping}" description="Copy Billing Info to Shipping Info" />
+			
+			<!--Shipping -->
+			<storeProperty name="shipToFirstName" value="${shipToFirstName}" description="shipToFirstName" />
+			<storeProperty name="shipToMiddleName" value="${shipToMiddleName}" description="shipToMiddleName" />
+			<storeProperty name="shipToLastName" value="${shipToLastName}" description="shipToLastName" />
+			<storeProperty name="shipToAptCompanySuite" value="${shipToAptCompanySuite}" description="shipToAptCompanySuite" />
+			<storeProperty name="shipToStreetAddress" value="${shipToStreetAddress}" description="shipToStreetAddress" />
+			<storeProperty name="shipToAddressTwo" value="${shipToAddressTwo}" description="shipToAddressTwo" />
+			<storeProperty name="shipToCity_orig" value="${shipToCity_orig}" description="shipToCity" />
+			
+			<storeProperty name="shipToState_orig" value="${shipToState_orig}" description="shipToState" />
+			<storeProperty name="shipToZipCode" value="${shipToZipCode}" description="shipToZipCode" />
+			<storeProperty name="shipToDayAreaCode" value="${shipToDayAreaCode}" description="shipToDayAreaCode" />
+			<storeProperty name="shipToDayPhone" value="${shipToDayPhone}" description="shipToDayPhone" />
+			<storeProperty name="shipToDayExtension" value="${shipToDayExtension}" description="shipToDayExtension" />
+			<storeProperty name="shipToEveAreaCode" value="${shipToEveAreaCode}" description="shipToEveAreaCode" />
+			<storeProperty name="shipToEvePhone" value="${shipToEvePhone}" description="shipToEvePhone" />
+			<storeProperty name="shipToEveExtension" value="${shipToEveExtension}" description="shipToEveExtension" />
+			
+		
+			&createAccountSetData;
+			<clickElement xpath="//a[contains(@onclick,'validate_address')]" />
+			<echo message="#{alertValidationMsg}" />
+			
+			<not>
+				<verifyXPath xpath="//div[@id='billingShippingMessage')]" description="Verify Validation Message" />
+			</not>
+			
+			<retry maxCount="3">
+				<sleep seconds="10" />	
+				<clickElement xpath="id('QAS_AcceptOriginal')" description="Click QAS Use Address as entered"/>
+			</retry>
+			<verifyDocumentURL text="http://${host}/home" />
+			
+		</webtest>
+		
+		
+	</target>
+</project>

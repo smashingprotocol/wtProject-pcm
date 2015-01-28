@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchNewVerifyFreeShippingPromoText">
+
+	<target name="searchNewVerifyFreeShippingPromoText">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title} - ${keyword}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />	
+			&searchKeyword;
+			
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+			</not>
+				
+			<verifyXPath xpath="//div[@class='rpricing']//span[text()='Free Shipping']" description="Verify the Free Shipping Text"/>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

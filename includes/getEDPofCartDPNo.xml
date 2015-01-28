@@ -1,0 +1,11 @@
+<!-- Need to pass the SKU to the cartDPNo.dynamic property, and page should be in shopping cart -->
+<group description="get EDP of the SKU in ShoppingCart">
+	<storeElementAttribute xpath="//input[@value='#{cartDPNo.dynamic}']" attributeName="id" property="tempcartDPNo" propertyType="dynamic" description="Store the qty box DPNo" />
+	<echo message="#{tempcartDPNo}"/>
+	<scriptStep description="Store the match count" language="javascript">
+		var strcartDPNo = step.getWebtestProperty('tempcartDPNo');
+		var strcartDPNo = strcartDPNo.replaceAll("[A-Za-z,(,),_]", "");
+		step.setWebtestProperty('cartEDPNo',strcartDPNo);
+	</scriptStep>
+	<echo message="#{cartEDPNo}"/>
+</group>

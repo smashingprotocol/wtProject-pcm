@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderMIRPriceVerificationSaveforLaterinCart">
+
+	<target name="verifyOrderMIRPriceVerificationSaveforLaterinCart">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<group description="Define properties">
+				<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${default.checkoutuser}" description="Define username to login" />
+				<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+				<storeProperty name="sku.dynamic" value="${sku}" description="Define dynamic Sku to checkout" />
+				<storeProperty name="addserviceplan.dynamic" value="${addServicePlan}" description="Define if to add a Serviceplan" />
+				
+				<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+				<storeProperty name="ccey.dynamic" value="2016" description="Define Credit Card Year" />
+				<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+				<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+				<storeProperty name="cardSecCode.dynamic" value="123" description="Define Security Code" />
+				<storeProperty name="placeOrder.dynamic" value="false" description="Define if to continue place order" />
+				<storeProperty name="rebateid.dynamic" value="${rebateid}" propertyType="dynamic"  description="Define Data Driven Rebate ID" />
+				<storeProperty name="cartDPNo.dynamic" value="${sku}" propertyType="dynamic"  description="Define Dynamic sku to get EDP No" />
+			</group>
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			&getEDPofCartDPNo;
+			
+			<group description="Save For Later">
+				<clickLink xpath="//a[contains(@onclick,'saveForLater') and contains(@onclick,'#{cartEDPNo}')]" description="Click Save For Later for Item with Shipping" />
+				<verifyText text="Your Shopping Cart is empty." />
+			</group>
+			
+			<group description="Move to Cart">
+				<clickElement xpath="${cart.btnmovetocart}" description="Click Move all items to Cart" />
+				<verifyXPath xpath="id('cartStaticQty_#{cartEDPNo}')" description="Verify the qty box of the item appears in shopping cart"/> 
+			</group>
+			
+			&unifiedProceedtoCheckout;
+			
+			<ifStep description="Verify MAIL IN REBATES">
+				<condition>
+					<verifyProperty property="rebateid.dynamic" value="instantmailin" propertyType="dynamic" description="Verify Instant and Mail in Rebate" />
+				</condition>
+				<then>
+					<verifyXPath xpath="//p[@id='subTotal' and text()!='#{pdp.finalprice}']" description="Verify the Sub Total in the Order Review is NOT same with the Cart" />
+				</then>
+			</ifStep>
+			
+			<ifStep description="Verify INSTANT REBATES">
+				<condition>
+					<verifyProperty property="rebateid.dynamic" value="instantrebates" propertyType="dynamic" description="Verify Instant and Mail in Rebate" />
+				</condition>
+				<then>
+					<verifyXPath xpath="//p[@id='total' and text()!='$0.00']" description="Verify the Grand Total is not 0" />
+					<verifyXPath xpath="//p[@id='subTotal' and text()='#{pdp.finalprice}']" description="Verify the Sub Total in the Order Review is same with the Cart" />
+				</then>
+			</ifStep>
+			
+		</webtest>
+		
+	</target>
+</project>

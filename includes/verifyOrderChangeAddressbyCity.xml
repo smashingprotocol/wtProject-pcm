@@ -1,0 +1,20 @@
+<group description="Step 4 - Verify Order: Change Address by selecting in the dropdown #{city.dynamic}">
+	
+	<retry maxcount="5">
+		<clickElement xpath="//a[@href='javascript:shipAdd.change()']" description="click the Change link in Shipping Address"/>
+		<sleep seconds="10"/>
+		<storeXPath xpath="(id('shipOpt')/option[contains(text(),'#{city.dynamic}')]) [position()=1]" property="shipaddress" propertyType="dynamic" description="Store the option in Shipping Address" />
+	</retry>
+	
+	<setSelectField xpath="id('shipOpt')" text="#{shipaddress}" description="Select the address in the dropdown" />
+	<clickElement xpath="id('subChangeBut')" description="Click the Continue button" />
+	
+	<retry maxcount="5">
+		<sleep seconds="10"/>
+		<not description="Change Popup address is closed">
+			<verifyXPath xpath="(id('shipOpt')/option[contains(text(),'#{city.dynamic}')]) [position()=1]" description="Dropdown list for the Address" />
+		</not>
+		<verifyXPath xpath="//div[@id='billingMessage' and text()='Shipping address changed successfully!']" description="Verify the Shipping address changed successfully"/>
+	</retry>
+
+</group>

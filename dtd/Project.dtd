@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!--
+This file is generated automatically from the information contained in the folder includes.
+Do not edit it else you risk to lose your changes.
+-->
+
+<!ENTITY addtoCartNewPDPSearchSKU SYSTEM "../includes/addtoCartNewPDPSearchSKU.xml">
+<!ENTITY addtoCartPDPSearchSKU SYSTEM "../includes/addtoCartPDPSearchSKU.xml">
+<!ENTITY buyCustomizeAppleAddtoCart SYSTEM "../includes/buyCustomizeAppleAddtoCart.xml">
+<!ENTITY cartCalculateShipping SYSTEM "../includes/cartCalculateShipping.xml">
+<!ENTITY cartCheckoutLogin SYSTEM "../includes/cartCheckoutLogin.xml">
+<!ENTITY cartSavedThisCart SYSTEM "../includes/cartSavedThisCart.xml">
+<!ENTITY ccCheckout SYSTEM "../includes/ccCheckout.xml">
+<!ENTITY checkoutAddNewShipping SYSTEM "../includes/checkoutAddNewShipping.xml">
+<!ENTITY checkoutBillAddForm SYSTEM "../includes/checkoutBillAddForm.xml">
+<!ENTITY checkoutBillingPaymentPayPalCredit SYSTEM "../includes/checkoutBillingPaymentPayPalCredit.xml">
+<!ENTITY checkoutShipAddForm SYSTEM "../includes/checkoutShipAddForm.xml">
+<!ENTITY clearCart SYSTEM "../includes/clearCart.xml">
+<!ENTITY config SYSTEM "../includes/config.xml">
+<!ENTITY createAccountNewSetData SYSTEM "../includes/createAccountNewSetData.xml">
+<!ENTITY createAccountSetData SYSTEM "../includes/createAccountSetData.xml">
+<!ENTITY creditCard SYSTEM "../includes/creditCard.xml">
+<!ENTITY customCodeFormFillupForm SYSTEM "../includes/customCodeFormFillupForm.xml">
+<!ENTITY deleteAllIteminCart SYSTEM "../includes/deleteAllIteminCart.xml">
+<!ENTITY doSomething SYSTEM "../includes/doSomething.xml">
+<!ENTITY expressCheckout SYSTEM "../includes/expressCheckout.xml">
+<!ENTITY getEDPofCartDPNo SYSTEM "../includes/getEDPofCartDPNo.xml">
+<!ENTITY gmailResetPassword SYSTEM "../includes/gmailResetPassword.xml">
+<!ENTITY headerLogin SYSTEM "../includes/headerLogin.xml">
+<!ENTITY homepageLogin SYSTEM "../includes/homepageLogin.xml">
+<!ENTITY invokePostNewLogin SYSTEM "../includes/invokePostNewLogin.xml">
+<!ENTITY invokePostNewLoginwithSS SYSTEM "../includes/invokePostNewLoginwithSS.xml">
+<!ENTITY invokePostProcessCart SYSTEM "../includes/invokePostProcessCart.xml">
+<!ENTITY invokePostSwapAccount SYSTEM "../includes/invokePostSwapAccount.xml">
+<!ENTITY loginHeader SYSTEM "../includes/loginHeader.xml">
+<!ENTITY logout SYSTEM "../includes/logout.xml">
+<!ENTITY macMallLogout SYSTEM "../includes/macMallLogout.xml">
+<!ENTITY mailinatorResetPassword SYSTEM "../includes/mailinatorResetPassword.xml">
+<!ENTITY myAccountChangeDefaultShipAddbyCity SYSTEM "../includes/myAccountChangeDefaultShipAddbyCity.xml">
+<!ENTITY myAccountInputBillAddForm SYSTEM "../includes/myAccountInputBillAddForm.xml">
+<!ENTITY myAccountInputShipAddForm SYSTEM "../includes/myAccountInputShipAddForm.xml">
+<!ENTITY myAccountLogin SYSTEM "../includes/myAccountLogin.xml">
+<!ENTITY pdpVerifyStrikethrPrice SYSTEM "../includes/pdpVerifyStrikethrPrice.xml">
+<!ENTITY proceedtoCheckout SYSTEM "../includes/proceedtoCheckout.xml">
+<!ENTITY proceedtoCheckoutBillingPayment SYSTEM "../includes/proceedtoCheckoutBillingPayment.xml">
+<!ENTITY proceedtoCheckoutBillingPaymentDynamicCard SYSTEM "../includes/proceedtoCheckoutBillingPaymentDynamicCard.xml">
+<!ENTITY proceedtoCheckoutCustomizationCode SYSTEM "../includes/proceedtoCheckoutCustomizationCode.xml">
+<!ENTITY proceedtoCheckoutPlaceOrder SYSTEM "../includes/proceedtoCheckoutPlaceOrder.xml">
+<!ENTITY proceedtoCheckoutPreferredAct SYSTEM "../includes/proceedtoCheckoutPreferredAct.xml">
+<!ENTITY proceedtoCheckoutShipMethod SYSTEM "../includes/proceedtoCheckoutShipMethod.xml">
+<!ENTITY proceedtoCheckoutShippingAddress SYSTEM "../includes/proceedtoCheckoutShippingAddress.xml">
+<!ENTITY quickAddCart SYSTEM "../includes/quickAddCart.xml">
+<!ENTITY quickAddSavedCart SYSTEM "../includes/quickAddSavedCart.xml">
+<!ENTITY resourceCenterLogin SYSTEM "../includes/resourceCenterLogin.xml">
+<!ENTITY searchGetFacetLinkCount SYSTEM "../includes/searchGetFacetLinkCount.xml">
+<!ENTITY searchGetSKUinAddBtn SYSTEM "../includes/searchGetSKUinAddBtn.xml">
+<!ENTITY searchKeyword SYSTEM "../includes/searchKeyword.xml">
+<!ENTITY searchSKUConfigureItem SYSTEM "../includes/searchSKUConfigureItem.xml">
+<!ENTITY searchSKUOpenPDP SYSTEM "../includes/searchSKUOpenPDP.xml">
+<!ENTITY searchSetFaceting SYSTEM "../includes/searchSetFaceting.xml">
+<!ENTITY subscribe SYSTEM "../includes/subscribe.xml">
+<!ENTITY unifiedCheckoutChangeAddress SYSTEM "../includes/unifiedCheckoutChangeAddress.xml">
+<!ENTITY unifiedCheckoutPreferredAct SYSTEM "../includes/unifiedCheckoutPreferredAct.xml">
+<!ENTITY unifiedEnterCheckoutForm SYSTEM "../includes/unifiedEnterCheckoutForm.xml">
+<!ENTITY unifiedEnterPaymentForm SYSTEM "../includes/unifiedEnterPaymentForm.xml">
+<!ENTITY unifiedEnterShipBillForm SYSTEM "../includes/unifiedEnterShipBillForm.xml">
+<!ENTITY unifiedProceedtoCheckout SYSTEM "../includes/unifiedProceedtoCheckout.xml">
+<!ENTITY unsubscribe SYSTEM "../includes/unsubscribe.xml">
+<!ENTITY verifyOrderChangeAddressbyCity SYSTEM "../includes/verifyOrderChangeAddressbyCity.xml">
+<!ENTITY verifyOrderChangeShipAddbyCity SYSTEM "../includes/verifyOrderChangeShipAddbyCity.xml">
+<!ENTITY verifyOrderChangeShipAddbyZipCode SYSTEM "../includes/verifyOrderChangeShipAddbyZipCode.xml">
+<!ENTITY verifyOrderPage SYSTEM "../includes/verifyOrderPage.xml">
+<!ENTITY verifyStoreCookies SYSTEM "../includes/verifyStoreCookies.xml">
+
