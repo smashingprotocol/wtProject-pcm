@@ -97,7 +97,7 @@
 		<antcall target="homepagePcmNotRedirecttoHome" />
 		<antcall target="forgotPassword" /> My Account page not compatible with webtest htmlunit-->
 		<antcall target="swapAccountRedirect" />
-		<antcall target="orderStatusOrderLookup" />
+		<antcall target="orderStatusOrderLookupTotalSummaryFix" />
 		<antcall target="pdpDefaultTab" />
 		<antcall target="pdpGetTotalPriceEstimate" />
 		<antcall target="pdpMaxQty" />
@@ -807,7 +807,7 @@
 	<target name="myAccountVerifyOrderStatus" description="myAccountVerifyOrderStatus" if="isProd">
 		<ant antfile="test/myAccountVerifyOrderStatus.xml"/>
 	</target>
-	
+
 	<target name="myAccountAddressBookCreateShipAdd" description="myAccountAddressBookCreateShipAdd">
 		<dataDriven tableContainer="myAccountAddressBookCreateShipAdd.xls">
 			<ant antfile="test/myAccountAddressBookCreateShipAdd.xml"/>
@@ -839,6 +839,13 @@
 	<target name="myAccountAddressBookDeleteShipAdd" description="myAccountAddressBookDeleteShipAdd">
 		<ant antfile="test/myAccountAddressBookDeleteShipAdd.xml"/>
 	</target>
+	
+	<target name="orderStatusOrderLookupTotalSummaryFix" description="orderStatusOrderLookupTotalSummaryFix" if="isProd">
+		<dataDriven tableContainer="orderStatusOrderLookupTotalSummaryFix.xls">
+			<ant antfile="test/orderStatusOrderLookupTotalSummaryFix.xml"/>
+		</dataDriven>	
+	</target>
+
 	
 	<!-- Category Page -->
 	<target name="categoryNewPageAddtoCart" description="categoryNewPageAddtoCart">
