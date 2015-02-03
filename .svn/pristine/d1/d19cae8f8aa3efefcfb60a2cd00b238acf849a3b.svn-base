@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchwithFacetPriceRange">
+
+	<target name="searchwithFacetPriceRange">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />
+			<storeProperty name="minPrice.dynamic" value="${minPrice}" description="Define Minimum price in slider" />
+			<storeProperty name="maxPrice.dynamic" value="${maxPrice}" description="Define Maximum price in slider" />
+			<storeProperty name="filterlabel.dynamic" value="${filterlabel.id}" description="Define the display label in the facet" />
+			
+			&searchKeyword;
+			
+			<group description="Search enter Price range">
+				<setInputField xpath="id('minPriceInSlider')" value="#{minPrice.dynamic}" description="Enter Minimum price" />
+				<setInputField xpath="id('maxPriceInSlider')" value="#{maxPrice.dynamic}" description="Enter Maximum price" />
+			</group>
+			
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+			</not>
+			
+			<group description="Invoke Search URL with POST parameters.">
+				<storeElementAttribute xpath="id('searchString')" property="searchString.dynamic" attributeName="value" description="Store the Search String" />
+				<invoke url="http://${host}/s?#{searchString.dynamic}" method="POST" content="priceRange=%5B%24#{minPrice.dynamic}+TO+%24#{maxPrice.dynamic}%2B%5D" description="Invoke search string with POST parameters" />		
+			</group>
+			
+			<ifStep description="Price range filtered is above the maximum">
+				<condition>
+					<verifyProperty property="filterlabel.dynamic" value="andabove" description="defined filter label in the facet" />
+				</condition>
+				<then>
+					<verifyXPath xpath="//div[@class='pth']/h3[text()='Price']" description="Price filter section is display in Facet" />
+					<verifyXPath xpath="//a[@class='clnk ga' and @title='$#{maxPrice.dynamic} and above']" description="Price filter section is display in Facet" />
+				</then>
+			</ifStep>
+			
+			<ifStep description="Price range filtered is below the maximum">
+				<condition>
+					<verifyProperty property="filterlabel.dynamic" value="andbelow" description="defined filter label in the facet" />
+				</condition>
+				<then>
+					<verifyXPath xpath="//div[@class='pth']/h3[text()='Price']" description="Price filter section is display in Facet" />
+					<verifyXPath xpath="//a[@class='clnk ga' and @title='$#{maxPrice.dynamic} and below']" description="Price filter section is display in Facet" />
+				</then>
+			</ifStep>
+		
+		</webtest>
+		
+	</target>
+</project>

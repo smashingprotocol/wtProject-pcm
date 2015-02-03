@@ -1,0 +1,6 @@
+<group description="Shopping Cart: Quick Add Skus">
+	<clickElement xpath="${cart.link}" description="Click My Cart"/>
+	<verifyDocumentURL text="http://${host}/n/Shopping-Cart/msc-cart" regex="true" description="Verify page is in Shopping Cart" />
+	<setInputField name="cartSku" value="#{quickaddsku.dynamic}" description="Enter SKUS to quick add" />
+	<clickLink xpath="id('btnCartSkuAdd')" description="Click Quick Add" />
+</group>

@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="unifiedcheckoutVerifyShipMethod">
+
+	<target name="unifiedcheckoutVerifyShipMethod">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="CHECKOUT: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			
+			<group description="Define property with hard coded values except Shipping Zipcode, City and State">
+				<storeProperty property="formmode.dynamic" value="${mode}" propertyType="dynamic" description="Enter mode of form" />
+				
+				<storeProperty name="billingEmail.dynamic" value="${billingEmail}" description="Define default username to login" />
+				<storeProperty name="billingPassword.dynamic" value="${billingPassword}" description="Define default password to login" />
+			
+				<storeProperty property="firstName.dynamic" value="Manilaqa" propertyType="dynamic" description="Enter default firstName" />
+				<storeProperty property="lastName.dynamic" value="${pcmHost}pcm" propertyType="dynamic" description="Enter default lastName" />
+				<storeProperty property="companyName.dynamic" value="The Co" propertyType="dynamic" description="Enter default companyName" />
+				<storeProperty property="addressOne.dynamic" value="123 Somewhere St" propertyType="dynamic" description="Enter default addressOne" />
+				<storeProperty property="addressTwo.dynamic" value="Unit 3490" propertyType="dynamic" description="Enter default addressTwo" />
+				<storeProperty property="city_orig.dynamic" value="EL SEGUNDO                   " propertyType="dynamic" description="Enter default city_orig" />
+				<storeProperty property="billingStateSelect.dynamic" value="CA" propertyType="dynamic" description="Enter default state_orig" />
+				<storeProperty property="zipCode.dynamic" value="90245" propertyType="dynamic" description="Enter zipCode" />
+				<storeProperty property="billingTelephone.dynamic" value="3315545100" propertyType="dynamic" description="Enter default Billing Telephone" />
+				<storeProperty property="billingMobile.dynamic" value="3315545100" propertyType="dynamic" description="Enter default Billing Mobile" />
+				
+				<!--shipping-->
+				<storeProperty property="sameAsBilling.dynamic" value="false" propertyType="dynamic" description="Same as Billing Address" />
+				<storeProperty property="isApo.dynamic" value="${isApo}" propertyType="dynamic" description="Set shipping if APO" />
+				
+				<storeProperty property="shippingFname.dynamic" value="Manilaqa" propertyType="dynamic" description="Enter ship firstName" />
+				<storeProperty property="shippingLname.dynamic" value="${pcmHost}pcm" propertyType="dynamic" description="Enter ship lastName" />
+				<storeProperty property="shippingCompany.dynamic" value="Shipping Co" propertyType="dynamic" description="Enter ship companyName" />
+				<storeProperty property="shippingAddress.dynamic" value="123 Somewher St." propertyType="dynamic" description="Enter ship addressOne" />
+				<storeProperty property="shippingAddress_2.dynamic" value="Unit 4390" propertyType="dynamic" description="Enter ship addressTwo" />
+				<storeProperty property="shippingCity.dynamic" value="${city_orig}" propertyType="dynamic" description="Enter ship city_orig" />
+				<storeProperty property="shippingStateSelect.dynamic" value="${state_orig}" propertyType="dynamic" description="Enter ship state_orig" />
+				<storeProperty property="shippingZip.dynamic" value="${zipCode}" propertyType="dynamic" description="Enter ship zipCode" />
+				<storeProperty property="shippingTelephone.dynamic" value="3315545100" propertyType="dynamic" description="Enter ship Telephone" />
+				<storeProperty property="shippingMobile.dynamic" value="3315545100" propertyType="dynamic" description="Enter ship  Mobile" />
+				
+				<storeProperty name="sku.dynamic" value="${sku}" description="Define Sku to checkout" />
+				
+				<storeProperty property="cardNumber.dynamic" value="4111111111111111" propertyType="dynamic" description="Define Credit Card No" />
+				<storeProperty property="expMonth.dynamic" value="12" propertyType="dynamic" description="Define expMonth" />
+				<storeProperty property="expYear.dynamic" value="2016" propertyType="dynamic" description="Define expYear" />
+				<storeProperty property="secCode.dynamic" value="123" propertyType="dynamic" description="Define secCode" />
+				
+			</group>
+			
+			&addtoCartPDPSearchSKU;
+			
+			<clickElement xpath="//a[contains(@href,'newUserCheckOut')]" description="newCustomer Checkout button" /> 	
+			<setInputField xpath="id('isBML')" value="false" description="Not BML" />
+			
+			&unifiedEnterShipBillForm;
+			&unifiedEnterPaymentForm;
+
+			<repeat count="${shipmethod.ctr}" counterName="ctr.shipmethod" startCount="1" description="Get All the Shipping method in Pcmall properties">
+				<ifStep description="Check if shipping method is not available in the dropdown [FALSE]">
+					<condition>
+						<verifyProperty property="isshipmethod.#{ctr.shipmethod}" propertyType="ant" value="false" description="Verify if the Shipping Method is false in the excel dynamic value" />
+					</condition>
+					<then>
+						<not description="Verify ${shipmethod.#{ctr.shipmethod}} is not available" >
+							<verifyXPath xpath="id('shipMethodsCont')//span[contains(text(),'${shipmethod.#{ctr.shipmethod}}')]" description="Verify if ${shipmethod.#{ctr.shipmethod}}"/>
+						</not>	
+					</then>
+				</ifStep>
+				
+				<ifStep description="Check if shipping method is available in the dropdown [TRUE]">
+					<condition>
+						<verifyProperty property="isshipmethod.#{ctr.shipmethod}" propertyType="ant" value="true" description="Verify if the Shipping Method is false in the excel dynamic value" />
+					</condition>
+					<then>
+						<verifyXPath xpath="id('shipMethodsCont')//span[contains(text(),'${shipmethod.#{ctr.shipmethod}}')]" description="Verify if ${shipmethod.#{ctr.shipmethod}}"/>
+					</then>
+				</ifStep>
+			
+			</repeat>
+	
+	
+			
+		</webtest>
+		
+	</target>
+</project>

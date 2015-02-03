@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderCartCalculateShipping">
+
+	<target name="verifyOrderCartCalculateShipping">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title} [ZipCode: ${zipCode}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${default.checkoutuser}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${sku}" description="Define Sku to checkout" />
+			<storeProperty name="zipcode.dynamic" value="${zipCode}" description="Define zipcode" />
+			
+			
+			<ifStep description="If store is PCMG. force withFreeShipping value to false">
+				<condition>
+					<verifyProperty property="store" value="pcmg" propertyType="ant" description="Check store" />
+				</condition>
+				<then>
+					<storeProperty name="withfreeshipping.dynamic" value="false" description="Define withFreeShipping" />
+				</then>
+				<else>
+					<storeProperty name="withfreeshipping.dynamic" value="${withFreeShipping}" description="Define withFreeShipping" />
+				</else>
+			</ifStep>
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			&unifiedProceedtoCheckout;
+				
+			<storeXPath xpath="count(//input[@type='radio' and @name='shippingMethod'])" property="shipMethodCount" propertyType="dynamic" description="Store the count of available Shipping Method" />
+			<not>	
+				<verifyProperty property="shipMethodCount" value="0" description="Verify shipping method count is not 0"/>
+			</not>
+				
+			<storeXPath xpath="id('subTotal')" property="subTotal" propertyType="dynamic"  description="Store the Sub Total"/>
+			
+			<ifStep description="If to verify the Free Shipping promo is available in Shipping Method">
+				<condition>
+					<verifyProperty property="withfreeshipping.dynamic" value="true" propertyType="ant" description="Check if to verify free shipping" />
+				</condition>
+				<then>
+					<verifyXPath xpath="id('shipMethodsCont')//span[text()='FREE']" description="Verify the Free Shipping Label in the Shipping Methods" />
+				</then>
+			</ifStep>	
+		
+			<repeat count="#{shipMethodCount}" startCount="1" counterName="ctr" description="Select Shipping Method and verify the amount in Order Review">
+				<storeElementAttribute xpath="(//input[@type='radio' and @name='shippingMethod']) [position()=#{ctr}]" attributeName="value" property="option.value" description="Store the option value of the shipping method" />
+				<setRadioButton xpath="(//input[@type='radio' and @name='shippingMethod']) [position()=#{ctr}]" description="Select the Shipping Method radio" />
+				
+				<ifStep description="If the price is not found, it means shipping is free">
+					<condition>
+						<not>
+							<verifyXPath xpath="//label[@id='#{option.value}_price']" description="Price of the Shipping Method" />
+						</not>
+					</condition>
+					<then>
+						<storeProperty property="shipMethod.price" value="0.00" description="Store the price as 0.00 for FREE Shipping" />
+						<storeProperty property="shipprice.label" value="Free" description="Store the price label as Free" />
+					</then>
+					<else>
+						<storeElementAttribute xpath="//label[@id='#{option.value}_price']" attributeName="price" property="shipMethod.price" propertyType="dynamic" description="Store the price of the selected Ship Method" />
+						<storeProperty property="shipprice.label" value="#{shipMethod.price}" description="Store the price label as Free" />
+					</else>
+				</ifStep>
+				
+				<scriptStep description="Compute the Grand Total" language="javascript">
+								var strShipMethodPrice = step.getWebtestProperty('shipMethod.price');
+								var strSubTotal = step.getWebtestProperty('subTotal');
+								var strGrandTotal;
+								
+								strShipMethodPrice = strShipMethodPrice.replace('$','');
+								strSubTotal = strSubTotal.replace('$','');
+								
+								strShipMethodPrice = strShipMethodPrice.replace(',','');
+								strSubTotal = strSubTotal.replace(',','');
+								
+								
+								strGrandTotal = parseFloat(strShipMethodPrice) + parseFloat(strSubTotal);
+								strGrandTotal = parseFloat(strGrandTotal).toFixed(2);
+								
+								step.setWebtestProperty('grandTotal',strGrandTotal);
+								
+								step.setWebtestProperty('shipMethodPriceTemp',strShipMethodPrice);
+								step.setWebtestProperty('subTotalTemp',strSubTotal);
+			
+				</scriptStep>
+				
+				<echo message="Sub Total Fee: #{subTotalTemp}" />
+				<echo message="Shipping Fee: #{shipMethodPriceTemp}" />
+				
+				<verifyXPath xpath="//p[@id='shipFee']" text="#{shipprice.label}" regex="true" description="Verify the Shipping method in Order Review" />
+			
+			</repeat>
+			
+		</webtest>
+		
+	</target>
+</project>

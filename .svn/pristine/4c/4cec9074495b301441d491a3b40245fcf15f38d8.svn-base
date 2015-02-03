@@ -1,0 +1,56 @@
+<group description="Input Default Ship to Address Fields">
+
+	<clickLink href="/o/My-Account-Dashboard/msc-4" description="Click My Account" />
+	<clickElement xpath="//a[contains(@name,'Account Settings')]" description="Click Manage My Address Book" />
+	
+	<ifStep description="If form is create or Edit">
+			<condition>
+				<verifyProperty property="formmode.dynamic" value="edit" description="Flag Create New Add" />
+			</condition>
+			<then>
+				<clickElement xpath="//a[contains(@onclick,'editShipDef') and contains(text(),'Edit')]" description="Click Edit" />
+				
+				<setInputField xpath="id('txtSFName')" value="#{firstName.dynamic}" description="Enter firstName" />
+				<setInputField xpath="id('txtSMName')" value="#{middleInitial.dynamic}" description="Enter middleInitial" />
+				<setInputField xpath="id('txtSLName')" value="#{lastName.dynamic}" description="Enter lastName" />
+				<setInputField xpath="id('txtSCompany')" value="#{companyName.dynamic}" description="Enter companyName" />
+				<setInputField xpath="id('txtSStAddress')" value="#{addressOne.dynamic}" description="Enter addressOne" />
+				<setInputField xpath="id('txtSAptAddress')" value="#{addressTwo.dynamic}" description="Enter addressTwo" />
+				<setInputField xpath="id('txtSCity_orig')" value="#{city_orig.dynamic}" description="Enter city_orig" />
+				<setSelectField xpath="id('dummySSt_orig')" text="#{state_orig.dynamic}" description="Enter state_orig" />
+				<setInputField xpath="id('txtSZip')" value="#{zipCode.dynamic}" description="Enter zipCode" />
+				<setInputField xpath="id('txtSAreaCode')" value="#{dayAreaCode.dynamic}" description="Enter dayAreaCode" />
+				<setInputField xpath="id('txtSPhone_1')" value="#{dayPhone1.dynamic}" description="Enter dayPhone1" />
+				<setInputField xpath="id('txtSPhone_2')" value="#{dayPhone2.dynamic}" description="Enter dayPhone2" />
+				<setInputField xpath="id('txtSSecAreaCode')" value="#{eveAreaCode.dynamic}" description="Enter eveAreaCode" />
+				<setInputField xpath="id('txtSSecPhone_1')" value="#{evePhone1.dynamic}" description="Enter evePhone1" />
+				<setInputField xpath="id('txtSSecPhone_2')" value="#{evePhone2.dynamic}" description="Enter evePhone2" />
+
+				<clickElement xpath="//a[contains(@href,'validate_shipping_address')]" description="Click Update Button" />
+				
+			</then>
+			<else>
+				<clickElement xpath="//a[contains(@onclick,'ShipNew') and contains(text(),'Create')]" description="Click Create" />
+				
+				<setInputField xpath="id('txtSFNameNew')" value="#{firstName.dynamic}" description="Enter firstName" />
+				<setInputField xpath="id('txtSMNameNew')" value="#{middleInitial.dynamic}" description="Enter middleInitial" />
+				<setInputField xpath="id('txtSLNameNew')" value="#{lastName.dynamic}" description="Enter lastName" />
+				<setInputField xpath="id('txtSCompanyNew')" value="#{companyName.dynamic}" description="Enter companyName" />
+				<setInputField xpath="id('txtSStAddressNew')" value="#{addressOne.dynamic}" description="Enter addressOne" />
+				<setInputField xpath="id('txtSAptAddressNew')" value="#{addressTwo.dynamic}" description="Enter addressTwo" />
+				<setInputField xpath="id('txtSCityNew_orig')" value="#{city_orig.dynamic}" description="Enter city_orig" />
+				<setSelectField xpath="id('dummySStNew_orig')" text="#{state_orig.dynamic}" description="Enter state_orig" />
+				<setInputField xpath="id('txtSZipNew')" value="#{zipCode.dynamic}" description="Enter zipCode" />
+				<setInputField xpath="id('txtSAreaCodeNew')" value="#{dayAreaCode.dynamic}" description="Enter dayAreaCode" />
+				<setInputField xpath="id('txtSPhone_1New')" value="#{dayPhone1.dynamic}" description="Enter dayPhone1" />
+				<setInputField xpath="id('dayPhone2')" value="#{dayPhone2.dynamic}" description="Enter dayPhone2" />
+				<setInputField xpath="id('txtSPhone_2New')" value="#{eveAreaCode.dynamic}" description="Enter eveAreaCode" />
+				<setInputField xpath="id('evePhone1')" value="#{evePhone1.dynamic}" description="Enter evePhone1" />
+				<setInputField xpath="id('evePhone2')" value="#{evePhone2.dynamic}" description="Enter evePhone2" />
+
+				<clickElement xpath="//a[contains(@href,'validate_new_shipping_address')]" description="Click Save Button" />
+			</else>
+	</ifStep>	
+	
+	
+</group>

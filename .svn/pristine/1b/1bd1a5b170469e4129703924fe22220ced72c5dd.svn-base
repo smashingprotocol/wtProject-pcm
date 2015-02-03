@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="checkoutAPOAddWeightLimit">
+
+	<target name="checkoutAPOAddWeightLimit">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="Checkout: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			&clearCart;
+			<storeProperty property="username.dynamic" value="manilaqa+${pcmHost}${username}" propertyType="dynamic"  description="Define the username" />
+			<storeProperty property="password.dynamic" value="${password}" propertyType="dynamic"  description="Define the Password" />
+			<storeProperty property="sku.dynamic" value="${sku}" propertyType="dynamic"  description="Define the sku" />
+			<storeProperty property="qty.dynamic" value="${qty}" propertyType="dynamic"  description="Define the qty" />
+			
+			<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+			<storeProperty name="ccey.dynamic" value="2016" description="Define Credit Card Year" />
+			<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+			<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+			<storeProperty name="cardSecCode.dynamic" value="123" description="Define Credit Card Security Code" />
+			
+			<storeProperty property="placeOrder.dynamic" value="true" propertyType="dynamic" description="Proceed to Place Order"/>
+			<storeProperty property="exceedsapolimit.dynamic" value="${exceedsAPOLimit}" propertyType="dynamic"  description="Define if will exceeds the APO Weight limit" />
+			
+			
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			<!--&proceedtoCheckout; -->
+			
+			&proceedtoCheckoutShippingAddress;
+			&proceedtoCheckoutShipMethod;
+			&proceedtoCheckoutBillingPayment;
+			&proceedtoCheckoutPlaceOrder;
+	
+		</webtest>
+		
+	</target>
+</project>

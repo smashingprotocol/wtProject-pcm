@@ -1,0 +1,172 @@
+//global email config wt properties
+wt.mailhost=mailrelay.cc-inc.com
+wt.mailport=25
+wt.address=autoqa@pcm.com
+emailto=Marlon.Palo@pcm.com,manilaqa@pcm.com
+reportserver=localhost,DMNLQASERVER
+report.dir=C:\\xampp\\htdocs\\webtest\\Reports
+
+//host
+testHost=www.pcm.com,prodtest.pcm.com,afs-sl-pcmit01.afservice.org,afs-sl-pcmit02.afservice.org,afs-sl-pcmit03.afservice.org,afs-sl-pcmuit01.afservice.org,vtorwsitstg03.pcmall.com,vtorwsitqfe03.pcmall.com,stage.pcm.com,vtorwsitstg22.pcmall.com,afs-sl-pcmguws01.afservice.org,afs-sl-pcmitss01.afservice.org,afs-sl-pcmitss02.afservice.org,afs-sl-pcmgmkt01.afservice.org,afs-sl-pcmmkt03.afservice.org,www.pcmg.com,prodtest.pcmg.com
+testProdHost=www.pcm.com,prodtest.pcm.com,stage.pcm.com,www.pcmg.com,prodtest.pcmg.com
+testStore=pcm,pcmg
+
+//test cases
+testcase.id=isSearch,isHomeMyAccount,isShoppingCart,isVerifyOrderCheckout,isLogin,isUserInfoFieldValidation,isVerifyLinks,isPriceRebatesVerification
+
+//skus
+defaultSku=546945
+defaultSku.dpNo=2929573
+sku.withServicePlan=13237004
+sku.withServicePlan.dpNo=8849631
+defaultesd.sku=9663409
+defaultesd.dpNo=6331591
+defaultSku.recyclingfee=9883143
+sku.mir=9232228
+sku.itr=500347
+default.irmirsku=9232228
+default.sku=546945
+sku.lcd=9317197
+defaultsku.soldout=9106759
+sku.esd=9663409
+sku.macconfig=9232227
+sku.maxqty=802250
+sku.freeshipping=9663416
+sku.withapplecare=9232227
+sku.withcustomcode=8197501
+sku.weightlimit=79237
+sku.callforprice=7381310
+sku.soldout=9430432
+sku.couldnotbeadded=9418688
+sku.clickhere=8901503
+default.keyword=hp
+
+//Single Sign In
+//enableSingleSignIn=0
+
+//Mixedcart
+allowMixedCart=1
+
+//Apple Care Customization Page
+aPPCustomizationPage=1
+
+//user
+stage.username=stagepcmall5@mailinator.com
+prod.username=prodpcmall5@mailinator.com
+default.username=pcmall5@mailinator.com
+default.checkoutuser=pcm1@gmail.com
+default.cartusername=pcmall2@mailinator.com
+preferred.username=preferredtest@test.com
+defaultPassword=123456
+default.myaccountuser=pcm10@gmail.com
+pcm.savedcarduser=manilaqa+voidpcm@gmail.com
+pcmg.savedcarduser=manilaqa+voidpcmg@gmail.com
+
+//shipmethod
+shipmethod.ctr=14
+shipmethod.1=FedEx Priority Overnight
+shipmethod.2=FedEx Saturday
+shipmethod.3=UPS Ground (3-7 days)
+shipmethod.4=U.S. Priority Mail (2-3 days)
+shipmethod.5=UPS 2nd Day Air (2 days)
+shipmethod.6=Overweight Ground
+shipmethod.7=Overweight Priority
+shipmethod.8=FedEx Standard Overnight
+shipmethod.9=FedEx Economy (2 days)
+shipmethod.10=APO/FPO Mail (4-6 weeks) 
+shipmethod.11=U.S. Priority Service Media Mail
+shipmethod.12=FlatScreen TV Ground
+shipmethod.13=U.S. First Class Mail (3-7 days)
+shipmethod.14=FedEx Ground (3-7 days)
+
+
+
+
+//PCM BD lite url
+testpcmbd=bd.pcm.com,prodtestbd.pcm.com,afs-sl-bdpcmit01.afservice.org,afs-sl-bdpcmit04.afservice.org
+
+
+//gmail account
+gmail.passwd=mpalopcm1
+
+
+//static xpath values
+cart.btnProceedToCheckout=//a[contains(@href,'checkOut')]
+cart.btnExpressCheckout=//a[contains(@href,'expressCheckout')]
+unifiedCart.btnCheckout=//a[contains(@href,'checkOut') and @title='Checkout']
+checkout.btnLogin=//input[@type='image' and @tabindex='3']
+checkout.btnChangeAdd=id('changeAddbut')
+checkout.linkEditShipAdd=//a[contains(@href,'editShipToPopup')]
+checkout.btnPopupEditShipAddCont=//img[@id='subEditBut']
+checkout.linkEditBillAdd=//a[contains(@href,'javascript:billAdd.editEBill')]
+checkout.btnPopupEditBillAddCont=//img[@id='subEBillBut']
+unifiedCheckout.lblRecyclingFee=//p[@id='stateFeeTitle' and not(contains(@class,'dNone'))]
+unifiedCheckout.linkChangeShipAdd=//a[@href='/o/unifiedWidget-2']
+search.btngo=//a[@class='searchInputBtn']
+search.btnfilterresult=//a[contains(@onclick,'return addKeywordFilter') or contains(@onclick,'addSearchWithinFilter')]
+search.iconcall=//span[@class='statavlb' and contains(text(),'Call')]
+search.iconinstock=//span[contains(text(),'In Stock')]
+searchnew.addtocart=//a[contains(@id,'addCartButtonFor')]
+searchnew.comparebtn=//a[@class='compareCartBtn ga']
+searchnew.comparechk=//input[@type='checkbox' and contains(@onclick,'addToCompareCartChk')]
+searchcto.configureitembtn=//div[@class='modalbx_cto']//a[contains(@class,'mid configure')]
+searchcto.proceedcartbtn=//div[@class='modalbx_cto']//a[contains(@class,'mid goto-cart')]
+searchipod.configureitembtn=//div[@class='modalbx_ipod']//a[contains(@class,'mid configureItem')]
+searchipad.buynoweppbtn=//div[@class='modalbx_ipad']//a[contains(@class,'mid redirectBd')]
+myaccount.btnlogin=id('signInForm')//input[@type='image']
+btnunsubscribe=//input[contains(@onclick,'return unsubscribe')]
+btnsubscribesignup=//input[contains(@onclick,'return ValidateNewsLetterForm')]
+pswdrecover.btnpswd=//input[@id='input-submit']
+pswdrecover.btnsendemail=//input[@name='option1']
+pswdchange.btncontinue=//input[contains(@onclick,'return isPasswordValid')]
+pdp.btnbuycustomize=//a[contains(@href,'customize')]
+pdp.btnaddtocart=//a[contains(@href,'addToCart') or contains(@href,'javascript:submitEppForm')]
+pdp.btnpricealert=//a[contains(@href,'productInfoBox')]
+pdp.instantrebatelbl=//p[contains(text(),'Instant Rebate')]
+pdp.mailinrebatelbl=//p[contains(text(),'Mail-in Rebate')]
+pdp.clickherelowestpricebtn=id('clickLowestPrice')
+pdp.yousavelbl=//p[contains(text(),'You Save')]
+pdp.callforpricemsg=//p[@class='callPcmSales']
+pdp.soldoutcallPCM=//img[@alt='Sold Out']
+pdp.finalPrice=//p[@itemprop='price']
+pdp.strikethrPrice=//span[@class='priceLineThr']
+savedcart.btnsave=//a[contains(@onclick,'saveToNewBasket')]
+savedcart.btnaddtocart=//a[contains(@onclick,'return addShoppingCartItem')]
+savedcart.btnaddtoexistingcart=//a[contains(@onclick,'saveToExistingBasket')]
+cart.btnclearcart=//a[contains(@onclick,'return deleteAll') or contains(@id,'removeAllCart')]
+cart.btnmovetocart=//a[@id='moveAllCart']
+cart.btnquickadd=//a[contains(@href,'addShoppingCartItem')]
+cart.iconstop=//img[@src='/mall/widgetti/images/cart/shoppingCart/imgStop_44x44.gif']
+cart.updatecartlink=//a[contains(@onclick,'return updateCart')]
+cart.emailcartlink=//a[contains(@href,'javascript:emailCart')]
+cart.savedcarthref=/n/Shopping-Cart/msc-257
+cart.savethiscarthref=/n/Shopping-Cart/msc-258?cartSource=1
+search.addtocartbtn=(//input[contains(@onclick,'return addToShoppingCart')])
+search.callforpricebtn=//a[text()='Call For Price']
+search.textboxseach=id('search-menu-9')//input
+search.relatedcontentbtn=//a[@class='ga' and contains(@data-action,'Related Content Search')]
+myaccount.link=//a[contains(@href,'My-Account-Dashboard')]
+orderstatus.link=//a[contains(@href,'/o/Order-Summary/msc-33')]
+orderstatus.findorderbtn=//div[@class='order-lookup_button']//input[contains(@type,'image')]
+videocenter.btnlogin=//img[contains(@onclick,'gotoLogin')]
+resourcecenter.btnlogin=//input[@type='image' and @tabindex='3']
+cart.grandtotaltext=//div[@class='ordersValue total']
+cart.stopsignimg=//img[contains(@src,'imgStop')]
+cart.soldoutmsg=//div[@class='txtitemsold2']
+cart.link=//a[@href='/n/Shopping-Cart/msc-cart']
+cart.savedcartlink=//a[@href='/n/Shopping-Cart/msc-257']
+cart.calculateshipbtn=id('ex_customer')
+cart.grandtotaltxt.legacy=//span[@class='txtotalprice']
+cart.grandtotaltxt.unified=//div[@class='ordersValue total']
+cart.shipmethoddropdown=//select[contains(@onchange,'getShippingChoice')]
+savedcartlist.editlink=(//a[contains(@onclick,'jmpUrl')]) [position()=1]
+catpage.addtocartbtn=//a[contains(@href,'section=category')]
+verifyorder.shipchangelink=//a[@href='/o/unifiedWidget-2']
+cctypemc.radiobtn=id('cct_4')
+cctypevi.radiobtn=id('cct_2')
+cctypeax.radiobtn=id('cct_1')
+cctypedi.radiobtn=id('cct_8')
+cctypedn.radiobtn=id('cct_16')
+
+
+

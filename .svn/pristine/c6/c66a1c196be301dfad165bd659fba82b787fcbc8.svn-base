@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchNewComparePageAddtoCartBtnCondition">
+
+	<target name="searchNewComparePageAddtoCartBtnCondition">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />
+			<storeProperty name="ctodialogaction.dynamic" value="${btn.action}" description="Define expected dialog box action" />
+			<storeProperty name="searchqty.dynamic" value="${qty}" description="Define quantity" />			
+			
+			<repeat count="4" counterName="ctr" startCount="1" description="Select 4 items to Compare">
+				<storeProperty name="search.keyword" value="${keyword.#{ctr}}" description="Define keyword to search" />
+				&searchKeyword;
+				<not description="No Product found page should not be display">
+					<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+				</not>
+				<storeElementAttribute xpath="${searchnew.comparechk}" attributeName="id" property="searchAddBtnID" propertyType="dynamic" description="Store the compare checkbox id to get sku" />
+				&searchGetSKUinAddBtn;
+				<storeProperty name="sku#{ctr}.dynamic" value="#{searchGetSKUinAddBtn.value}" description="Store the SKU of item" />	
+				<setCheckbox xpath="//input[contains(@id,'chkCompare')]" description="Check compare on the first item of Search results" />
+			</repeat>
+			
+			<clickLink xpath="${searchnew.comparebtn}" description="click Compare button" />
+			<verifyDocumentURL text="http://${host}/n/Search-Comparison/msc-82" description="Verify Compare page url" />
+
+			<verifyXPath xpath="//a[text()='Call For Price']" description="Verify Call For Price Button" />
+			<verifyXPath xpath="//a[text()='See Lowest Price']" description="Verify See Lowest Price Button" />
+			
+			
+		</webtest>
+		
+	</target>
+</project>

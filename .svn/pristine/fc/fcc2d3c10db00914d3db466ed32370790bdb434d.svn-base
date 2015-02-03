@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartNewConfiguratorAddedinCartwithServicePlan">
+
+	<target name="shoppingCartNewConfiguratorAddedinCartwithServicePlan">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: ${title}. [${sku.config}]">
+			
+			&config;
+			
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="sku.dynamic" value="${sku.config}" description="Define Sku to Search" />
+			<storeProperty name="navlinks.dynamic" value="${navlinks}" description="Define Navlinks of the Configurator page" />
+			<storeProperty name="searchqty.dynamic" value="${qty}" description="Define quantity" />	
+			
+			&searchSKUConfigureItem;
+		
+			
+			<!-- base options-->
+			<!--
+			<storeXPath xpath="count(//input[@class='baseOption'])" property="configCount" propertyType="dynamic" description="Stor the number of configurator row available" />
+			<repeat count="#{configCount}" counterName="cctr" startCount="1">
+				<ifStep>
+					<condition>
+						<setRadioButton xpath="(//input[@class='baseOption']) [position()=#{cctr}]" description="Select the Base Option #{cctr}" />
+					</condition>
+					<then>
+						<storeXPath xpath="//td[@class='prod-final-price cfg-txt-right']" property="configFinalPrice" propertyType="dynamic" description="Store the Final Price in Configurator Page" />
+						<echo message="#{configFinalPrice}"/>
+						<clickElement xpath="//input[@class='submit']" description="Click the Add to Cart Button" />
+						&searchSKUConfigureItem;
+					</then>
+				</ifStep>
+			</repeat>
+			-->
+			
+			<!-- Accessories Option-->
+			<storeXPath xpath="count(//input[@class='addonOption' and @value!='none'])" property="optionCount" propertyType="dynamic" description="Stor the number of configurator row available" />
+			<repeat count="#{optionCount}" counterName="cctr" startCount="1" description="Click all accessories">
+				<ifStep>
+					<condition>
+						<verifyXPath xpath="(//input[@class='addonOption'  and @value!='none' and @type='checkbox']) [position()=#{cctr}]" description="If the Accessories Option #{cctr} is a checkbox" />
+					</condition>
+					<then>
+						<setCheckbox xpath="(//input[@class='addonOption'  and @value!='none' and @type='checkbox']) [position()=#{cctr}]" description="Select Accessories Option #{cctr}" />
+						<storeElementAttribute xpath="(//input[@class='addonOption' and @value!='none']) [position()=#{cctr}]" attributeName="id" property="option#{cctr}.sku" propertyType="dynamic" description="Store the sku of the selected Accessories"/>
+					</then>	
+					<else>
+						<setRadioButton xpath="(//input[@class='addonOption'  and @value!='none' and @type='radio']) [position()=#{cctr}]" description="Select Accessories Option #{cctr}" />
+						<storeElementAttribute xpath="(//input[@class='addonOption' and @value!='none']) [position()=#{cctr}]" attributeName="id" property="option#{cctr}.sku" propertyType="dynamic" description="Store the sku of the selected Accessories"/>
+					</else>
+				</ifStep>		
+			</repeat>
+			
+			<storeXPath xpath="//td[@class='prod-final-price cfg-txt-right']" property="configFinalPrice" propertyType="dynamic" description="Store the Final Price in Configurator Page" />
+			<echo message="#{configFinalPrice}"/>
+			<clickElement xpath="//input[@class='submit']" description="Click the Add to Cart Button" />
+			
+			<ifStep description="If page goes to Engraving (iPad, iPod), Proceeds to the next page without engraving">
+				<condition>
+					<verifyXPath xpath="//div[@class='engrave-option']" description="Verify the Engraving option is display" />
+				</condition>
+				<then>
+					<clickElement xpath="//img[@id='addIpodWithoutEngraving']" description="Click Buy Now button without engraving" />
+				</then>
+			</ifStep>
+			
+			<group description="Service Plan Page">
+				<verifyXPath xpath="//span[@class='breadCrumbsTitle' and text()='Service Plans']" description="Verify the Service Plan page is display"/>
+				<storeXPath xpath="count(//input[@type='radio'])" property="radioctr" description="Store the number of Radio buttons in Service Plan" />
+				<storeProperty property="radioctr" value="#{radioctr} - 1" eval="true" description="Removed the count for radio button for no service plan selection" />
+				<storeRandom property="randomRadioBtn" from="1" to="#{radioctr}" description="Select a random radio button count"/>
+				<storeElementAttribute xpath="(//input[@type='radio']) [position()=#{randomRadioBtn}]" property="serviceplan.sku" attributeName="value" description="Store a random sku of the serviceplan" />
+				<setRadioButton xpath="(//input[@type='radio']) [position()=#{randomRadioBtn}]" description="Select the Service Plan radio button #{randomRadioBtn}" />
+				<echo message="#{serviceplan.sku}" />
+				<clickElement xpath="//a[contains(@href,'javascript:submitServicePlansSelection')]" description="Click Next Button of Service Plan Page" />
+			</group>
+			
+			<storeProperty property="cartDPNo.dynamic" value="#{sku.dynamic}" description="Store the base sku" />
+			&getEDPofCartDPNo;
+			<verifyXPath xpath="id('cartStaticQty_#{cartEDPNo}')" description="Verify the Base Sku is added in cart" />
+			
+			<storeProperty property="cartDPNo.dynamic" value="#{serviceplan.sku}" description="Store the service plan sku" />
+			&getEDPofCartDPNo;
+			<verifyXPath xpath="id('cartStaticQty_#{cartEDPNo}')" description="Verify the Service Plan Sku is added in cart" />
+			
+			
+			
+			
+			
+			
+			
+		</webtest>
+		
+	</target>
+</project>

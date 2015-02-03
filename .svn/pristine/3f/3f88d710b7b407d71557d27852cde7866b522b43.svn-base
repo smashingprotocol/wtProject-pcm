@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartUpdateServicePlanQty">
+
+	<target name="shoppingCartUpdateServicePlanQty">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: ${title} [${host}]">
+			
+			&config;
+			
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${sku.withServicePlan}" description="Define Sku to checkout" />
+			<storeProperty name="addserviceplan.dynamic" value="${addServicePlan}" description="Define if to add a Serviceplan" />
+			<storeProperty name="cartName.dynamic" value="${now} With Service Plan" description="Define Cart Name" />
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			<storeProperty name="cartDPNo.dynamic" value="#{servicePlanDPNo}" description="Pass the service plan sku to get its edp no" />
+			&getEDPofCartDPNo;
+			
+			<group description="Shopping Cart update the Service Plan QTY more than QTY of the Principal SKU">
+				<storeProperty name="servicePlanEDPNo" value="#{cartEDPNo}" description="Store the EDP No of the Service Plan SKU" />
+				<storeElementAttribute xpath="id('cartStaticQty_${sku.withServicePlan.dpNo}')" attributeName="value" property="principalQTY" propertyType="dynamic" />
+				<storeProperty property="tmpQTY" value="#{principalQTY} + 1" eval="true" propertyType="dynamic" description="store the principal qty incremented to 1" />
+				<setInputField xpath="id('cartStaticQty_#{servicePlanEDPNo}')" value="#{tmpQTY}" description="Enter the Principal QTY plus 1 in the Service Plan qty"/>
+				<storeXPath xpath="count(${cart.updatecartlink})" property="update.ctr" propertyType="dynamic" description="Store the Number of Update link" />
+
+				<repeat count="#{update.ctr}" startCount="1" counterName="ctr" description="Click all the Update link">
+					<clickElement xpath="(${cart.updatecartlink}) [position()=#{ctr}]" description="Click Update button" />
+				</repeat>
+				
+				<verifyInputField xpath="id('cartStaticQty_#{servicePlanEDPNo}')" value="#{principalQTY}" description="Verify the qty of Service Plan is reverted back to qty equals to the Principal SKU" />
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

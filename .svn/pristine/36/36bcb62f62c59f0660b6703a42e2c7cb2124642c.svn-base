@@ -1,0 +1,11 @@
+<group description="Saved Cart Detail: Quick Add Skus">
+	<clickElement xpath="//a[@href='/n/Shopping-Cart/msc-cart']" description="Click My Cart"/>
+	<verifyDocumentURL text="http://${host}/n/Shopping-Cart/msc-cart" regex="true" description="Verify page is in Shopping Cart" />
+	<clickElement xpath="${cart.savedcartlink}" description="Click Saved Cart link"/>
+	<verifyDocumentURL text="http://${host}/n/Shopping-Cart/msc-257" regex="true" description="Verify page is in Saved Cart List" />
+	<clickElement xpath="${savedcartlist.editlink}" description="Click Edit link of the first Saved Cart List"/>
+	<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Saved Cart Detail" regex="true" description="Verify breadcrumbs is Saved Cart Entry" />
+	
+	<setInputField name="cartSku" value="#{quickaddsku.dynamic}" description="Enter SKUS to quick add" />
+	<clickElement xpath="//a[contains(@onclick,'return addCartItem')]" description="Click Quick Add" />
+</group>

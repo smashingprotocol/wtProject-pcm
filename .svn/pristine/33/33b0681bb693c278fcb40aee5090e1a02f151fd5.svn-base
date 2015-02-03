@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchNewViewCountperPage">
+
+	<target name="searchNewViewCountperPage">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title} [${keyword}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />	
+			&searchKeyword;
+			
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+				<verifyXPath xpath="//span[contains(text(),'No products found for keyword')]" description="XPath for No product found page"  />
+			</not>
+			
+			<group description="View by 25 Default">
+				<verifyXPath xpath="count(//div[@class='itemlist lst'])" text="25" description="Item on list are 25"/>
+			</group>
+			
+			<group description="View by 50">
+				<setSelectField xpath="id('toolbarViewBy')" value="50" description="Select View 50"/>
+				<invoke  url="#{searchurl.dynamic}&amp;n=msc-search&amp;showFacetStatus=show&amp;resultViewType=list&amp;isAutoExpandDisabled=false&amp;callerWidget=toolbar&amp;numPerPage=50" description="Invoke page with view by 50" />
+				<retry maxCount="3">
+					<sleep seconds="5"/>
+					<verifyXPath xpath="count(//div[@class='itemlist lst'])" text="50" description="Item on list are 50"/>
+				</retry>	
+			</group>
+			
+			<group description="View by 100">
+				<setSelectField xpath="id('toolbarViewBy')" value="100" description="Select View 100"/>
+				<invoke  url="#{searchurl.dynamic}&amp;n=msc-search&amp;showFacetStatus=show&amp;resultViewType=list&amp;isAutoExpandDisabled=false&amp;callerWidget=toolbar&amp;numPerPage=100" description="Invoke page with view by 100" />
+				<retry maxCount="3">
+					<sleep seconds="5"/>
+					<verifyXPath xpath="count(//div[@class='itemlist lst'])" text="100" description="Item on list are 100"/>
+				</retry>	
+			</group>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

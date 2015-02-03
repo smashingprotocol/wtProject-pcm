@@ -1,0 +1,2361 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml" version="HTML+RDFa 1.0" xml:lang="en" xml:lang="en" >
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="verify-v1" content="acpt4eBYMyj9p7WWET6e+0bZu2NqfMxwnPxuRUT8EAk=" >
+<meta name="netinsert" content="840.0.1.12.12.1">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<title>Sign-In</title>
+<!--START IMPORTS ONLY-->
+<!-- Prototype Jsp Header -->
+<script src="/mall/frameworks/jquery/jquery-1.11.0.min.js?ver" type="text/javascript" language="javascript"></script>
+<script src="/ttsvr/mall/frameworks/prototype-min-1.6.0.2/p-min.js" type="text/javascript" language="javascript"></script>
+<script src="/ttsvr/mall/frameworks/scriptaculous-js-1.8.1/scriptaculous.js?load=effects,controls" type="text/javascript" language="javascript"></script>
+<script src="/ttsvr/mall/frameworks/jquery/trunk8.js" type="text/javascript" language="javascript"></script>
+<style type='text/css'>
+/* Ask FEJT how to edit this file
+ * Generated using Sass */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local("Open Sans"), local("OpenSans"), url(/mall/widgetti/stylesheet/unified-login/commons/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format("woff"); }
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local("Open Sans Bold"), local("OpenSans-Bold"), url(/mall/widgetti/stylesheet/unified-login/commons/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format("woff"); }
+.dft, .dft * {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  font-family: "Open Sans", Arial, sans-serif;
+  vertical-align: baseline;
+  color: #333333; }
+
+.dft article, .dft aside, .dft details, .dft figcaption, .dft figure,
+.dft footer, .dft header, .dft hgroup, .dft menu, .dft nav, .dft section {
+  display: block; }
+
+body.dft {
+  line-height: 1; }
+
+.dft ol, .dft ul {
+  list-style: none; }
+
+.dft blockquote, .dft q {
+  quotes: none; }
+
+.dft blockquote:before, .dft blockquote:after,
+.dft q:before, .dft q:after {
+  content: '';
+  content: none; }
+
+.dft a {
+  color: #0088cc; }
+.login-header{
+	position:relative;
+	width: 490px;
+	margin:0 auto;
+	height:90px;
+}
+.login-wrapper{
+	width:490px;
+	margin:0 auto;
+}
+.login-signin .login-con {
+	width:310px;
+	margin:0 auto;
+	margin-top:27px;
+}
+.login-footer{
+	width:490px;
+	margin:0 auto;
+}
+
+div.registration {
+    background-color: #f4f4f4;
+    border-radius: 0 0 5px 5px;
+    border-top: 2px solid #e1e1e1;
+    font-size: 14px;
+    height: 72px;
+    line-height: 75px;
+    margin-top: 30px;
+    text-align: center;
+    width: 100%;
+}.tdata .checkbox{ width:20px;}
+.tdata .label{ width:90px;}
+.tdata .forgot{ width:200px;}
+.tbl .trow{
+	width:100%;
+	overflow:hidden;
+}
+.tbl .trow .tdata{
+	position:relative;
+	float:left;
+}
+.trow label{
+	font-size:14px;
+	cursor: pointer;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-o-border-radius: 2px;
+	-ms-border-radius: 2px;
+	border-radius: 2px;
+}
+.margin-top-data{margin-top:18px;}
+.margin-top{margin-top:28px !important;}
+.margin-password{margin-top:35px;}
+.input-data.error{border:1px solid #d61920 !important;}
+.input-data.errors{border:1px solid #d61920 !important;}
+
+.create-account .input-small{width:125px !important;}
+.create-account .trow-small{width:140px !important;;}
+.create-account .trow-width{width:165px !important;;}
+.create-account .loader{
+	position: absolute;
+	right: 5px;
+	bottom: 8px;
+	width:16px;
+	height:16px;
+	background-image: url(../img/ajax-loader.gif);
+	display:none;
+
+}
+.login-header .right-link{
+	display:block;
+	position:absolute;
+	right:0px;
+	bottom:18px;
+	font-size:12px;
+	text-align:right;
+	width:200px !important;
+}
+.login-header .signin-register{display:none;}
+.login-header .logo{
+	display:block;
+	width: 200px;
+	position:absolute;
+	bottom: 20px;
+}
+.login-header .right-link a{
+	text-align:right;
+	bottom:20px;
+	font-size:12px;
+}	
+.login-wrapper{
+	font:
+	-moz-box-shadow: 0 0 3px -1px #eee;
+	-webkit-box-shadow: 0 0 3px -1px #eee;
+	box-shadow: 0 0 3px -1px #eee;
+	-o-box-shadow: 0 0 3px -1px #eee;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+	border:1px solid #d7d7d7 !important;
+	background-color:#fff;
+	behavior: url('/css/pie');
+}
+.login-wrapper a, .login-header a{ text-decoration:none;}
+.login-wrapper a:hover , .login-header a:hover{ text-decoration:underline;}
+.login-wrapper .invalid{
+	border: 1px solid #d61920;
+	text-align:center;
+	line-height:20px;
+	height:20px;
+	margin-bottom:5px;
+	color:#fff;
+	behavior: url('/css/pie');
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	border-radius: 5px;
+	font-size:12px;
+	background-color: #d71921;
+}
+.login-wrapper .input-data{
+	display:block;
+	width:290px;
+	height:16px;
+	line-height:15px;
+	color:#666666;
+	font-size:12px;
+	float:left;
+	outline: none; 
+	padding:7px 9px 7px;
+	border:1px solid #d3dee2;
+	-webkit-border-radius: 2px;
+    -moz-border-radius:2px;
+    -o-border-radius: 2px;
+    -ms-border-radius: 2px;
+    border-radius: 2px;
+    behavior: url('/css/pie');
+    background-image: url(/mall/images/unified-login/input-bg.png);
+}
+.login-wrapper .login-forgot .login-reset-btn{
+	width:310px;
+	margin:0 auto;
+	overflow:hidden;	
+	margin-top:20px;
+}
+.login-wrapper .verification p{
+	line-height:20px;
+}
+.login-wrapper label.error{ display:none !important;}
+.login-wrapper .input-submit{
+	behavior: url('/css/pie');
+	font-family: 'Helvetica Neue', Arial, sans-serif;
+	font-size:18px;
+	display:block;
+	height:41px;
+	line-height:30px;
+	width:310px;
+	background:transparent;
+	border:none;
+	outline:none;
+	overflow:hidden;
+	-webkit-box-shadow: inset 0px 1px 0px 0px #26b5f2;
+	-moz-box-shadow: inset 0px 1px 0px 0px #26b5f2;
+	-o-box-shadow: inset 0px 1px 0px 0px #26b5f2;
+	-ms-box-shadow: inset 0px 1px 0px 0px #26b5f2;
+	box-shadow: inset 0px 1px 0px 0px #26b5f2);
+	border:1px solid #2382d4;
+	text-shadow:1px 1px 0px #2382d4;
+	background: #43a8e8;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#43a8e8), to(#1d7dd2));
+	background: -webkit-linear-gradient(#43a8e8, #1d7dd2);
+	background: -moz-linear-gradient(#43a8e8, #1d7dd2);
+	background: -ms-linear-gradient(#43a8e8, #1d7dd2);
+	background: -o-linear-gradient(#43a8e8, #1d7dd2);
+	background: linear-gradient(#43a8e8, #1d7dd2);
+	-pie-background: linear-gradient(#43a8e8, #1d7dd2);
+	color:#fff;
+	font-weight:bold;
+	z-index:2;
+	cursor:pointer;
+	float:left;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	border-radius: 5px;
+}
+.login-wrapper .input-submit:hover{
+	background: #409fdb;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#409fdb), to(#1c76c5));
+	background: -webkit-linear-gradient(#409fdb, #1c76c5);
+	background: -moz-linear-gradient(#409fdb, #1c76c5);
+	background: -ms-linear-gradient(#409fdb, #1c76c5);
+	background: -o-linear-gradient(#409fdb, #1c76c5);
+	background: linear-gradient(#409fdb, #1c76c5);
+	-pie-background: linear-gradient(#409fdb, #1c76c5);
+}
+.login-wrapper .login-forgot{overflow:hidden}
+.login-wrapper .login-forgot .input-data{width:350px;}
+.login-wrapper .input-fb-button{
+	font-size:18px;
+	font-family: 'Helvetica Neue', Arial, sans-serif;
+	behavior: url('/css/pie');
+	display:block;
+	height:41px;
+	line-height:30px;
+	padding-left:40px;
+	width:310px;
+	background:transparent;
+	border:none;
+	outline:none;
+	text-shadow:1px 1px 0px  #4570a5;
+	background-color:#4c76a8;
+	background-image: url(../img/login-facebook.png);
+	background-repeat: no-repeat;
+	color:#fff;
+	font-weight:bold;
+	cursor:pointer;
+	z-index:3;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	border-radius: 5px;
+}
+.login-wrapper .fb-line{
+	height:40px;
+	line-height:40px;
+	width:40px;
+	text-align:center;
+	background-color:#FFF;
+	margin:0 auto;
+}
+.login-wrapper .input-fb-button:hover{
+	background-color:#466d9b;
+	background-image: url(../img/login-facebook-hover.png);
+}
+.login-wrapper .welcome-back{
+	text-align:center;
+	width:310px;
+	font-size: 20px;
+}
+.login-wrapper .sign-or-fb{
+	height:40px;
+	text-align:center;
+	width:310px;
+	font-weight:bold;
+	background-image: url(../img/or.png);
+}
+.login-wrapper .input-label{
+	display:inline-block;
+	margin-bottom:5px;
+	padding:1px;
+}
+.login-wrapper .form-title{
+	margin-top:25px;
+	font-weight:bold;
+	text-align:center;
+	font-size:20px;
+}
+.login-wrapper .input-remember{
+	display:block;
+	float:right;
+	margin-top:3px;
+	margin-right:5px;
+}
+.login-wrapper .remember-text{ font-size:12px !important;}
+.login-wrapper .login-forgot, .create-account, .login-dff-user{ display:none}
+.login-wrapper .forgot-row{
+	width:205px;
+	text-align:right;
+	font-size:12px;
+}
+.login-wrapper .remember-me{
+	float:left;
+}
+
+.login-wrapper .remember-me a{	
+	display:block;
+	text-decoration:none;
+	margin-top:4px;
+	float:right;
+	font-size:12px;
+}
+.login-wrapper .login-forgot p{ 
+	display:block;
+	font-size:12px;
+	width:380px;
+	margin:0 auto;
+}
+.login-wrapper .registration{
+	width:100%;
+	height:72px;
+	line-height:75px;
+	background-color:#f4f4f4;
+	border-top:2px solid #e1e1e1;
+	text-align:center;
+	font-size:14px;
+	-webkit-border-radius: 0 0 5px 5px;
+    -moz-border-radius:0 0 5px 5px;
+	-o-border-radius: 0 0 5px 5px;
+	-ms-border-radius: 0 0 5px 5px;
+	border-radius: 0 0 5px 5px;
+	margin-top:30px;
+	behavior: url('/css/pie');
+}
+.login-wrapper .diffent-account{
+	width:100%;
+	height:72px;
+	line-height:75px;
+	background-color:#f4f4f4;
+	border-top:2px solid #e1e1e1;
+	text-align:center;
+	font-size:14px;
+	-webkit-border-radius: 0 0 5px 5px;
+    -moz-border-radius:0 0 5px 5px;
+	-o-border-radius: 0 0 5px 5px;
+	-ms-border-radius: 0 0 5px 5px;
+	border-radius: 0 0 5px 5px;
+	margin-top:30px;
+	behavior: url('/css/pie');
+}
+.login-wrapper .terms-conditions{
+	margin-top:20px;
+	width:100%;
+	}	
+.login-wrapper .terms-conditions p{ 
+	line-height:16px;
+	font-size:12px;
+	text-align:center;
+	padding:2px;
+	}
+	
+.login-wrapper .reset-password-data{margin-top:20px;}	
+.login-wrapper .reset{
+	overflow:hidden;
+	width:310px;
+	margin:0 auto;
+}	
+.login-wrapper .exclusive-email{
+	padding:5px;
+	height:30px;
+	width:200px;
+	margin:0 auto;
+}
+.login-footer{
+	width:490px;
+	margin:0 auto;
+	line-height:20px;
+	text-align:center;
+	font-size:11px;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+.login-footer p{
+	line-height: 16px;
+	color:#666 !important;
+	text-shadow:1px 1px 0px #FFF;
+
+}
+.errTooltipCon{
+	display:none;
+	position:relative;
+	z-index:0;
+}
+.errTooltipCon .fSize12px{
+	font-size:12px;
+	color:#FFF !important;
+}
+.tooltip-radius{
+	position:relative;
+	border:2px solid #d61920;
+	behavior: url('/css/pie');
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	border-radius: 5px;	
+	background-color: #d71921;
+	overflow:auto;
+	z-index:0;
+}
+.tooltip-arrow{
+	height:5px;
+	background-image: url(/mall/images/unified-login/errTooltip.png);
+	background-repeat: no-repeat;
+	background-position:10px 0px;
+}
+.errTooltipContentCon{
+	position:relative;
+	padding:10px;
+	color:#FFF;
+	background-color: #d71921;
+	z-index:1;
+}
+
+
+.createAccountModal{ display:none;}
+.callmodal{ display:none;}
+.modal-wrapper{
+	position: relative;
+	background-color:#fff;
+	margin:0 auto;
+	width:335px;
+	height: auto;
+	z-index: 200;
+	behavior: url('/css/pie');
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-moz-border-radius: 5px;
+	-ms-moz-border-radius: 5px;
+	border-radius: 5px;
+	overflow:hidden;
+	padding-bottom:20px;
+}
+.modal-element{
+    position: absolute;
+    top:32%;
+    left:0;
+    right:0;
+}
+.modal-wrapper .modal-content{
+	margin:0 auto;
+	width:290px;
+	font-size:12px;
+	margin-top:18px;
+	margin-bottom:18px;
+	line-height:1.7;
+	text-align:left; 
+}
+.modal-wrapper .modal-content #emailTo{
+	font-weight:bold;
+	padding:5px 0px 5px;
+}
+.modal-wrapper .modal-header{
+	position: relative;
+	width:100%;
+	height:50px;
+	line-height:50px;
+	border-bottom:1px solid #e1e1e1;
+	text-align:left; 
+}
+.modal-wrapper .modal-header .cncl{
+	position: absolute;
+	width:38px;
+	height:38px;
+	right:5px;
+	top:5px;
+	background: url('/mall/widgetti/images/resetPassword/close.png');
+	cursor:pointer;
+}
+.modal-wrapper .modal-header h3{
+	margin-left:20px;
+	font-weight: bolder;
+	font-size: 14px;
+}
+.modal-wrapper .modal-btn-wrapper{
+	margin:0 auto;
+	width: 130px;
+}
+.modal-wrapper .modal-btn-wrapper .modal-button {
+	behavior: url('/css/pie');
+	font-family: 'Helvetica Neue', Arial, sans-serif;
+	display: block;
+	height: 35px;
+	line-height: 34px;
+	text-align:center;
+	text-decoration:none;
+	width: 130px;
+	background: transparent;
+	border: none;
+	outline: none;
+	overflow: hidden;
+	-webkit-box-shadow: inset 0px 1px 0px 0px #26b5f2;
+	-moz-box-shadow: inset 0px 1px 0px 0px #26b5f2;
+	-ms-box-shadow: inset 0px 1px 0px 0px #26b5f2;
+	-o-box-shadow: inset 0px 1px 0px 0px #26b5f2;
+	box-shadow: inset 0px 1px 0px 0px #26b5f2);
+	border: 1px solid #2382d4;
+	text-shadow: 1px 1px 0px #2382d4;
+	background: #43a8e8;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#43a8e8), to(#1d7dd2));
+	background: -webkit-linear-gradient(#43a8e8, #1d7dd2);
+	background: -moz-linear-gradient(#43a8e8, #1d7dd2);
+	background: -ms-linear-gradient(#43a8e8, #1d7dd2);
+	background: -o-linear-gradient(#43a8e8, #1d7dd2);
+	background: linear-gradient(#43a8e8, #1d7dd2);
+	-pie-background: linear-gradient(#43a8e8, #1d7dd2);
+	color: #fff;
+	font-weight: bolder;
+	float: left;
+	z-index: 2;
+	cursor: pointer;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	border-radius: 5px;
+}
+.modal-wrapper .modal-btn-wrapper .modal-button:hover{
+	background: #409fdb;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#409fdb), to(#1c76c5));
+	background: -webkit-linear-gradient(#409fdb, #1c76c5);
+	background: -moz-linear-gradient(#409fdb, #1c76c5);
+	background: -ms-linear-gradient(#409fdb, #1c76c5);
+	background: -o-linear-gradient(#409fdb, #1c76c5);
+	background: linear-gradient(#409fdb, #1c76c5);
+	-pie-background: linear-gradient(#409fdb, #1c76c5);
+}
+
+/* CASL css */
+.casl-div{
+	background: #fcfcef;
+	padding:5px 15px 5px 25px;
+	position:relative;
+}
+.casl-div .clr{
+	clear:both;
+}
+.casl-div input{
+	position:absolute; 
+	top:10px;
+	left:5px;
+}
+.casl-div label{
+	font-size:11px;
+	line-height:16px;
+	
+}
+
+label.input-label {
+    background-color: transparent !important;
+}.overlay{
+    position: fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    width: 100%;
+    height: 100%;
+    z-index: 199;
+    background: url('/mall/widgetti/images/resetPassword/overlay.png') repeat;
+    display: none;
+    cursor:pointer;
+}
+.modalbx{
+    background: transparent;
+    width: 665px;
+    position: fixed;
+    z-index: 201;
+    display:none;
+}
+.loader-modal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    display: none;
+    z-index: 202;
+}
+.loader-modal .loading{
+    background: url('/mall/widgetti/images/resetPassword/load.png') 0px 0px no-repeat;
+    width: 40px;
+    height:40px;
+}
+.error-mdlbx .mdl-ttl h3{
+    text-indent: 0px !important
+}
+.error-mdlbx .mdl-cntnt p{
+    font-size: 12px;
+    margin: 0 20px 20px 20px;
+}
+
+.vamiddle { vertical-align:middle !important; } .needhelp a { color:#3e96ef; text-decoration:none; font-family: "Open Sans", Arial, sans-serif; font-size:12px;} .needhelp a:hover { color:#3e96ef; text-decoration:underline; font-family: "Open Sans", Arial, sans-serif; font-size:12px;}
+</style>
+<script src="/mall/widgetti/javascript/org/jquery/jquery.validate.min.js" type="text/javascript"></script>
+
+
+<!-- Start of Footer Spacing Fix -->
+<script type="text/javascript">
+jQuery(document).ready(function() {
+	jQuery('.footer_bg').parentsUntil('table').parent().css('font-size', '0');
+});
+</script>
+<!-- End of Footer Spacing Fix -->
+
+<script type="text/javascript">
+function jmpUrl(url) {
+	window.location = encodeURI(url);
+	return false;
+}
+function jmpNavpoint(navpoint) 
+{
+	window.location = "/n/" + encodeURIComponent(navpoint);
+	return false;
+}
+function jmpProduct(productId,seoBooster) {
+	var url = "/p/";
+	if (seoBooster && seoBooster!="")
+		url += encodeURIComponent(seoBooster) + "/";
+	url += encodeURIComponent(productId);
+	window.location = url;
+	return false;
+}
+
+var wbd_q = "";
+var wbd_n = "msc-445";
+var wbd_cc = "";
+var wbd_cn = "";
+var wbd_man = "";
+var wbd_sfq = "";
+var wbd_dfq = "";
+var wbd_tn = "";
+var wbd_stn = "";
+var wbd_rpk = "";
+var wbd_rdr = "";
+var wbd_sbq = "";
+var wbd_pfq = "";
+var wbd_prc = "";
+var wbd_dpno = "";
+var wbd_mfrpn = "";
+var wbd_navLbl = ""; 
+var wbd_x = "";
+var resetFlag = "";
+var wbd_excludeFacet ="";
+var wbd_excludeFacetValue ="";
+var wbd_clearSelection ="";
+var wbd_dfqParam ="";
+var searchContent = "false";
+var searchSource = "";
+var hideSelectedFilter ="false";
+var isAutoExpandDisabled ="false";
+var WIN_LOC = '/n/Shopping-Cart/msc-257';
+
+function setQ(str) { wbd_q = str; }
+function setN(str) { wbd_n = str; }
+function setCc(str) { wbd_cc = str; }
+function setCn(str) { wbd_cn = str; }
+function setMan(str) { wbd_man = str; }
+function setSfq(str) { wbd_sfq = str; }
+function setPrc(str) { wbd_prc = str; }
+function setSbq(str) { wbd_sbq = str; }
+function setPfq(str) { wbd_pfq = str; }
+function setX(str) { wbd_x = str; }
+function setDpNo(str) { wbd_dpno = str; }
+function setMfrPartNo(str) { wbd_mfrpn = str; }
+function setTn(str) { 
+	wbd_tn = str; 
+}
+
+function setStn(str) { 
+	wbd_stn = str; 
+}
+
+function setMultiStn(toRemove) {
+	var _stn = "";
+	var facetList = _stn.split(";");
+
+	var string = "";
+
+	for(var counter =0;counter < facetList.length;counter++){
+		var searchNav = facetList[counter].split(" | ");
+		var length = searchNav.length;
+		var lastElement = searchNav[length - 1];
+		
+		if(lastElement == toRemove){
+			continue;
+		}else{
+			string += facetList[counter] + ";";
+		}
+	}
+
+	wbd_stn = string.substring(0,string.length - 1); 
+}
+
+function setRpk(str){
+	wbd_rpk = str;	
+}
+
+function setRdr(str) { 
+	wbd_rdr = str; 
+}
+
+function setDfqParam(val){
+	wbd_dfqParam =val;
+}
+
+function setSearchContent(str){
+	searchContent = str;
+}
+
+function setSearchSource(source) {
+	searchSource = source;
+}
+
+function setExcludeFacet(field,value) {
+	wbd_excludeFacet = field; 
+	wbd_excludeFacetValue = value;
+}
+function setClearSelection(value) {
+	wbd_clearSelection = value;
+}
+function setQ(str) { wbd_q = str; }
+
+function resetFlag() { resetFlag = ""; }
+
+function removeTn() { tn=""; }
+
+function setHideSelectedFilter(str) {hideSelectedFilter = str; }
+
+function setAutoExpandDisabled(str) {
+	isAutoExpandDisabled = str;
+}
+
+function unescapeHTML(html) {
+	var htmlNode = document.createElement("DIV");
+	htmlNode.innerHTML = html;
+	if(htmlNode.innerText)
+		return htmlNode.innerText; // IE
+	return htmlNode.textContent; // FF
+} 
+
+function setDfq(str)
+{
+	wbd_dfq = wbd_dfq +"$$$"+ str;
+}
+
+function removeDfq(str)
+{
+    wbd_dfq = unescapeHTML(wbd_dfq);
+	var startIndex = wbd_dfq.indexOf("$$$"+str);
+	var lastIndex = wbd_dfq.indexOf("$$$",startIndex+3);
+
+	if (startIndex >=0 && lastIndex == -1)
+		lastIndex = wbd_dfq.length; 
+	
+	var stringToReplace = wbd_dfq.substring(startIndex,lastIndex); 
+	wbd_dfq = wbd_dfq.replace(stringToReplace,"");
+}
+
+function resetSrch(qry)
+{
+	wbd_q = "";
+	wbd_n = "";
+	wbd_cc = "";
+	wbd_cn = "";
+	wbd_man = "";
+	wbd_prc = "";
+	wbd_x = "";
+	wbd_sfq = "";
+	wbd_dfq = "";
+	wbd_tn = "";
+	wbd_stn = "";
+	wbd_rpk = "";
+	wbd_rdr = "";
+	wbd_sbq = "";
+	wbd_pfq = "";
+	wbd_dpno = "";
+	wbd_mfrpn = "";
+	resetFlag = "1";
+	isAutoExpandDisabled = "false";
+}
+
+function jmpSrchFromHeader(qry)
+{	
+	resetSrch(qry);
+	qry= qry.replace(/\s+$/, '');
+
+	if($('SearchSelection') != null){
+		if ($('SearchSelection').value == 'mallNo') { //dpNo (pc mall part no)
+			setDpNo(qry);
+		}else if ($('SearchSelection').value == 'manuNo') { //MfrPN (mfr. part no)
+			setMfrPartNo(qry);
+		}else if ($('SearchSelection').value == 'macOnly') {
+			setMan('Apple');
+		}else if ($('SearchSelection').value == 'pcOnly') {
+			setPfq('PC');
+		}else if ($('SearchSelection').value == 'content') {
+			setSearchContent('true');
+		}
+	}
+	if (qry && qry!="" && qry!="Search PCMall"){
+			return jmpSrch(qry);
+	}
+	else
+		return false;
+}
+
+function getUrlParam(name)
+{
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href );
+  if( results == null )
+    return "";
+  else
+    return results[1];
+}
+
+function buildQuery(filterNum, paramValue, paramName){
+	return "&q"+filterNum+"="+paramValue+"&x"+filterNum+"="+paramName;
+}
+
+function insertParam(url, key, value)
+{
+    key = escape(key); value = escape(value);
+
+    var kvp = url.substr(0).split('&');
+
+    var i=kvp.length; var x; while(i--) 
+    {
+        x = kvp[i].split('=');
+
+        if (x[0]==key)
+        {
+                x[1] = value;
+                kvp[i] = x.join('=');
+                break;
+        }
+    }
+
+    if(i<0) {kvp[kvp.length] = [key,value].join('=');}
+
+    //this will reload the page, it's likely better to store this until finished
+    //document.location.search = kvp.join('&');
+    return kvp.join('&'); 
+}
+
+function removeParam(url, key)
+{
+    key = escape(key);
+
+    var kvp = url.substr(0).split('&');
+    var kvp2 = [];
+
+    for (var i = 0; i < kvp.length; i++) {
+        var x = kvp[i].split('=');
+
+        if (x[0] != key) {
+            kvp2.push(kvp[i]);
+        }
+    }
+
+    return kvp2.join('&'); 
+}
+
+function encodeParamValues(argString){
+	var encodedString = argString;
+
+	encodedString = encodedString.replace("%", "%25");
+	encodedString = encodedString.replace("&", "%26");
+	encodedString = encodedString.replace("~", "%7E");
+	encodedString = encodedString.replace("<", "%3C");
+	encodedString = encodedString.replace(">", "%3E");
+	encodedString = encodedString.replace(".", "%2E");
+	encodedString = encodedString.replace("\"", "%22");
+	encodedString = encodedString.replace("{", "%7B");
+	encodedString = encodedString.replace("}", "%7D");
+	encodedString = encodedString.replace("|", "%7C");
+	encodedString = encodedString.replace("/", "~2F");
+	encodedString = encodedString.replace("\-", "%2D");
+	encodedString = encodedString.replace("'", "%60");
+	encodedString = encodedString.replace("_", "%5F");
+	encodedString = encodedString.replace("^", "%5E");
+	return encodedString;
+	
+}
+
+function getQueryByFacetKeyword(facetkeyword, filternum){
+
+	//get elements by name
+	var facetOptions = document.getElementsByName(facetkeyword);
+
+	if(facetOptions == null)
+		return "";
+	
+	//loop
+	var selectedItems = "";
+	var isFirst = true;
+	for(var i=0; i < facetOptions.length; i++){
+		if(facetOptions[i].checked){
+			if(isFirst)
+				isFirst = false;
+			else
+				selectedItems += "|";				
+
+			selectedItems += jQuery("<div/>").html(facetOptions[i].value).text();
+			//selectedItems +=  unescapeHTML(facetOptions[i].value);
+		}
+	}
+
+	var query = "";
+	if(selectedItems != ""){
+
+			query += "&x"+filternum+"="+facetkeyword;
+			query += "&q"+filternum+"="+encodeURIComponent(selectedItems); //test
+	
+	}
+
+	return query;
+}
+
+function jmpSrch(qry) {
+	if (qry && qry!="" && qry!="Search PCMall")
+		wbd_q = qry;
+	else{
+		jmpAdvancedSrch('');
+		return false;
+	}
+	var params = "";
+	if (wbd_q != "")
+		params +="&q="+encodeURIComponent(wbd_q);
+	if (wbd_n != "")
+		params +="&n="+encodeURIComponent(wbd_n);
+	if (wbd_cc != "")
+		params += "&cc="+encodeURIComponent(wbd_cc);
+	if (wbd_cn != "")
+		params += "&cn="+encodeURIComponent(wbd_cn);
+	if (wbd_man != "")
+		params += "&man="+encodeURIComponent(wbd_man);
+	if (wbd_prc != "")
+		params += "&prc="+encodeURIComponent(wbd_prc);
+	if (wbd_sfq != "")
+		params += "&sfq="+encodeURIComponent(wbd_sfq);
+	if (wbd_dpno != "")
+		params += "&dpno="+encodeURIComponent(wbd_dpno);
+	if (wbd_mfrpn != "")
+		params += "&mfrpn="+encodeURIComponent(wbd_mfrpn);
+	if (wbd_dfq != "")
+	{
+		wbd_dfq = unescapeHTML(wbd_dfq);
+		params += "&dfq="+encodeURIComponent(wbd_dfq);
+	}
+	if (wbd_tn != "")
+	{
+		params += "&tn="+encodeURIComponent(wbd_tn);
+	}
+
+	if (wbd_stn != "")
+	{
+		params += "&stn="+ encodeURIComponent(wbd_stn);
+	}
+	if(wbd_rpk != "")
+	{
+		params += "&disableRedirect="+ encodeURIComponent(wbd_rpk);
+	}
+	if (wbd_rdr != "")
+	{
+		params += "&rdr="+ encodeURIComponent(wbd_rdr);
+	}
+		
+	if (wbd_pfq != "")
+		params += "&pfq="+encodeURIComponent(wbd_pfq);
+	if (wbd_sbq != "")
+		params += "&sbq="+encodeURIComponent(wbd_sbq);	
+	if ($('removedProdDesc') && $('removedProdDesc').checked)
+		params += "&removedProdDesc=true";
+	if ($('shipOnlyFilter') && $('shipOnlyFilter').checked)
+		params += "&shipOnlyFilter=true";
+	if ($('removedLicenseFilter') && $('removedLicenseFilter').checked)
+		params += "&removedLicenseFilter=true";
+	if ($('licenseOnlyFilter') && $('licenseOnlyFilter').checked)
+		params += "&licenseOnlyFilter=true";
+	
+	if ($('directDownloadFilter') && $('directDownloadFilter').checked)
+		params += "&directDownloadFilter=true";
+
+	if ($('includeImage') && !$('includeImage').checked)
+		params += "&includeImage=false";
+	else
+		params += "&includeImage=true";
+		
+	if ($('refurbishedCondition') && $('refurbishedCondition').checked)
+		params += "&refurbishedCondition=true";
+	if ($('openBoxCondition') && $('openBoxCondition').checked){
+		params += "&openBoxCondition=true";
+	}
+	if ($('clearanceCondition') && $('clearanceCondition').checked)
+		params += "&clearanceCondition=true";
+
+	if ($('currentTab')){
+		params += "&currentTab="+$('currentTab').value;
+	}
+	   
+	if (wbd_x != "")
+		params += "&"+wbd_x; 
+	var winLoc = WIN_LOC;
+	if (resetFlag=="1") {
+		winLoc = "/s"
+			
+	}	
+	//paging
+	if($('numPerPage')){ 
+		if($('numPerPage').value || $('numPerPage').value != ""){
+			params += "&numPerPage="+$('numPerPage').value;
+		}
+	}
+	//tpop
+	if($('tpop')){ 
+		if($('tpop').value && $('tpop').value != "" && $('tpop').value == "yes"){
+			params += "&tpop="+$('tpop').value;
+		}
+	}	
+	params += "&hideSelectedFilter="+hideSelectedFilter;
+	params += "&isAutoExpandDisabled=" + isAutoExpandDisabled;
+	params = appendSearchSource(params);
+	window.location = winLoc + "?rch" + params;
+	return false;
+}
+
+
+
+
+function jmpAdvancedSrch(qry) {
+
+	if (qry && qry!="" && qry!="Search PCMall")
+		wbd_q = qry;
+
+	var params = "";
+	if (wbd_q != "")
+		params +="&q="+encodeURIComponent(wbd_q);
+	if (wbd_n != "")
+		params +="&n="+encodeURIComponent(wbd_n);
+	if (wbd_cc != "")
+		params += "&cc="+encodeURIComponent(wbd_cc);
+	if (wbd_cn != "")
+		params += "&cn="+encodeURIComponent(wbd_cn);
+	if (wbd_man != "")
+		params += "&manufacturer="+encodeURIComponent(wbd_man);
+	if (wbd_prc != "")
+		params += "&priceRange="+encodeURIComponent(wbd_prc);
+	if (wbd_sfq != ""){
+    	wbd_sfq = encodeURIComponent(wbd_sfq);
+     	wbd_sfq = unescapeHTML(wbd_sfq);    	
+		params += "&sfq="+wbd_sfq;
+	}
+	if (wbd_dfq != "")
+	{
+		wbd_dfq = unescapeHTML(wbd_dfq);
+		params += "&dfq="+encodeURIComponent(wbd_dfq);
+	}
+	if (wbd_tn != "")
+	{
+		params += "&tn="+encodeURIComponent(wbd_tn);
+	}
+	if (wbd_stn != "")
+	{
+		params += "&stn="+ encodeURIComponent(wbd_stn);
+	}
+	if(wbd_rpk != "")
+	{
+		params += "&disableRedirect="+ encodeURIComponent(wbd_rpk);
+	}
+	if (wbd_rdr != "")
+	{
+		params += "&rdr="+ encodeURIComponent(wbd_rdr);
+	}
+	
+	if (wbd_pfq != "")
+		params += "&pfq="+encodeURIComponent(wbd_pfq);
+	if (wbd_sbq != "")
+		params += "&sbq="+encodeURIComponent(wbd_sbq);	
+	if ($('removedProdDesc') && $('removedProdDesc').checked)
+		params += "&removedProdDesc=true";
+	if ($('shipOnlyFilter') && $('shipOnlyFilter').checked)
+		params += "&shipOnlyFilter=true";
+	if ($('removedLicenseFilter') && $('removedLicenseFilter').checked)
+		params += "&removedLicenseFilter=true";
+	if ($('licenseOnlyFilter') && $('licenseOnlyFilter').checked)
+		params += "&licenseOnlyFilter=true";
+
+	if ($('directDownloadFilter') && $('directDownloadFilter').checked)
+		params += "&directDownloadFilter=true";
+	
+	if ($('includeImage') && !$('includeImage').checked)
+		params += "&includeImage=false";
+	else
+		params += "&includeImage=true";
+		
+	if ($('refurbishedCondition') && $('refurbishedCondition').checked)
+		params += "&refurbishedCondition=true";
+	if ($('openBoxCondition') && $('openBoxCondition').checked){
+		params += "&openBoxCondition=true";
+	}
+	if ($('clearanceCondition') && $('clearanceCondition').checked)
+		params += "&clearanceCondition=true";
+
+	if ($('currentTab')){
+		params += "&currentTab="+$('currentTab').value;
+	}
+
+	if (wbd_navLbl != "")
+		params += "&navLbl="+encodeURIComponent(wbd_navLbl);
+	   
+	if (wbd_x != "")
+		params += "&"+wbd_x; 
+	var winLoc = WIN_LOC; 
+	if (resetFlag=="1") {
+		winLoc = "/s"
+			
+	}	
+	// paging
+	//if($('numPerPage')){ 
+	//	if($('numPerPage').value || $('numPerPage').value != ""){
+	//		params += "&numPerPage="+$('numPerPage').value;
+	//	}
+	//}
+	
+	var rppObj = jQuery('select#toolbarViewBy');
+	if(rppObj.length){ 
+		params += "&numPerPage="+rppObj.val();
+	}
+	
+	//tpop
+	if($('tpop')){ 
+		if($('tpop').value && $('tpop').value != "" && $('tpop').value == "yes"){
+			params += "&tpop="+$('tpop').value;
+		}
+	}	
+
+	//remove
+	if(wbd_excludeFacet != ""){
+		params+="&excludeFacet="+wbd_excludeFacet+"&excludeFacetValue="+encodeURIComponent(wbd_excludeFacetValue);
+	}
+
+	//clear
+	if(wbd_clearSelection != ""){
+		params+="&clearSelection=1";
+	}
+	if(wbd_dfqParam != ""){
+		params +=wbd_dfqParam;
+	}
+	var searchOtherView = 0
+	if(searchOtherView =="1"  ){
+		params+="&searchOtherView";
+	}
+	params += "&hideSelectedFilter="+hideSelectedFilter;
+	params += "&isAutoExpandDisabled=" + isAutoExpandDisabled;
+	params = appendSearchSource(params);
+	$('advancedForm').action = winLoc + "?rch" + params+"&advancedSearch=1";
+	$('advancedForm').submit();
+}
+
+// Append searchSource parameter.
+var appendSearchSource = function (param) {
+	if (searchSource) {
+		param += "&ssrc=" + searchSource;
+		searchSource = "";
+    }
+
+    return param;
+}
+
+</script>
+<!--END IMPORTS ONLY-->
+</head>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" class="wbd">
+
+<table border='0' cellpadding='0' cellspacing='0'  width='490' align='center' valign='top'>
+ <tr>
+  <td  align='left' valign='top'><table border='0' cellpadding='0' cellspacing='0'  align='center' valign='top'>
+ <tr>
+  <td  class='dft' align='left' valign='top'><table border='0' cellpadding='0' cellspacing='0'  height='90' width='490' align='center' valign='top'>
+ <tr>
+  <td  class='vamiddle' align='left' valign='middle'><div class="wt12 wcGray3" ><p><a href="http://www.pcm.com/"><img src="/widgets/header/main-menu/img/pcm-logo-lg.png" alt="" /></a></p></div></td>
+  <td  class='vamiddle' align='right' valign='middle'><a href="/n/Your-Account/navLinks-155" class="wt" style=" font-size:12px; color:#0088cc; font-weight:normal; text-decoration:none;"  onmouseover="this.style.color='#0088cc';this.style.textDecoration='underline';"  onmouseout="this.style.color='#0088cc';this.style.textDecoration='none';"  target="_blank">Need Help?</a></td>
+ </tr>
+</table>
+</td>
+ </tr>
+</table>
+</td>
+ </tr>
+ <tr>
+  <td ></td>
+ </tr>
+ <tr>
+  <td ></td>
+ </tr>
+ <tr>
+  <td  class='dft'><!-- START -->
+
+<!-- START -->
+	<div class="dft">
+		<div class="login-wrapper" style="text-align:left">
+			<form name="loginForm" id="loginForm" action="https://afs-sl-pcmuit01.afservice.org/o/New-Sign-in/msc-445"  method="post">
+			   <input type="hidden" name="op" value="mall.unified.login.signIn.signIn" />
+			   <input type="hidden" name="currentWidgetId" value="signIn_7" />
+			   <input type="hidden" name="redirectUrl" value="http%3A%2F%2Fafs-sl-pcmuit01.afservice.org%2Fn%2FShopping-Cart%2Fmsc-257" />
+			   <input type="hidden" name="specificURL" value="" />
+			   <input type="hidden" name="siteSelectorUrl" value="" />
+			   <input type="hidden" name="siteSelectorPageSwitch" value="false" />
+			   	<div class="login-signin" id="login-signin">
+					<h2 class="form-title">Sign in</h2>
+					<div class="login-con">
+						<div class="tbl">
+							<div id="invalid"></div>
+							<div class="tr trow">
+								<div class="tdata">
+										<span><label class="input-label" for="emailAddress">Email Address / Username</label></span>
+										<input id="emailAddress" type="text" name="emailAddress"  class="input-data" value="" maxlength="50"/>
+
+								</div>
+							</div>
+							<div class="tr trow">
+								<div class="td tdata margin-top-data">
+										<label class="input-label" for="password">Password</label>
+										<input id="password" type="password" name="password" class="input-data" value="" maxlength="30"/>
+								</div>
+							</div>
+							<div class="tr trow">
+								<div class="td tdata margin-top-data" >
+									<div class="remember-me checkbox"><input id="rememberMe" class="input-remember"  type="checkbox" name="rememberMe" checked="checked" /></div>
+									<div class="remember-me label"><label for="rememberMe" class="remember-text">Remember me</label></div>
+									<div class="remember-me forgot"><a title="Forgot Password?" href="/o/Forgot-Password/msc-446" id="forgot-password">Forgot Password?</a></div>
+								</div>
+							</div>
+							<div class="tr trow">
+								<div class="td tdata margin-top">
+									<input id="input-submit" class="input-submit" type="button" title="Sign in" value="Sign in" />
+								</div>
+							</div>
+							<div class="tr trow">
+								<div class="td tdata margin-top">
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</form>
+			<div class="registration">
+				<p><span class="dont-account">Don't have a PCM Account?</span> <span class="register-now"><a id="register-now" title="Register Now?"  href="/o/Account-Registration/msc-447">Register Now?</a></span></p>
+			</div> 
+		</div>
+	</div>
+	<script type="text/javascript">
+		jQuery(function(){
+                    PCM.loginValidation.init('loginForm');
+
+                    
+		});
+	</script>
+<!-- END -->
+
+	<div class="overlay"></div>
+<div class="modalbx">
+	<div class="mdl-mcntnt"></div>
+</div>
+<div id="callModalFailure" class="callmodal">
+	<div class="modal-wrapper">
+		<div class="modal-header"><h3>Error Message</h3></div>
+		<div class="modal-content">
+			<div id="signInErrorMsg">&nbsp;</div>
+		</div>
+		<div class="modal-btn-wrapper">
+			<a class="modal-button cncl default" href="#sign-in" title="Ok" id="modal-button">Ok</a>
+		</div>
+		<div style="margin-bottom:-22px; clear:both">&nbsp;</div>
+	</div>
+</div>
+<!-- END -->
+<!--Tooltip - Start-->
+<div class="errTooltipCon" >
+    <div class="tooltip-radius"><div class="errTooltipContentCon"></div></div>
+    <div class="tooltip-arrow"></div>
+</div>
+<!--Tooltip - End--></td>
+ </tr>
+ <tr>
+  <td ><table border='0' cellpadding='0' cellspacing='0'  width='490' align='center' valign='top'>
+ <tr>
+  <td  class='vamiddle' align='center' valign='top'><span class="wbdRichText"><p style="line-height: 16px; color: #666 !important; text-shadow: 1px 1px 0px #FFF; font-size: 11px; font-family: 'Open Sans', Arial, sans-serif;">1940 E. Mariposa Ave, El Segundo, CA 90245 - 800-700-1000<br />&copy; 2014 PCM Sales, Inc.</p></span></td>
+ </tr>
+</table>
+</td>
+ </tr>
+ <tr>
+  <td ></td>
+ </tr>
+</table>
+
+<!--START IMPORTS ONLY-->
+<style type='text/css'>
+/**
+ *  Page CSS - always gets included in this page.
+ */
+
+/* body tag, only in the ToolTwist designer */
+.body-designer {
+}
+body {background: #efeeee;}</style>
+<script type="text/javascript">
+var SIGN_IN_UTILITY = SIGN_IN_UTILITY || {};
+
+SIGN_IN_UTILITY.method = (function($){
+	
+	return {
+		
+		submitRequest : function(data, callbackSuccess, callbackFail){
+			var request = $.post('/SignInService', data);
+			
+			request.done(function (response, textStatus, jqXHR){
+		    	if(response.transactionFailure){
+		    		callbackFail(response);
+		    	}else{
+		    		callbackSuccess(response);
+		    	}      
+		    });
+		}
+	
+	}
+})(jQuery)</script>
+<script type="text/javascript">/**
+ * Copyright 2013 PCM, Inc.
+ */
+if (typeof PCM === 'undefined')
+    PCM = {};
+
+/**
+ * INFO TOOLTIP
+ *
+ * Available Options:
+ * -padding
+ * -zIndex
+ * -toggle event (if this is true then hover event disabled)
+ *
+ * Supported selector:
+ * -class selector only
+ *
+ *
+ * ERROR TOOLTIP
+ *
+ * Available Options:
+ * -padding
+ * -zIndex
+ * -arrowDirection - if not supplied will show down
+ *
+ * Supported selector:
+ * -class selector only
+ */
+PCM.tooltip = function() {
+
+    var _selector = null;
+    var _selector_attr = null;
+    var _base = null;
+    var _base_id = null;
+    var _base_width = null;
+    var _base_height = null;
+    var _offset = null;
+    var _tooltip_con = null;
+    var _tooltip_con_height = null;
+    var _tooltip_content = null;
+    var _hover_interval = null;
+    var _config_value = null;
+    var _errortooltip_arrow = null;
+
+    var _createInfoTooltip = function() {
+        var _init = function(selector) {
+            _selector = selector;
+            _selector_attr = _selector.substring(1);
+            _tooltip_con = jQuery('.tooltipCon');
+            _tooltip_content = jQuery('.tooltipCon .tooltipContent');
+
+            jQuery(_selector).mouseenter(function() {
+                _base = jQuery(this);
+                _base_id = jQuery(_base).attr('id');
+                _base_width = jQuery(_base).width();
+                _base_height = jQuery(_base).height();
+                _offset = jQuery(_base).offset();
+                _getContent();
+                _clearHoverInterval();
+                _config(_config_value);
+                _displayTooltip();
+            });
+            jQuery(_selector).mouseleave(function() {
+                _setHoverInterval();
+            });
+            jQuery(_tooltip_con).mouseenter(function() {
+                _clearHoverInterval();
+            });
+            jQuery(_tooltip_con).mouseleave(function() {
+                _setHoverInterval();
+            });
+        };
+
+        var _config = function(config_value) {
+            _config_value = config_value;
+
+            if (typeof _config_value.padding != 'undefined') {
+                jQuery(_tooltip_content).css('padding', _config_value.padding);
+            }
+            if (typeof _config_value.zIndex != 'undefined') {
+                jQuery(_tooltip_con).css('z-index', _config_value.zIndex);
+            }
+            if (typeof _config_value.toggle != 'undefined' && _config_value.toggle == true) {
+                jQuery(_selector).unbind('mouseenter');
+                jQuery(_selector).unbind('mouseleave');
+                jQuery(_tooltip_con).unbind('mouseenter');
+                jQuery(_tooltip_con).unbind('mouseleave');
+                jQuery(_selector).toggle(function() {
+                    _base = jQuery(this);
+                    _base_id = jQuery(_base).attr('id');
+                    _base_width = jQuery(_base).width();
+                    _base_height = jQuery(_base).height();
+                    _offset = jQuery(_base).offset();
+                    _getContent();
+                    _clearHoverInterval();
+                    _displayTooltip();
+                }, function() {
+                    _setHoverInterval();
+                });
+            }
+        };
+
+        var _displayTooltip = function() {
+            var _bottom_top = _offset.top + _base_height;
+            var _temp_bottom_top = _offset.top + _base_height + 10;
+            var _center_left = (_offset.left + (_base_width / 2)) - 31;
+            jQuery(_tooltip_con).css({
+                'position': 'absolute',
+                'top': _temp_bottom_top + 'px',
+                'left': _center_left + 'px'
+            }).stop().animate({
+                'opacity': '1',
+                'top': _bottom_top + 'px'
+            }, 200).show();
+        };
+
+        var _hideTooltip = function() {
+			if(!_offset) return;
+            var _temp_bottom_top = _offset.top + _base_height + 10;
+            jQuery(_tooltip_con).stop().animate({
+                'opacity': '0',
+                'top': _temp_bottom_top + 'px'
+            }, 200, function() {
+                jQuery(_tooltip_con).hide();
+                _clearHoverInterval();
+            });
+
+        };
+
+        var _getContent = function() {
+            var _content = jQuery('[' + _selector_attr + '="' + _base_id + '"]').clone();
+            jQuery(_tooltip_content).html(_content.html());
+        };
+
+        var _setHoverInterval = function() {
+            _hover_interval = setInterval(_hideTooltip, 200);
+        };
+
+        var _clearHoverInterval = function() {
+            clearInterval(_hover_interval);
+        };
+
+        return {
+            init: _init,
+            config: _config
+        };
+    };
+
+    var _createErrorTooltip = function() {
+
+        var _error = null;
+        var _element = null;
+        var _label = null;
+
+        var _init = function(selector) {
+            _selector = selector;
+            _selector_attr = _selector.substring(1);
+            _tooltip_con = jQuery('.errTooltipCon');
+            _tooltip_content = jQuery('.errTooltipCon .errTooltipContentCon');
+
+            jQuery(document).delegate(_selector, 'mouseenter', function() {
+                _base = jQuery(this);
+                _base_id = jQuery(_base).attr('id');
+                _base_width = jQuery(_base).width();
+                _base_height = jQuery(_base).height();
+                _offset = jQuery(_base).offset();
+                _getContent();
+                _displayTooltip();
+            });
+
+            jQuery(document).delegate(_selector, 'mouseleave', function() {
+                _hideTooltip();
+            });
+        };
+
+        var _config = function(config_value) {
+            var _config_value = config_value;
+            
+            if (typeof _config_value.padding != 'undefined') {
+                jQuery('.errTooltipBorderMidMid').css('padding', _config_value.padding);
+            }
+            if (typeof _config_value.padding != 'undefined') {
+                jQuery(_tooltip_content).css('width', _config_value.width);
+            }
+            if (typeof _config_value.zIndex != 'undefined') {
+                jQuery(_tooltip_con).css('z-index', _config_value.zIndex);
+            }
+            if (typeof _config_value.arrowDirection != 'undefined') {
+            	if(_config_value.arrowDirection == 'left'){
+            		var arrow = jQuery(_tooltip_con).find('.errTooltipArrow');
+            		arrow.removeClass('errTooltipArrow').addClass('errTooltipArrowLeft');
+            		arrow.prependTo(jQuery(_tooltip_con).find('.errTooltipBorderMidMid'));
+            		jQuery(_tooltip_con).removeClass('arrowLeft').addClass('arrowLeft');
+            		_errortooltip_arrow = arrow;
+            	}
+            }
+        };
+
+        var _displayTooltip = function() {
+            _tooltip_con_height = jQuery(_tooltip_con).height();
+            var _top_top = _offset.top - _tooltip_con_height;
+            
+            if(jQuery(_tooltip_con).hasClass('arrowLeft')){
+            	_top_top = _offset.top ;
+            	var _left_left = _offset.left +  _base.outerWidth() + _errortooltip_arrow.width() + 4; //padding left
+            	
+            	var arrowTop = 0 - jQuery(_tooltip_con).find('.errTooltipBorderTopMid').outerHeight() + Math.ceil(_tooltip_con_height / 2) - Math.ceil(_errortooltip_arrow.height() / 2);
+            	var arrowLeft  = 0 - jQuery(_tooltip_con).find('.errTooltipBorderMidLeft').outerWidth() - _errortooltip_arrow.width();
+            	//adjust first the position of the arrow
+            	jQuery(_tooltip_con).find('.errTooltipArrowLeft').css({
+            		'top' : arrowTop + 'px',
+            		'left' : arrowLeft + 'px'
+            	});
+            	
+	        	 jQuery(_tooltip_con).css({
+	                'position': 'absolute',
+	                'top': _top_top + 'px',
+	                'left': _left_left + 'px',
+	                'opacity': '1',
+	                'height' : _base_height
+	            }).show();
+	        	 
+            }else{
+            	 jQuery(_tooltip_con).css({
+ 	                'position': 'absolute',
+ 	                'top': _top_top + 'px',
+ 	                'left': _offset.left + 'px',
+ 	                'opacity': '1'
+ 	            }).show();
+            }
+        };
+
+        var _hideTooltip = function() {
+            jQuery(_tooltip_con).hide();
+        };
+
+        var _getContent = function() {
+            var _content= jQuery('label[for="' + _base_id + '"].' + _selector_attr + '').clone().html();
+            _tooltip_content.html('<div class="fSize12px">' + _content + '</div>');
+        };
+
+        /*Customize this method when:
+         *-use outside checkout
+         *-add new input type text
+         *
+         *This method is for handling errors in jquery validation.
+         **/
+        var _errorHandler = function(error, element) {
+            _error = error;
+            _element = element;
+
+            var _element_id = jQuery(_element).attr('id') || '';
+            var _element_class = jQuery(_element).attr('class') || '';
+
+            jQuery(_element).attr('class', '');
+            _element_class = _element_class.split(' ');
+            for (var i = 0; i < _element_class.length; i++) {
+                
+                _integCustomSelect(_element_id, _element_class[i], 'error');
+                _groupHighlight(_element_id, 'error');
+                
+                if (_element_class[i] != 'inputText162' && _element_class[i] != 'inputText337' && _element_class[i] != 'inputText90' && _element_class[i] != 'inputText67') {
+                    jQuery(_element).addClass(_element_class[i]);
+                } else {
+                    jQuery(_element).addClass(_element_class[i] + '-error');
+                }
+            }
+
+            jQuery('label[for=' + _element_id + ']').css({
+                'padding': '1px',
+                'background-color': '#f9a914'
+            });
+
+            jQuery(_element).after(_error);
+            _getContent(_element);
+
+        };
+
+        /*Customize this method when:
+         *-use outside checkout
+         *-add new input type text
+         *
+         *This method is for handling success in jquery validation.
+         **/
+        var _successHandler = function(label) {
+            _label = label;
+            var _label_for = _label.attr('for')  || '';
+            var _input = jQuery('#' + _label_for);
+            var _input_id = _input.attr('id')  || '';
+            var _input_class = _input.attr('class') || '';
+
+            jQuery(_input).attr('class', '');
+            _input_class = _input_class.split(' ');
+            for (var i = 0; i < _input_class.length; i++) {
+
+                _integCustomSelect(_input_id, _input_class[i], 'success');
+                _groupHighlight(_input_id, 'success');
+
+                if (_input_class[i] != 'inputText162-error' && _input_class[i] != 'inputText337-error' && _input_class[i] != 'inputText90-error' && _input_class[i] != 'inputText67-error') {
+                    jQuery(_input).addClass(_input_class[i]);
+                } else {
+                    var _temp_input_class = _input_class[i].split('-');
+                    jQuery(_input).addClass(_temp_input_class[0]);
+                }
+            }
+
+            jQuery('label[for=' + _input_id + ']').css({
+                'background-color': 'transparent'
+            });
+
+            _hideTooltip();
+            jQuery('.errorInfoCon').hide();
+        };
+
+        /*Customize this method when:
+         *-use outside checkout
+         *-add new input type text
+         *
+         *This method is to support display and animation of _errorHandler.
+         *Wrapped by timeout function to execute the _errorHandler first before this method.
+         **/
+        var _invalidHandler = function() {
+            setTimeout(function() {
+                var _element = jQuery('.error');
+                if (_element.length != 0) {
+                    for (var i = 0; i < _element.length; i++) {
+                        var _temp_element = _element.eq(i);
+                        var _temp_element_class = _temp_element.attr('class') || '';
+                        var _temp_element_id = _temp_element.attr('id') || '';
+                        _temp_element_class = _temp_element_class.split(' ');
+                        _temp_element.attr('class', '');
+
+                        for (var a = 0; a < _temp_element_class.length; a++) {
+
+                            _integCustomSelect(_temp_element_id, _temp_element_class[a], 'error');
+                            _groupHighlight(_temp_element_id, 'error');
+                            
+                            if (_temp_element_class[a] != 'inputText162' && _temp_element_class[a] != 'inputText337' && _temp_element_class[a] != 'inputText90' && _temp_element_class[a] != 'inputText67') {
+                                _temp_element.addClass(_temp_element_class[a]);
+                            } else {
+                                _temp_element.addClass(_temp_element_class[a] + '-error');
+                            }
+
+                            jQuery('label[for=' + _temp_element_id + ']').css({
+                                'padding': '1px',
+                                'background-color': '#f9a914'
+                            });
+                        }
+                    }
+
+                    jQuery('.errorInfoCon').slideDown(300);
+                }
+            }, 100);
+        };
+
+        //This function is to integrate the custom select plugin in PCM BD
+        var _integCustomSelect = function(_id, _class, _type) {
+            var _split = _class.split('-');
+            var _status = false;
+            var _class_plugin1 = '.DivSelectyze';
+            var _class_plugin2 = '.divSelecty';
+            var _selectClass = _class_plugin1 + '.'+ _class +','+ _class_plugin2 + '.'+ _class; //multiple selector
+			
+            var _csErrorHandler = function() {
+                jQuery(_selectClass).removeClass('valid')
+                        .addClass('error')
+                        .attr('id', _id);
+                setTimeout(function() {//wait invalidHandler to execute before this
+                    var _label = jQuery(_selectClass).parent().find('label').detach();//get the label created and place to last, to fix the bug of select plugin
+                    jQuery(_selectClass).parent().append(_label);
+                }, 200);
+            };
+
+            var _csSuccessHandler = function() {
+                jQuery(_selectClass).removeClass('error')
+                        .addClass('valid')
+                        .attr('id', _id);
+				
+            };
+
+            for (var i = 0; i < _split.length; i++) {
+                if (_split[i] === 'customSelect') {
+                    _status = true;
+                }
+            }
+            if (_status === true) {
+                if (_type === 'error') {
+                    _csErrorHandler();
+                } else if (_type === 'success') {
+                    _csSuccessHandler();
+                }
+            }
+			
+        };
+    
+        //ID should prefix_group_unique
+        //FOR should prefix_group
+        //To highlight the label in input groups
+        var _groupHighlight = function(_id, _type){
+            if(_type === 'error'){
+                if(_id !== undefined && _id.indexOf('group') !== -1){
+                    var _split = _id.split('_');
+                    var _for = _split[0]+'_'+_split[1];
+
+                    jQuery('label[for=' + _for + ']').css({
+                        'padding': '2px',
+                        'background-color': '#f9a914'
+                    });
+                }
+            }else if(_type === 'success'){
+                if(_id !== undefined && _id.indexOf('group') !== -1){
+                    var _split = _id.split('_');
+                    var _for = _split[0]+'_'+_split[1];
+
+                    jQuery('label[for=' + _for + ']').css({
+                        'padding': '0px',
+                        'background-color': 'transparent'
+                    });
+                }
+            }
+        };
+    
+        return {
+            init: _init,
+            config: _config,
+            errorHandler: _errorHandler,
+            successHandler: _successHandler,
+            invalidHandler: _invalidHandler,
+            hide: _hideTooltip
+        };
+    };
+
+    var _createErrorTooltipBtm = function() {
+
+        var _error = null;
+        var _element = null;
+        var _label = null;
+        var _speed = null;
+        var _easing = null;
+
+        var _init = function() {
+            _tooltip_con = '.errTooltipConBtm';
+            _tooltip_content = '.errTooltipConBtm .errTooltipContentCon';
+
+            _speed = 300;
+            _easing = 'easeOutQuint';
+
+        };
+
+        var _config = function(config_value) {
+            _config_value = config_value;
+
+            if (typeof _config_value.padding != 'undefined') {
+                jQuery('.errTooltipBorderMidMid').css('padding', _config_value.padding);
+            }
+            if (typeof _config_value.width != 'undefined') {
+                jQuery(_tooltip_content).css('width', _config_value.width);
+            }
+            if (typeof _config_value.zIndex != 'undefined') {
+                jQuery(_tooltip_con).css('z-index', _config_value.zIndex);
+            }
+
+        };
+
+        var _displayTooltip = function() {
+            jQuery(_tooltip_con).show();
+        };
+        var _displayTooltipAfterElement = function(element, text) {
+
+            jQuery(element).parent().find('.errTooltipConBtm').remove();
+            jQuery(element).after(jQuery(_tooltip_con).clone());
+            $tooltipcontainer = jQuery(element).next(_tooltip_con);
+            $tooltipcontainer.find('.errTooltipContentCon').html('<div class="fSize12px" >' + text + '</div>');
+
+            var _full_height = $tooltipcontainer.outerHeight() + 16;
+
+            $tooltipcontainer.css({
+                'display': 'block',
+                'height': 0,
+                'opacity': 0
+            }).animate({
+                'height': _full_height,
+                'opacity': 1
+            }, _speed, _easing);
+        }
+        var _hideTooltip = function() {
+            jQuery(_tooltip_con).hide();
+        };
+
+        var _hideTooltipAfterElement = function(element, mode) {
+            if (mode == 'undo') {
+                jQuery(element).val(jQuery(element).attr('temp_value'));
+            }
+            $tooltipcontainer = jQuery(element).next(_tooltip_con);
+            $tooltipcontainer.animate({
+                'height': 0,
+                'opacity': 0
+            }, _speed, _easing, function() {
+                jQuery(element).parent().find('.errTooltipConBtm').delay().remove();
+            });
+        };
+
+        var _updateTooltip = function(trigger, element, _html, _functionGetData) {
+
+            jQuery(trigger).blur(function() {
+                //store user input
+                jQuery(element).attr('temp_value', jQuery(element).val());
+
+                //ajax call here
+
+                //after ajax call
+                jQuery(element).val(_functionGetData);
+
+                _displayTooltipAfterElement(element, //element after which the tooltip will be attached
+                        //html content of tooltip
+                        _html + 'Click <a href="#" class="ttip_undo">Undo</a>  if the update is wrong ' + 'or Click <a class="ttip_confirm">Confirm</a> to accept the update.');
+            });
+
+            jQuery('.ttip_confirm').live('click', function() {
+                _hideTooltipAfterElement(element, '');
+            });
+
+            jQuery('.ttip_undo').live('click', function() {
+                _hideTooltipAfterElement(element, 'undo');
+            });
+
+        }
+        var _getTooltipText = function(url, element, _html) {
+            $.get(url, function(data) {
+                jQuery(element).val(data);
+
+                _displayTooltipAfterElement(element, //element after which the tooltip will be attached
+                        //html content of tooltip
+                        _html + 'Click <a href="#" class="ttip_undo">Undo</a>  if the update is wrong ' + 'or Click <a class="ttip_confirm">Confirm</a> to accept the update.');
+            });
+        }
+        /*Customize this method when:
+         *-use outside checkout
+         *-add new input type text
+         *
+         *This method is for handling errors in jquery validation.
+         **/
+        var _errorHandler = function(error, element) {
+            _error = error;
+            _element = element;
+            var _element_id = jQuery(_element).attr('id');
+            var _element_class = jQuery(_element).attr('class');
+
+            //append the static error message
+            jQuery(_element).after(jQuery(_tooltip_con).hide().clone().show());
+            //remove extra tooltips
+            jQuery(_tooltip_con).prev(_tooltip_con).remove();
+            jQuery(_tooltip_con).last().hide();
+
+            jQuery(_element).attr('class', '');
+            _element_class = _element_class.split(' ');
+            var err_msg = _error.text();
+            $tooltipcontainer = jQuery(_element).next(_tooltip_con).find('.errTooltipContentCon').html('<div class="fSize12px" >' + err_msg + '</div>');
+
+            //format labels with errors
+            jQuery('label[for=' + _element_id + ']').css({
+                'padding': '2px',
+                'background-color': '#f9a914'
+            });
+
+            for (i = 0; i < _element_class.length; i++) {
+                if (_element_class[i] != 'inputText162' && _element_class[i] != 'inputText337' && _element_class[i] != 'inputText90' && _element_class[i] != 'inputText67') {
+                    jQuery(_element).addClass(_element_class[i]);
+                } else {
+                    jQuery(_element).addClass(_element_class[i] + '-error');
+                }
+            }
+
+        };
+
+        /*Customize this method when:
+         *-use outside checkout
+         *-add new input type text
+         *
+         *This method is for handling success in jquery validation.
+         **/
+        var _successHandler = function(label) {
+            _label = label;
+            var _label_for = _label.attr('for');
+            var _input = jQuery('#' + _label_for);
+            var _input_id = _input.attr('id');
+            var _input_class = _input.attr('class') || '';
+
+            _input.next(_tooltip_con).remove();
+
+            jQuery(_input).attr('class', '');
+            _input_class = _input_class.split(' ');
+            for (i = 0; i < _input_class.length; i++) {
+                if (_input_class[i] != 'inputText162-error' && _input_class[i] != 'inputText337-error' && _input_class[i] != 'inputText90-error' && _input_class[i] != 'inputText67-error') {
+                    jQuery(_input).addClass(_input_class[i]);
+                } else {
+                    var _temp_input_class = _input_class[i].split('-');
+                    jQuery(_input).addClass(_temp_input_class[0]);
+                }
+            }
+
+            jQuery('label[for=' + _input_id + ']').css({
+                'padding': '0px',
+                'background-color': 'transparent'
+            });
+
+            jQuery('.errorInfoCon').hide();
+            jQuery(_tooltip_con).last().hide();
+
+        };
+
+        /*Customize this method when:
+         *-use outside checkout
+         *-add new input type text
+         *
+         *This method is to support display and animation of _errorHandler.
+         *Wrapped by timeout function to execute the _errorHandler first before this method.
+         **/
+        var _invalidHandler = function() {
+            setTimeout(function() {
+                var _element = jQuery('input.error');
+                if (_element.length != 0) {
+                    for (i = 0; i < _element.length; i++) {
+                        var _temp_element = _element.eq(i);
+                        var _temp_element_class = _temp_element.attr('class');
+                        var _temp_element_id = _temp_element.attr('id');
+                        _temp_element_class = _temp_element_class.split(' ');
+                        _temp_element.attr('class', '');
+
+                        for (a = 0; a < _temp_element_class.length; a++) {
+                            if (_temp_element_class[a] != 'inputText162' && _temp_element_class[a] != 'inputText337' && _temp_element_class[a] != 'inputText90' && _temp_element_class[a] != 'inputText67') {
+                                _temp_element.addClass(_temp_element_class[a]);
+                            } else {
+                                _temp_element.addClass(_temp_element_class[a] + '-error');
+                            }
+
+                            jQuery('label[for=' + _temp_element_id + ']').css({
+                                'padding': '2px',
+                                'background-color': '#f9a914'
+                            });
+                        }
+                    }
+                    jQuery(_tooltip_con).slideDown(300);
+                    jQuery(_tooltip_con).last().hide();
+                    jQuery('.errorInfoCon').slideDown(300);
+
+                }
+            }, 100);
+        };
+
+        return {
+            init: _init,
+            config: _config,
+            errorHandler: _errorHandler,
+            successHandler: _successHandler,
+            invalidHandler: _invalidHandler,
+            displayTooltipAfterElement: _displayTooltipAfterElement,
+            hideTooltipAfterElement: _hideTooltipAfterElement,
+            updateTooltip: _updateTooltip,
+            hideTooltip: _hideTooltip
+        };
+    };
+
+    return {
+        infoTooltip: _createInfoTooltip,
+        errorTooltip: _createErrorTooltip,
+        errorTooltipBtm: _createErrorTooltipBtm
+    };
+};
+</script>
+<script type="text/javascript">var PCM = PCM || {};
+PCM.loginValidation = (function (jQ) {
+
+    var formId = null;
+    var init = function (id) {
+        formId = id;
+        loginValidate();
+        applyFormValidation();
+    };
+    var loginValidate = function () {
+        var emailAddress = '#emailAddress';
+        jQ(emailAddress).focus();
+
+        jQ(emailAddress).keydown(function (evt) {
+            if (evt.which == 13 || evt.keyCode == 13) {
+                // validate login
+                validateLogin();
+            }
+        });
+
+        jQ('#password').keydown(function (evt) {
+            if (evt.which == 13 || evt.keyCode == 13) {
+                // validate login
+                validateLogin();
+            }
+        });
+
+        jQ('#input-submit').click(function () {
+            // validate login
+            validateLogin();
+        });
+    };
+    var validateLogin = function () {
+        var errors = {};
+
+        var emailAddress = jQ('#emailAddress');
+        var emailAddressNotEmpty = makeFieldRequired(errors, emailAddress, "emailAddress");
+
+        var password = jQ('#password');
+        var passwordNotEmpty = makeFieldRequired(errors, password, "password");
+
+        // if password is not empty, check if has the minimum characters and contains only alpha numeric characters
+        if (passwordNotEmpty) {
+            if (!hasMinimumCharacters(password, 1)) {
+                errors["password"] = "Invalid password";
+            }
+        }
+
+        var inputSubmit = jQ('#input-submit');
+
+        jQ.ajax(
+                {
+                    url: "/ajaxCall/signInValidation",
+                    type: "post",
+                    cache: false,
+                    data: {
+                        email: function () {
+                            return jQ("#emailAddress").val();
+                        }
+                    },
+                    beforeSend: function (data) {
+                        inputSubmit.attr('disable', true);
+                    },
+                    complete: function (data) {
+                        inputSubmit.attr('disable', false);
+
+                        var validator = jQ('#loginForm').validate({
+                            focusout: false
+                        });
+
+                        validator.resetForm();
+
+                        var responseText = jQ.parseJSON(data.responseText);
+                        var isValid = responseText.valid;
+
+                        if (isValid && jQ.isEmptyObject(errors)) {
+                            document.loginForm.method = "post";
+                            document.loginForm.submit();
+                        } else {
+                            var errMsgs = responseText.errorMessages;
+
+                            if (errMsgs !== null) {
+                                // do not use the "not empty" error message of unified validation
+                                setUnifiedValidationErrMsg(errors, emailAddressNotEmpty, "emailAddress", errMsgs.email);
+                            }
+
+                            validator.showErrors(errors);
+                        }
+                    }
+                }
+        );
+    };
+    var hasMinimumCharacters = function (field, minChar) {
+        return field.val().length >= minChar;
+    };
+    var setUnifiedValidationErrMsg = function (errors, isErrorOveridden, fieldName, msg) {
+        if (isErrorOveridden) {
+            if (jQ.trim(msg) !== '') {
+                errors[fieldName] = msg;
+            }
+        }
+    };
+    /**
+     * Returns <b>true</b> if not empty else <b>false</b>
+     */
+    var makeFieldRequired = function (errors, field, fieldName) {
+        if (jQ.trim(field.val()) === '') {
+            errors[fieldName] = "This field is required.";
+            return false;
+        }
+        return true;
+    };
+    var applyFormValidation = function () {
+        errorTooltip = new PCM.tooltip();
+        errorTooltip.errorTooltip().init('.error');
+    };
+    return{init: init};
+})(jQuery);</script>
+<script type="text/javascript">var PCM = PCM || {};
+
+PCM.modalBx = function(elm, settings){
+    var _elm = jQuery(elm);
+    var _olay = jQuery('.overlay');
+    var _mod = jQuery('.modalbx');
+    var _modWidth = 335;
+    var _winWidth = jQuery(window).width();
+    var _winHeight = jQuery(window).height();
+    var _docHeight = jQuery(document).height();
+    var _docWidth = jQuery(document).width();
+    var _load = jQuery('.loader-modal');
+    var _appendStatus = false;
+	var _default = true;
+    var closeId;
+    var init = function(opt){
+        var scrollTop = jQuery(window).scrollTop();        
+        if(typeof opt === 'undefined'){
+            _elm.on('click', function() {
+                modal().openModal(jQuery(this).attr('href'));
+            });
+            hashModal().checkHash();
+        }
+         jQuery(document).on('click','.cncl', function(){    
+            modal().closeModal();
+            return false;
+        });
+        _mod.find('.cls').on('click', function(){
+            modal().closeModal();
+            jQuery(window).scrollTop(scrollTop); 
+            return false;                        
+        });
+        _olay.unbind('click').on('click', function() {
+           modal().closeModal();
+            return false;           
+        });
+        jQuery(window).resize(function() {
+            modal().adjustModal().adjustPosition(true);
+            
+        });
+    };
+    var syncVar = function(){
+        _winWidth = jQuery(window).width();
+        _winHeight = jQuery(window).height();
+        _docHeight = jQuery(document).height();
+        _docWidth = jQuery(document).width();
+    };
+    
+    var hashModal = function(){
+        var checkHash = function(){
+            var whash = window.location.hash;
+            if (jQuery(whash).index() !== -1 && jQuery(whash).attr('data-modal') === "true") {
+                modal().openModal(whash);
+            }
+        };
+        
+        var removeHash = function(){
+            window.location.hash = '';
+        };
+        
+        return{
+            checkHash:checkHash,
+            removeHash:removeHash
+        };
+    };
+    var modal = function(){
+        var openModal = function(href, opt){
+            init(true);
+            if(typeof opt !== 'undefined' && opt === true){
+                _appendStatus = true;
+            }
+            _olay.css('height', _docHeight + 'px');
+            if(_appendStatus === false){
+                var clone = jQuery(href).clone().html();
+                _mod.children('.mdl-mcntnt').html(clone);
+            }else{
+                closeId = href;
+                _mod.children('.mdl-mcntnt').html(jQuery(href + '> div'));
+            }
+            if(typeof settings  !== 'undefined' && typeof settings.width  !== 'undefined'){
+                _mod.css('width', settings.width + 'px');
+            }else{
+                _mod.css('width', _modWidth + 'px');
+            }
+            adjustModal().adjustWidth();
+            adjustModal().adjustPosition(false);
+            _mod.fadeIn(200);
+            _olay.fadeIn(200);
+            adjustModal().adjustOnScreen();
+            jQuery('.default').focus();
+        };
+        
+        var closeModal = function(){
+            if(_appendStatus === true){
+                jQuery(closeId).html(_mod.find('.mdl-mcntnt > div'));
+                _appendStatus = false;
+            }
+            _olay.fadeOut(200);
+            _mod.fadeOut(200);
+            jQuery('body').css('overflow', 'auto');
+            hashModal().removeHash();
+            return false;
+        };
+        
+        var adjustModal = function(){
+			syncVar(); 
+            var adjustPosition = function(opt){
+				var top = (_winHeight / 2) - _mod.height() / 2;
+				var left = Math.max(0, ((_winWidth - _mod.outerWidth()) / 2) +   jQuery(window).scrollLeft());
+		                if(opt === true){
+		                    if(_default===true){
+		                      _mod.css({ 'top': top + 'px','left': left + 'px'});
+		                      _default=false;
+		                    }
+			                 clearTimeout(window.resizeEvt);
+			                 window.resizeEvt = setTimeout(function(){
+			    		        _mod.animate({'top': top + 'px','left': left + 'px'}, 200, 'easeOutQuart'); 
+			                 },100); 
+		                }else{
+		                    _mod.css({'top': top + 'px','left': left + 'px'});
+		                }
+		                
+		                _olay.css('width', _docWidth + 'px'); 	 	
+		                _olay.css('height', _docHeight + 'px'); 
+            };
+            var adjustWidth = function(){
+                var tpmd = _mod.find('.tp-md');
+                var btmd = _mod.find('.btm-md');
+                var mct = _mod.find('.mdl-mcntnt');
+                tpmd.css('width', (_mod.width() - 10) + 'px');
+                btmd.css('width', (_mod.width() - 10) + 'px');
+                mct.css('width',_mod.width() + 'px');
+            };
+            var adjustOnScreen = function(){
+                 if (_mod.width() > _winWidth || _winHeight < _mod.height()) {
+                    _mod.css('position', 'absolute');
+                    jQuery('body,html').stop().animate({scrollTop: _mod.offset().top}, 300, 'easeOutQuart'); 
+                } else {
+                    _mod.css('position', 'fixed');
+                }
+                if (_winHeight > _mod.height()) {
+                   jQuery('body').css('overflow','hidden');
+                }else{
+                   jQuery('body').css('overflow', 'auto');
+                }
+            };
+            
+            return{
+                adjustPosition:adjustPosition,
+                adjustWidth:adjustWidth,
+                adjustOnScreen:adjustOnScreen
+            };
+        };
+        
+        return{
+            openModal:openModal,
+            closeModal:closeModal,
+            adjustModal:adjustModal
+        };
+    };
+    
+    var staticMethods = function(){
+        var intervlLoad;
+        var showLoader = function(){
+            var x = 0;
+            var limit = 440;
+            var loader = _load.find('.loading');
+            _load.fadeIn(200);
+            clearInterval(intervlLoad);
+           intervlLoad =  setInterval(function(){
+                if (x === limit)
+                    x = 0;
+                else
+                    x+=40;
+                loader.css('background-position-y',((x!==0)?'-':'') + x + 'px');
+            }, 100);
+        };
+        
+        var hideLoader = function(){
+            _load.hide();
+            clearInterval(intervlLoad);
+        };
+        
+        return{
+            showLoader:showLoader,
+            hideLoader:hideLoader
+        };
+    };
+    
+    return{
+        init:init,
+        modal:modal,
+        staticMethods:staticMethods
+    };
+};</script>
+
+<!--END IMPORTS ONLY-->
+</body>
+</html>

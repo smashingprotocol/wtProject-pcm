@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="pdpIpadtoPCMBDLite">
+
+	<target name="pdpIpadtoPCMBDLite">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="PDP: ${title} [${host}]">
+			
+			&config;
+			
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${sku}" description="Define Sku to checkout" />
+			<storeProperty name="addserviceplan.dynamic" value="${withServicePlan}" description="Define if to add a service plan" />
+			
+			<storeProperty name="pcmbdurl.dynamic" value="${bdHost}" description="Define PCM BD lite URL" />
+			
+			<ifStep description="If to login user">
+				<condition>
+						<verifyProperty property="islogin" text="true" propertyType="ant" description="Define if to login user" />
+				</condition>
+				<then>
+					&myAccountLogin;
+					&clearCart;
+				</then>
+			</ifStep>
+			
+			&addtoCartPDPSearchSKU;
+			
+			<ifStep description="If to add a Service Plan, add a Service Plan">
+				<condition>
+					<verifyProperty property="addserviceplan.dynamic" value="true" description="If to add a Service Plan" />
+				</condition>
+				<then>
+					<verifyDocumentURL text="https://#{pcmbdurl.dynamic}/n/Global-Login-Register/bd-120" description="Verify the PCM BD url" />
+				
+					<ifStep description="Check PCM BD lite login fields">
+						<condition>
+							<verifyProperty property="islogin" text="true" propertyType="ant" description="Define if to login user" />
+						</condition>
+						<then>
+						
+							<verifyInputField xpath="id('dummyFirstName')" value="${firstName}" description="Verify the First name is entered on the First Name field" />
+							<verifyInputField xpath="id('dummyLastName')" value="${lastName}" description="Verify the Last name is entered on the Last Name field" />
+							<verifyInputField xpath="id('dummyEmail')" value="#{username.dynamic}" description="Verify the Email Address is entered on the Email Address field" />
+						</then>
+						<else>
+							<verifyInputField xpath="id('dummyFirstName')" value="" description="Verify the First name is entered on the First Name field" />
+							<verifyInputField xpath="id('dummyLastName')" value="" description="Verify the Last name is entered on the Last Name field" />
+							<verifyInputField xpath="id('dummyEmail')" value="" description="Verify the Email Address is entered on the Email Address field" />
+						</else>
+					</ifStep>
+				</then>
+				<else>
+					<verifyXPath xpath="//p[contains(text(),'Call 1-800-700-1000 to order or buy online via')]" description="Verify the message iPad purchase via Busines Direct box appears" />
+					<verifyXPath xpath="//a[contains(@href,'/api/login?opType=consumer-epp-register')]" description="Verify the BD link redirects to BD EPP" />
+				</else>
+			</ifStep>
+			
+			
+			
+			
+			
+			
+		</webtest>
+		
+	</target>
+</project>

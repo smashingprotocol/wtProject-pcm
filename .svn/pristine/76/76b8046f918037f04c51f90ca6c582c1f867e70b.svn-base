@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderConfirmationScripts">
+
+	<target name="verifyOrderConfirmationScripts">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: Order Confirmation tracking scripts (CJ, GTS)">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<group description="Define properties">
+				<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${username}" description="Define username to login" />
+				<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+				<storeProperty name="sku.dynamic" value="${sku}" description="Define Sku to checkout" />
+				<storeProperty name="verifyrecyclingfee.dynamic" value="false" description="Define if recycling fee should be verify" />
+				<storeProperty name="recyclingfee.dynamic" value="${recyclingFee}" description="Define recycling fee" />
+				<storeProperty name="placeOrder.dynamic" value="true" description="Define if to continue place order" />
+				
+				<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+				<storeProperty name="cardType.dynamic" value="2" description="Define Credit Card Type" />
+				
+				<storeProperty property="expMonth.dynamic" value="12" propertyType="dynamic" description="Define expMonth" />
+				<storeProperty property="expYear.dynamic" value="2016" propertyType="dynamic" description="Define expYear" />
+				<storeProperty property="secCode.dynamic" value="123" propertyType="dynamic" description="Define secCode" />
+			</group>
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			<group description="Shopping Cart: Grand Total is not 0">
+				<verifyXPath xpath="//p[@class='itemTotalPrice' and text()='#{pdp.finalprice}']" description="Verify the Unit Price in PDP can be found in the cart" />
+				<storeXPath xpath="${cart.grandtotaltext}" property="cart.grandTotal" propertyType="dynamic" />
+			</group>
+			
+			&unifiedProceedtoCheckout;
+			&proceedtoCheckoutPlaceOrder;
+			
+			<verifyXPath xpath="//img[contains(@src,'www.emjcd.com')]" description="Verify the CJ Tracking Scripts is found." />
+			<verifyXPath xpath="//div[@id='gts-order']" description="Verify the Google Trusted Store" />
+			
+			<storeXPath xpath="//span[@id='gts-o-id']" property="orderNumber" description="Store the Order Number" />
+		
+			<echo message="Order Number: #{orderNumber}" />
+		
+		</webtest>
+		
+	</target>
+</project>

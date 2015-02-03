@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderOmnitureProperties">
+
+	<target name="verifyOrderOmnitureProperties">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: Omniture Properties">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			
+			<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+			<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${default.checkoutuser}" description="Define username to checkout" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to checkout" />
+			
+			
+			&addtoCartPDPSearchSKU;
+			<clickElement xpath="//a[contains(@href,'newUserCheckOut')]" description="newCustomer Checkout button" />
+			<verifyXPath xpath="//script[contains(text(),'s.events=&#34;scCheckout&#34;')]" description="s.events" />
+			
+			<clickLink xpath="${cart.link}" description="Click back to cart" />
+			
+			<clickElement xpath="//a[contains(@href,'guestUserCheckOut')]" description="Guest Checkout button" />
+			<verifyXPath xpath="//script[contains(text(),'s.events=&#34;scCheckout&#34;')]" description="s.events" />
+			
+			<clickLink xpath="${cart.link}" description="Click back to cart" />
+			
+			<clickElement xpath="//a[@id='ex_customer']" description="Existing Customer Checkout button" />
+			<setInputField xpath="id('shoppCartEmail')" value="#{username.dynamic}" description="Enter Username" />
+			<setInputField xpath="id('shoppCartPwd')" value="#{password.dynamic}" description="Enter Username" />
+			<clickElement xpath="//a[@id='scLoginSubmit']" description="Click SignIN" />
+
+			<verifyXPath xpath="//script[contains(text(),'s.events=&#34;scCheckout&#34;')]" description="s.events" />	
+		
+		</webtest>
+		
+	</target>
+</project>

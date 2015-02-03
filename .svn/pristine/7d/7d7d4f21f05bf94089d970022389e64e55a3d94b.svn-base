@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartAddESDviaQuickAdd">
+
+	<target name="shoppingCartAddESDviaQuickAdd">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: Unable to mixed cart with ESD and Non ESD via Quick Add [ESD: ${sku.esd}].">
+			
+			&config;
+			
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${${pcmHost}.username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${sku.nonesd}" propertyType="dynamic" description="Define Sku to checkout" />
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			<group description="Add ESD SKU via Quick Add">
+				<setInputField name="cartSku" value="${sku.esd}" description="Enter ESD SKU" />
+				<clickElement xpath="${cart.btnquickadd}" description="Click Quick Add" />
+				<verifyText text="We are unable to process orders which have both software downloads and products that require shipping" />
+				<not description="ESD SKU should not be added in cart">
+					<verifyXPath xpath="//div[@class='txtpcmallpart' and contains(text(),'${sku.esd}')]" description="Direct Download icon" />
+				</not>	
+			</group>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="pdpPromoCodeCouponBox">
+
+	<target name="pdpPromoCodeCouponBox">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="PDP: ${title}">
+			
+			&config;
+			
+			<storeProperty name="sku.dynamic" value="${sku}" propertyType="dynamic"  description="Define Data Driven Sku to checkout" />
+			<storeProperty name="rebateid.dynamic" value="${rebateid}" propertyType="dynamic"  description="Define Data Driven Rebate ID" />
+			<invoke url="${sku.url}source=${couponCode}" description="Invoke the PDP"/>
+			
+			<setInputField xpath="id('couponBox')" value="${couponCode}" description="Enter Coupon Code"/>
+			<clickLink xpath="id('applyToOrderBtn')" description="Click Apply Link" />
+		
+		<ifStep description="MAIL IN REBATES">
+			<condition>
+				<verifyProperty property="rebateid.dynamic" value="instantmailin" propertyType="dynamic" description="Verify Instant and Mail in Rebate" />
+			</condition>
+			<then>
+				<verifyXPath xpath="${pdp.mailinrebatelbl}" description="Verify the Mail In Rebate text label" />
+				&pdpVerifyStrikethrPrice;
+			</then>
+		</ifStep>
+		
+		<ifStep description="INSTANT REBATES">
+			<condition>
+				<verifyProperty property="rebateid.dynamic" value="instantrebates" propertyType="dynamic" description="Verify Instant and Mail in Rebate" />
+			</condition>
+			<then>
+				<verifyXPath xpath="${pdp.instantrebatelbl}" description="Verify the Instant Rebate text label" />
+				&pdpVerifyStrikethrPrice;
+			</then>
+		</ifStep>
+		
+		<ifStep description="Verify CLICK HERE TO SEE LOWEST PRICE (Display price is lower than MAP)">
+			<condition>
+				<verifyProperty property="rebateid.dynamic" value="lowestprice" propertyType="dynamic" description="Verify Click Here to see lowest price" />
+			</condition>
+			<then>
+				<verifyXPath xpath="${pdp.clickherelowestpricebtn}" description="Verify the Click Here lowest price button" />
+			</then>
+		</ifStep>
+		
+		<ifStep description="Verify YOU SAVE (Display price is equal to MAP)">
+			<condition>
+				<verifyProperty property="rebateid.dynamic" value="yousave" propertyType="dynamic" description="Verify You Save" />
+			</condition>
+			<then>
+				<verifyXPath xpath="${pdp.yousavelbl}" description="Verify the You Save label" />
+			</then>
+		</ifStep>
+		
+		<ifStep description="Verify CALL FOR PRICE (No Price and add to cart button display)">
+			<condition>
+				<verifyProperty property="rebateid.dynamic" value="callforprice" propertyType="dynamic" description="Call For Price" />
+			</condition>
+			<then>
+				<verifyXPath xpath="${pdp.callforpricemsg}" description="Verify the Call for Price message" />
+				<not description="Add to cart button should not be available">	
+					<verifyXPath xpath="${pdp.btnaddtocart}" description="Add to cart button" />
+				</not>
+			</then>
+		</ifStep>
+		
+		<ifStep description="Verify SOLD OUT (No add to cart button display. Please call PCM Sales is display">
+			<condition>
+				<verifyProperty property="rebateid.dynamic" value="soldout" propertyType="dynamic" description="Verify Sold Out" />
+			</condition>
+			<then>
+				<verifyXPath xpath="${pdp.soldoutcallPCM}" description="Verify the Call PCM Sales image when item is sold out" />
+				<not description="Add to cart button should not be available">	
+					<verifyXPath xpath="${pdp.btnaddtocart}" description="Add to cart button" />
+				</not>
+			</then>
+		</ifStep>
+		
+		
+		</webtest>
+		
+	</target>
+</project>

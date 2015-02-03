@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchwithFacetFilterCount">
+
+	<target name="searchwithFacetFilterCount">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />
+			
+			&searchKeyword;
+			&searchSetFaceting;
+			
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+			</not>
+			
+			<ifStep description="Get xpath If Search is redesign">
+				<condition>
+					<storeXPath xpath="//div[@class='num']//span[@class='ottl']" property="product.count" propertyType="dynamic" description="Store the count of products in pagination 1 of ...count (SEARCH REDESIGN)" />
+				</condition>
+				<then>
+					<storeXPath xpath="translate(//span[@class='ottl'],',','')" property="ottl.count" propertyType="dynamic"  description="verify the Count of products matches the count of category" />
+					<verifyProperty property="category1.count" text="#{ottl.count}" regex="true" propertyType="dynamic" description="verify the Count of products matches the count of category" />
+				</then>
+				<else description="Search Legacy">
+					<storeXPath xpath="normalize-space(//div[@class='fDblue floatL'])" property="product.count" propertyType="dynamic" description="Store the count of products in Showing of..." />
+					<verifyProperty property="category1.count" text="#{product.count}" regex="true" propertyType="dynamic" description="verify the Count of products matches the count of category" />
+				</else>
+			</ifStep>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

@@ -1,0 +1,3 @@
+<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+<setInputField xpath="id('password')" value="#{password.dynamic}" description="Enter Password" />
+<clickElement xpath="//input[@id='input-submit']" description="Click Sign in" />

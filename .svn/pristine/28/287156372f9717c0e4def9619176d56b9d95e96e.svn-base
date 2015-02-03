@@ -1,0 +1,97 @@
+<group description="Proceed to Checkout: 3. Billing and Payment">
+	<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Billing And Payment" regex="true" description="Verify breadcrumbs is Billing And Payment page" />
+	
+	<ifStep description="If to Verify the selected a Billing Address by optionIndex">
+		<condition>
+			<verifyProperty name="verifyBilling.dynamic" value="true" description="Verify the selected Biling Address" />
+		</condition>
+		<then>
+			<verifySelectField xpath="id('billOpt')" text="#{billText.dynamic}" description="Select a Billing Address by option index count" /> 
+		</then>
+	</ifStep>
+	
+	<ifStep description="If to Select a Billing Address by optionIndex">
+		<condition>
+			<verifyProperty name="selectBilling.dynamic" value="true" description="Verify if to select a Biling Address" />
+		</condition>
+		<then>
+			<storeXPath xpath="id('billOpt')/option[#{billingOptionIndex.dynamic}]" property="billText" propertyType="dynamic" />
+			<setSelectField xpath="id('billOpt')" text="#{billText}" description="Select a Billing Address by option index count" /> 
+		</then>
+	</ifStep>
+	
+		<setRadioButton xpath="id('ccm')" description="Select Credit Card radiobutton" />
+		<sleep seconds="10"/>
+		
+		<ifStep description="If to select Card is VISA">
+			<condition>
+				<verifyProperty name="cct.dynamic" value="Visa" description="Card to select is Visa" />
+			</condition>
+			<then>
+				<setRadioButton xpath="id('cct_2')" description="Select VISA radiobutton" />
+			</then>
+		</ifStep>
+		
+		<ifStep description="If to select Card is MasterCard">
+			<condition>
+				<verifyProperty name="cct.dynamic" value="MasterCard" description="Card to select is MC" />
+			</condition>
+			<then>
+				<setRadioButton xpath="id('cct_4')" description="Select MC radiobutton" />
+			</then>
+		</ifStep>
+		
+		<ifStep description="If to select Card is Amex">
+			<condition>
+				<verifyProperty name="cct.dynamic" value="Amex" description="Card to select is Amex" />
+			</condition>
+			<then>
+				<setRadioButton xpath="id('cct_1')" description="Select Amex radiobutton" />
+			</then>
+		</ifStep>
+		
+		<ifStep description="If to select Card is Discover">
+			<condition>
+				<verifyProperty name="cct.dynamic" value="Discover" description="Card to select is Discover" />
+			</condition>
+			<then>
+				<setRadioButton xpath="id('cct_8')" description="Select Discover radiobutton" />
+			</then>
+		</ifStep>
+		
+		<ifStep description="If to select Card is Diners">
+			<condition>
+				<verifyProperty name="cct.dynamic" value="Diners" description="Card to select is Diners" />
+			</condition>
+			<then>
+				<setRadioButton xpath="id('cct_16')" description="Select Diners radiobutton" />
+			</then>
+		</ifStep>
+
+		<setSelectField xpath="id('ccem')" text="#{ccem.dynamic}" description="Set the Month expiration date" />
+		<setSelectField xpath="id('ccey')" text="#{ccey.dynamic}" description="Set the Year expiration date" />
+		<setInputField xpath="id('cardName')" value="#{cardName.dynamic}" description="Set the Card Name" />
+		<setInputField xpath="id('cardNumber')" value="#{cardNumber.dynamic}" description="Set the Card Number" />
+		<setInputField xpath="id('cardSecCode')" value="#{cardSecCode.dynamic}" description="Set the Card security Code" />
+		
+		<ifStep description="If to Save Card">
+			<condition>
+				<verifyProperty name="spm.dynamic" value="true" description="Card to select is Diners" />
+			</condition>
+			<then>
+				<setCheckbox xpath="id('spm')" checked="true" description="save new payment method" />
+				<setInputField xpath="id('pmName')" value="#{pmName.dynamic}" description="Set the Card Number" />
+			</then>
+		</ifStep>
+	
+	<clickElement xpath="id('conCheckBut')" description="Enter Continue" />
+	<retry maxCount="6">
+		<sleep seconds="10"/>
+		<not description="Page should not be Billing and Payment anymore">	
+			<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Billing And Payment" regex="true" description="Verify breadcrumbs is Billing And Payment page" />
+		</not>
+	</retry>	
+</group>
+
+
+

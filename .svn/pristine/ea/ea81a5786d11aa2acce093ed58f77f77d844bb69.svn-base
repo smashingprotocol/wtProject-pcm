@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartMacConfiguratorAddedinCart">
+
+	<target name="shoppingCartMacConfiguratorAddedinCart">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: MAC Configurator item are added in cart. [${sku.macconfig}]">
+			
+			&config;
+			
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="sku.dynamic" value="${sku.macconfig}" description="Define Sku to checkout" />
+			
+			&clearCart;
+			&searchSKUOpenPDP;
+			
+		
+			<group description="Go to Mac Customize Page and select items in configurator">
+				<clickLink xpath="//a[contains(@href,'javascript:customize') and contains(@href,'#{sku.dynamic}')]" description="Click the Buy Customize Button" />
+				<storeXPath xpath="count(//td[@class='optBgW'])" property="configCount" propertyType="dynamic" description="Stor the number of configurator row available" />
+				<repeat count="#{configCount}" counterName="cctr" startCount="1">
+					<ifStep>
+						<condition>
+							<verifyXPath xpath="//input[@name='c#{cctr}']" description="Verify if Row #{cctr} is available" />
+						</condition>
+						<then>
+							<storeXPath xpath="count(//input[@name='c#{cctr}'])" property="radioCount" propertyType="dynamic" description="Store the number of radio button in C#{cctr}" />
+							<setRadioButton xpath="(//input[@name='c#{cctr}']) [position()=#{radioCount}]" description="Select the last radio button in configuration row" />
+							<storeElementAttribute xpath="(//input[@name='c#{cctr}']) [position()=#{radioCount}]" property="c#{cctr}.id" attributeName="id" propertyType="dynamic" description="Store the ID" />
+							
+							<ifStep description="If item can be added in cart separately or Update the Sku">
+								<condition>
+									<verifyXPath xpath="id('#{c#{cctr}.id}')" description="Verify if the id of the radiobutton is ot be added as separate item in cart." />
+								</condition>
+								<then>
+									<storeXPath xpath="id('#{c#{cctr}.id}')" property="#{c#{cctr}.id}.sku" propertyType="dynamic" description="Store the SKU"/>
+								</then>
+								<else>
+									<storeXPath xpath="id('pc1o1c2o5')/span[@class='dpno']" property="#{c#{cctr}.id}.sku" propertyType="dynamic" description="Store the SKU"/>
+								</else>
+							</ifStep>
+							
+						</then>
+					</ifStep>
+				</repeat>
+			</group>
+			
+			<group description="Add to Cart item with Configurator and skip Service Plan">
+				<clickLink xpath="//a[contains(@href,'addToCart')]" description="Click Add to Cart" />
+				<clickLink xpath="//a[contains(@href,'submitServicePlansSelection')]" description="Click Next in Service Plan selection" />
+			</group>
+			
+			<ifStep description="If page is msc-194, proceed to cart" >
+				<condition>
+					<clickLink href="/n/Shopping-Cart/msc-cart" />
+				</condition>
+			</ifStep>
+			
+			<repeat count="#{configCount}" counterName="cartCount" startCount="1" description="Verify the configurator item in Shopping Cart">
+				<verifyXPath xpath="//div[@class='txtpcmallpart' and contains(text(),'#{#{c#{cartCount}.id}.sku}')] " description="Verify the PCM Part No of the Configurator item is available in Shopping cart" />
+			</repeat>
+			
+		</webtest>
+		
+	</target>
+</project>

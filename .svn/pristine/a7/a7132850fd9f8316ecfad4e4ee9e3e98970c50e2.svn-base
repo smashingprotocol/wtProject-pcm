@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderReviewQtyValidation">
+
+	<target name="verifyOrderReviewQtyValidation">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title}.">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="errorMsg.dynamic" value="${errorMsg}" description="Define the error validation type" />
+			
+			&myAccountLogin;
+			&clearCart;
+			<storeProperty name="sku.dynamic" value="${sku}" description="Define Default Sku to checkout" />
+			
+			&addtoCartPDPSearchSKU;
+			
+			<storeProperty name="cartDPNo.dynamic" value="${sku}" description="Define Sku to get the PDP No" />
+			&getEDPofCartDPNo;
+			
+			&unifiedProceedtoCheckout;
+			
+			<storeProperty property="zipcode.dynamic" value="${zipCode}" description="Define what kind of validation is expected."/>
+			<ifStep description="If to update Shipping Address by specific Zip code">
+				<condition>
+					<not>
+						<verifyProperty property="zipcode.dynamic" value="" description="Property value is empty" />
+					</not>
+				</condition>
+				<then>
+				 &verifyOrderChangeShipAddbyZipCode;
+				</then>
+			</ifStep>
+			
+			<clickElement xpath="//a[@id='editYourCart']" description="Click Edit your cart" />
+			<sleep seconds="3"/>
+			<storeProperty name="qty.dynamic" value="${qty}" description="Define qty value" />
+			<setInputField xpath="//input[@id='orQty_#{cartEDPNo}']" value="#{qty.dynamic}" description="Input Field of the item" />
+			<clickElement xpath="//a[@id='continueShopping']" description="Click Update" />
+			<verifyXPath xpath="//div[@id='orderReviewQtyEdit_#{cartEDPNo}' and contains(@style,'display: block')]/label[contains(text(),'#{errorMsg.dynamic}')]" description="Verify the qty box is validated" />
+
+		</webtest>
+		
+	</target>
+</project>

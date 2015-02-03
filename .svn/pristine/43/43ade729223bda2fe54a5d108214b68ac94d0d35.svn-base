@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+
+<!--
+This is a (nearly) empty WebTest project containing just a few examples for a quick start	
+-->
+
+<project name="example" default="wt.full">
+	
+	<property name="webtest.home" value="c:\WEBTESTHOME"/>
+	<import file="definitions.xml" description="Import custom definitions (if any)"/>
+	<import file="${webtest.home}/webtest.xml" description="Import all functionalities for a full build"/>
+	
+	<property name="wt.testInWork" value="tests/allTests.xml"/>
+	<!-- webtest.xml variables -->
+	<property file="pcmall.properties"/>
+	
+	<!-- AntForm Property -->
+	<taskdef name="antmenu" classname="com.sardak.antform.AntForm" 
+		classpath="${webtest.home}/lib/antform.jar"/>
+	
+	<antmenu title="PCM Webtest" image="images_pcm_logo.jpg">
+
+		<!--
+		<AntMenuItem name="Settings">
+			<AntMenuItem name="Config" target="settings"/>
+		</AntMenuItem>
+		-->
+		
+		<selectionProperty label="Select Host:" 
+		property="host" 
+		values="${testHost}"
+		unless="wt.antform.skip"/>
+		<selectionProperty label="Select Store:" property="store" values="${testStore}" unless="wt.antform.skip" />
+		<selectionProperty label="Select Prod Host:" 
+		property="prodHost" 
+		values="${testProdHost}"
+		unless="wt.antform.skip"/>
+		<separator unless="wt.antform.skip"></separator>
+		<label unless="wt.antform.skip">Select the group of test case(s) to execute:</label>
+		<!--<booleanProperty label="1. Home/My Account/Search" property="isHomeMyAccountSearch" unless="wt.antform.skip"/>
+		<booleanProperty label="2. Shopping Cart" property="isShoppingCart" unless="wt.antform.skip"/>
+		<booleanProperty label="3. Verify Order/Checkout" property="isVerifyOrderCheckout" unless="wt.antform.skip"/>
+		<booleanProperty label="4. Single Sign In" property="isSSO" unless="wt.antform.skip"/>
+		<booleanProperty label="5. Verify Homepage link Pages are available and no PC Mall wordings" property="isVerifyLinks" unless="wt.antform.skip"/> -->
+		<checkSelectionProperty label="Select Test Case ID's:" property="testcase.selected" values="${testcase.id}" unless="wt.antform.skip" />
+		<!--<booleanProperty label="Is Single Sign On Enable?:" property="enableSingleSignIn" unless="wt.antform.skip"/> currently SSO is disabled on all servers-->
+		<separator unless="wt.antform.skip"></separator>
+		<selectionProperty label="Select BD Host:" 
+		property="bdHost" 
+		values="${testpcmbd}"
+		unless="wt.antform.skip"/>
+		<separator unless="wt.antform.skip"></separator>
+		<selectionProperty label="Select Testing Type:" property="testtype.selected" values="Full,Basic" unless="wt.antform.skip" />
+		<separator unless="wt.antform.skip"></separator>
+		<selectionProperty label="Select Report Server:" 
+		property="host.emailreport" 
+		values="${reportserver}"
+		unless="wt.antform.skip"/>
+		<selectionProperty label="Email Report to:" property="tolist" values="${emailto}"  unless="wt.antform.skip"/>
+		<booleanProperty label="Create a Email Report?:" property="createEmailReport" unless="wt.antform.skip"/>
+		<separator unless="wt.antform.skip"></separator>
+		<buttonBar unless="wt.antform.skip">
+			<button label="Cancel" type="cancel" target=""/>
+		</buttonBar>	
+	</antmenu>
+	<property name="wt.antform.skip" value="true" description="Prevent antform in restarting"/>
+	<!-- AntForm End -->
+	
+	<property name="protocol" value="http"/>
+	<property name="port" value="80"/>
+	<property name="basepath" value="/n/Shopping-Cart/msc-cart"/>
+	<property name="browser" value="FF10"/>
+	<property name="autorefresh" value="true"/>
+	<!--<property name="saveresponse" value="true"/> -->
+	<!--<property name="timeout" value="300"/> -->
+	
+	<!-- Continue to checkout -->
+	<condition property="proceedCheckout" value="true" else="true">
+			<contains string="${host}" substring="${prodHost}" />
+	</condition>
+
+	<!-- Report directory -->
+	<property environment="env"/>
+    <property name="env.HOSTNAME" value="${env.COMPUTERNAME}"/>
+	<condition property="reportServer" value="${env.HOSTNAME}" else="${host.emailreport}">
+		<equals arg1="${host.emailreport}" arg2="localhost" />
+	</condition>
+	
+	<taskdef name="hostinfo" classname="org.apache.tools.ant.taskdefs.HostInfo" classpath="${env.ANT_HOME}/lib/ant.jar"/>
+	<hostinfo prefix="remotehost" host="${host}"/>
+	<property name="hostip" value="${remotehost.ADDR4}"/>
+	
+	<condition property="createEmailableReport">
+			<equals arg1="${createEmailReport}" arg2="true" />
+	</condition>
+	
+	<condition property="isCopyReportToRemoteServer">
+		<not>	
+			<equals arg1="${host.emailreport}" arg2="localhost" />
+		</not>	
+	</condition>
+	
+	<condition property="wt.testProject" value="prod/pcmall/website" else="staging/pcmall/website">
+			<contains string="${host}" substring="${prodHost}" />
+	</condition>
+
+	<!--excel files: to used when data is different in staging and production -->
+	<condition property="excelExt" value="Prod" else="">
+			<contains string="${host}" substring="${prodHost}" />
+	</condition>	
+	
+	<condition property="pcmHost" value="prod" else="stage">
+			<contains string="${host}" substring="${prodHost}" />
+	</condition>	
+	
+	<!-- time format  with PST timezone-->
+	<tstamp>
+		<format property="now" pattern="MMdhmS" />
+		<format property="now2" pattern="MM/d" />
+		<format property="datepicker" pattern="MM/dd/yyyy" timezone="PST" />
+		<format property="datepicker2" pattern="MM/dd/yyyy" timezone="PST" />
+		<format property="startTimeHours" pattern="h" timezone="PST" />
+		<format property="startTimeMinutes" pattern="mm" timezone="PST" unit="minute" offset="-1" /> 
+		<format property="override.startTimeHours" pattern="h" timezone="PST" />
+		<format property="override.startTimeMinutes" timezone="PST" pattern="mm" unit="minute" offset="3" /> 
+		<format property="startTimeAmOrPm" timezone="PST" pattern="a" /> 
+		<format property="ssDatePicker" timezone="PST" pattern="MM/dd/yyyy" />
+		<format property="ssDatePicker2" timezone="PST" pattern="MM/dd/yyyy" unit="year" offset="1" />
+		<format property="queDatepicker" pattern="MM/dd/yyyy" timezone="PST" unit="day" offset="5" />
+		<format property="queDatepicker2" pattern="MM/dd/yyyy" timezone="PST" unit="day" offset="7" />
+	</tstamp>
+
+<!--
+	Activate this if you are behind a proxy and want to test a server outside your local network
+	See http://ant.apache.org/manual/OptionalTasks/setproxy.html
+	<setproxy proxyhost="209.233.130.34" />
+-->
+	
+</project>

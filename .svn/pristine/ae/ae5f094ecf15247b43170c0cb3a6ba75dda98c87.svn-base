@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="pdpReviewLogin">
+
+	<target name="pdpReviewLogin">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="PDP: ${title} [${host}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+			
+			&searchSKUOpenPDP;
+			
+			<clickLink xpath="id('link-writerev')" description="Click Write a Review" />
+			
+			<group description="Check if users successfully logs In">
+				&invokePostNewLogin;
+				<ifStep description="Check if user able to login">
+					<condition>
+						<verifyProperty name="login" value="true" propertyType="ant"/>
+					</condition>
+					<then>	
+						<verifyXPath xpath="//h1[text()='Write A Review']" description="Verify the Write A Review header." />
+						<not description="Login field is not display">
+							<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+						</not>
+					</then>
+					<else>
+						<verifyXPath xpath="//p[@class='wcR']" text="Invalid email address or password." description="Validation message appears" />
+						<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+					</else>
+				</ifStep>				
+			</group>
+		
+		</webtest>
+		
+	</target>
+</project>

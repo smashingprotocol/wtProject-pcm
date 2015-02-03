@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="checkoutVBVEnrolledCard">
+
+	<target name="checkoutVBVEnrolledCard">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<group description="Define properties">
+				<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${username}" description="Define username to login" />
+				<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+				<storeProperty name="sku.dynamic" value="${sku}" description="Define Sku to checkout" />
+				<storeProperty name="cctype.dynamic" value="${cardtypeid}" description="Define Credit Card Month" />
+				<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+				<storeProperty name="ccey.dynamic" value="2016" description="Define Credit Card Year" />
+				<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+				<storeProperty name="cardNumber.dynamic" value="${cardnumber}" description="Define Data Driven Credit Card Number" />
+				<storeProperty name="cardSecCode.dynamic" value="123" description="Define Security Code" />
+				<storeProperty name="verifyrecyclingfee.dynamic" value="false" description="Define if recycling fee should be verify" />
+				<storeProperty name="recyclingfee.dynamic" value="${recyclingFee}" description="Define recycling fee" />
+				<storeProperty name="placeOrder.dynamic" value="true" description="Define if to continue place order" />
+				<storeProperty name="withauthwindow.dynamic" value="${withauthwindow}" description="Define if Auth Window is expected." />
+			</group>
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+					
+			&proceedtoCheckoutShippingAddress;
+			&proceedtoCheckoutShipMethod;
+			&proceedtoCheckoutBillingPayment;
+			&proceedtoCheckoutPlaceOrder;
+			
+			<ifStep description="Verify by VISA - With Expected Authentication window">
+				<condition>
+					<verifyProperty name="withauthwindow.dynamic" value="true" propertyType="dynamic" description="Auth window is expected" />
+				</condition>
+				<then>
+					<retry maxCount="6">
+						<sleep seconds="10"/>
+						<setInputField name="external.field.password" value="1234" />
+					</retry>
+					<clickButton name="UsernamePasswordEntry" description="Click the button in Verfied by VISA window" />
+				</then>	
+			</ifStep>
+			
+			<ifStep description="If Staging, continue to Checkout.">
+					<condition>
+						<verifyProperty name="pcmHost" value="prod" propertyType="ant" />
+					</condition>
+					<then>
+						<retry maxCount="6">
+							<sleep seconds="10"/>
+							<ifStep description="Check payment message for rejected credit cards">
+								<condition>
+									<verifyXPath xpath="id('billingMessage')" text="Because your card issuer cannot authenticate this card, please select another card or form of payment to complete your purchase" regex="true" description="Enter Credit Card is not accepted." />
+								</condition>
+								<else>
+									<verifyXPath xpath="id('billingMessage')" text="The card entered was not approved by your bank. You may use a different credit method, enter a new card or contact your bank" regex="true" description="Enter Credit Card is not accepted." />
+								</else>
+							</ifStep>	
+						</retry>
+					</then>
+					<else>
+						<retry maxCount="6">
+							<sleep seconds="10"/>
+							<verifyXPath xpath="//div[@class='capOrderConfirm']//p" text="Your order has been submitted successfully." regex="true" description="Verify Order Confirmation Page" />
+						</retry>	
+					</else>
+			</ifStep>
+		
+		</webtest>
+		
+	</target>
+</project>

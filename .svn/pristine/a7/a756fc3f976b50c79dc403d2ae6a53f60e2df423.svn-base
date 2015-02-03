@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="forgotPassword">
+
+	<target name="forgotPassword">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="FORGOT PASSWORD: ${title} [${host}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${pcmHost}.pcm@gmail.com" description="Define username to login" />
+			<storeProperty name="gmail.passwd" value="${gmail.passwd}" description="Define default gmail password" />
+			
+			
+			
+			<group description="Forgot Password">
+				<clickLink href="/n/Shopping-Cart/msc-257" description="Click Saved Cart in Cart to temporary login in cart" />
+				<clickLink href="/o/Forgot-Password/msc-446" description="Click Forgot my username or password"/>
+				<setInputField xpath="id('forgotEmail')" value="#{username.dynamic}" description="Enter Email in Forgot Password" />
+				<clickButton xpath="${pswdrecover.btnpswd}" description="Click Password button" />
+				<clickButton xpath="//a[@id='modal-button']" description="Click OK button" />
+			</group>
+			
+			&gmailResetPassword;
+			
+			<group description="User can enter New Password">
+				<setInputField xpath="id('newPassword')" value="${newPassword}" description="Enter New Password" />
+				<setInputField xpath="id('confirmPassword')" value="${newPassword}" description="Enter New Password" />
+				<!--<clickElement xpath="${pswdchange.btncontinue}" description="Click Continue" />
+				<verifyText text="Your password has been changed!" description="Verify password has been changed" /> -->
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

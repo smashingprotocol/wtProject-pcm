@@ -1,0 +1,25 @@
+<group description="Empty Cart">
+	<clickLink href="/n/Shopping-Cart/msc-cart" description="Click My Cart"/>
+	
+	<repeat count="5">
+		<ifStep>
+			<condition>
+				<not>
+					<verifyText text="Your cart is currently empty!" />
+				</not>
+			</condition>
+			<then>
+				<clickElement xpath="//a[contains(@href,'deleteEDP')]" description="Click the X icon in Shopping Cart"  />
+			</then>
+			<else>
+				<verifyText text="Your cart is currently empty!" />
+			</else>
+		</ifStep>
+	</repeat>
+	
+	<clickLink href="/home" description="Go to homepage"/>
+	
+</group>
+			
+			
+

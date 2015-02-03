@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="myAccounttoShoppingCart">
+
+	<target name="myAccounttoShoppingCart">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="My Account: Shopping cart still logged in">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="${pcmHost}${default.username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${defaultSku.recyclingfee}" description="Define Sku to checkout" />
+			&myAccountLogin;
+			&addtoCartPDPSearchSKU;
+		
+		</webtest>
+		
+	</target>
+</project>

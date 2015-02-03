@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="checkoutAmazonPDPbySearchSKU">
+
+	<target name="checkoutAmazonPDPbySearchSKU">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="Checkout: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to MacMall Homepage"/>
+			&macMallLogin;
+			&deleteAllIteminCart;
+			&addtoCartPDPSearchSKU;
+	
+			<group description="Proceed to checkout and Select Payment Method">
+				<clickElement xpath="//img[contains(@src,'payments.amazon.com')]" description="Click Checkout with amazon Button" />
+				<verifyDocumentURL text="https://www.amazon.com/ap/signin?" regex="true" description="Verify Amazon URL" />
+				<setInputField xpath="id('ap_email')" value="${amazonUser}" description="Enter Amazon Email Address" />
+				<setInputField xpath="id('ap_password')" value="${amazonPassword}" description="Enter Amazon Password" />
+				
+				<clickElement xpath="id('signInSubmit')" description="Amazon: Click Sign in using our secure server" />
+				<previousResponse/>
+				<invoke url="http://${host}/n/Amazon-Billing/macmsc-178" />
+				&noExceptions;
+			</group>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

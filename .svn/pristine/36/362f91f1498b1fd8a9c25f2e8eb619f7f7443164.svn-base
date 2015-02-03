@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartVerifyCouponCodeDiscount">
+
+	<target name="shoppingCartVerifyCouponCodeDiscount">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			
+			<invoke url="${pdp.url}source=${sourceCode}" description="Go to PCMall Homepage"/>
+			<clickElement xpath="${pdp.btnaddtocart}" description="Click Add to Cart in PDP" />
+			
+			<!-- get the edp -->
+			<storeProperty property="cartDPNo.dynamic" value="${sku}" description="Store the sku of test item" />
+			&getEDPofCartDPNo;
+			
+			<!-- store other url parametet not found on under the form cart -->
+			<storeProperty property="cartEdp.dynamic" value="#{cartEDPNo}" description="Store other property not set under cart form" />
+			<storeProperty property="cartSku.dynamic" value="" description="Store other property not set under cart form" />
+			<storeProperty property="zipCode.dynamic" value="" description="Store other property not set under cart form" />
+			<storeProperty property="couponCode.dynamic" value="${sourceCode}" description="Store other property not set under cart form" />
+			<storeProperty property="opType.dynamic" value="applyCoupon" description="Store other property not set under cart form" />
+			
+			<storeXPath xpath="//p[@class='itemTotalPrice']" property="itemRegPrice.dynamic" description="Store the regular price of the item" />
+			<echo message="#{itemRegPrice.dynamic}" />
+			
+			<setInputField xpath="id('couponCode')" value="#{couponCode.dynamic}" description="Enter the Source Code" />
+			
+			&invokePostProcessCart;
+	
+			<storeXPath xpath="//p[@class='itemTotalPrice']" property="itemDiscountPrice.dynamic" description="Store the discounted price of the item" />
+			<echo message="Original Price: #{itemRegPrice.dynamic}" />
+			<echo message="Discounted Price: #{itemDiscountPrice.dynamic}" />
+			
+			<not description="Final Price should not be equaled to the Original Price" >
+				<verifyProperty property="itemDiscountPrice.dynamic" value="#{itemRegPrice.dynamic}" description="Compare the Original price text and discounted price text" />
+			</not>
+			
+		</webtest>
+		
+	</target>
+</project>

@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="unifiedcheckoutShipBillAddressValidation">
+
+	<target name="unifiedcheckoutShipBillAddressValidation">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="CHECKOUT: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			
+			<group description="Define property values">
+				<storeProperty property="formmode.dynamic" value="${mode}" propertyType="dynamic" description="Enter mode of form" />
+				
+				<storeProperty name="billingEmail.dynamic" value="${billingEmail}" description="Define default username to login" />
+				<storeProperty name="billingPassword.dynamic" value="${billingPassword}" description="Define default password to login" />
+			
+				<storeProperty property="firstName.dynamic" value="${firstName}" propertyType="dynamic" description="Enter firstName" />
+				<storeProperty property="lastName.dynamic" value="${pcmHost}${lastName}" propertyType="dynamic" description="Enter lastName" />
+				<storeProperty property="companyName.dynamic" value="${companyName}" propertyType="dynamic" description="Enter companyName" />
+				<storeProperty property="addressOne.dynamic" value="${addressOne}" propertyType="dynamic" description="Enter addressOne" />
+				<storeProperty property="addressTwo.dynamic" value="${addressTwo}" propertyType="dynamic" description="Enter addressTwo" />
+				<storeProperty property="city_orig.dynamic" value="${city_orig}" propertyType="dynamic" description="Enter city_orig" />
+				<storeProperty property="billingStateSelect.dynamic" value="${state_orig}" propertyType="dynamic" description="Enter state_orig" />
+				<storeProperty property="zipCode.dynamic" value="${zipCode}" propertyType="dynamic" description="Enter zipCode" />
+				<storeProperty property="billingTelephone.dynamic" value="${billingTelephone}" propertyType="dynamic" description="Enter Billing Telephone" />
+				<storeProperty property="billingMobile.dynamic" value="${billingMobile}" propertyType="dynamic" description="Enter Billing Mobile" />
+				
+				<storeProperty property="sameAsBilling.dynamic" value="${sameAsBilling}" propertyType="dynamic" description="Same as Billing Address" />
+				<storeProperty property="isApo.dynamic" value="${isApo}" propertyType="dynamic" description="Set shipping if APO" />
+				
+				<!--shipping-->
+				<storeProperty property="shippingFname.dynamic" value="${firstName.ship}" propertyType="dynamic" description="Enter ship firstName" />
+				<storeProperty property="shippingLname.dynamic" value="${lastName.ship}" propertyType="dynamic" description="Enter ship lastName" />
+				<storeProperty property="shippingCompany.dynamic" value="${companyName.ship}" propertyType="dynamic" description="Enter ship companyName" />
+				<storeProperty property="shippingAddress.dynamic" value="${addressOne.ship}" propertyType="dynamic" description="Enter ship addressOne" />
+				<storeProperty property="shippingAddress_2.dynamic" value="${addressTwo.ship}" propertyType="dynamic" description="Enter ship addressTwo" />
+				<storeProperty property="shippingCity.dynamic" value="${city_orig.ship}" propertyType="dynamic" description="Enter ship city_orig" />
+				<storeProperty property="shippingStateSelect.dynamic" value="${state_orig.ship}" propertyType="dynamic" description="Enter ship state_orig" />
+				<storeProperty property="shippingZip.dynamic" value="${zipCode.ship}" propertyType="dynamic" description="Enter ship zipCode" />
+				<storeProperty property="shippingTelephone.dynamic" value="${telephone.ship}" propertyType="dynamic" description="Enter ship Telephone" />
+				<storeProperty property="shippingMobile.dynamic" value="${mobile.ship}" propertyType="dynamic" description="Enter ship  Mobile" />
+				
+				<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+				
+				<storeProperty property="cardNumber.dynamic" value="${cardNumber}" propertyType="dynamic" description="Define Credit Card No" />
+				<storeProperty property="expMonth.dynamic" value="${expMonth}" propertyType="dynamic" description="Define expMonth" />
+				<storeProperty property="expYear.dynamic" value="${expYear}" propertyType="dynamic" description="Define expYear" />
+				<storeProperty property="secCode.dynamic" value="${secCode}" propertyType="dynamic" description="Define secCode" />
+				<storeProperty property="labeltext.dynamic" value="${labelfor.text}" propertyType="dynamic" description="Define Label of the field with error"/>
+			</group>
+			
+			&addtoCartPDPSearchSKU;
+			
+			<clickElement xpath="//a[contains(@href,'newUserCheckOut')]" description="newCustomer Checkout button" /> 	
+			<setInputField xpath="id('isBML')" value="false" description="Not BML" />
+			
+			&unifiedEnterShipBillForm;
+			&unifiedEnterPaymentForm;
+
+			<setCheckbox xpath="id('mmTermsConditions')" description="Checkbox terms of use and sale" />
+			<clickElement xpath="id('orderFormSubmit')" description="Click Place Your Order button"/>
+			
+			<group description="Verify the label error message">
+				<verifyXPath xpath="//div[@class='errorInfoCon dNone']//div[contains(text(),'Some of your information needs to be checked. Please review the fields highlighted in red.')]" description="Verify the Error message on top"/>
+				<verifyXPath xpath="//label[@class='boxLabel' and contains(@style,'f9a914') and @for='#{labeltext.dynamic}']" description="Verify the label of the field is highlighted" />
+			</group>
+	
+	
+			
+		</webtest>
+		
+	</target>
+</project>

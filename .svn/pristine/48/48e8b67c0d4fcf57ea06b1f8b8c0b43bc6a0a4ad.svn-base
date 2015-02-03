@@ -1,0 +1,21 @@
+<group description="Account has Linked Account">
+	<storeElementAttribute xpath="//form[@id='swapAccountForm21']" property="swapURL" attributeName="action" description="Store the POST URL" />
+	<storeElementAttribute xpath="//input[@name='op']" property="op" attributeName="value" description="Store the Redirect OP value" />
+	<storeProperty property="userLoginId" value="#{userLoginId.dynamic}" description="Store the userLoginId value" />
+	<storeProperty property="userStoreId" value="#{userStoreId.dynamic}" description="Store the userStoreId value" />
+	
+	<storeProperty property="tempuserLoginId" value="#{userLoginId.dynamic}" description="Store the username" />
+	
+	<scriptStep description="Convert the characters to encodeURI to use in parameter" language="javascript">
+		var strUserName = step.getWebtestProperty('tempuserLoginId');
+		var strUserName = encodeURIComponent(strUserName);
+		step.setWebtestProperty('userLoginId',strUserName);
+	</scriptStep>
+	
+	<echo message="#{username.dynamic}"/>
+	<echo message="#{userStoreId.dynamic}"/>
+	<enableJavaScript enable="false" />
+	<invoke url="#{swapURL}" content="op=#{op}&amp;userLoginId=#{userLoginId}&amp;userStoreId=#{userStoreId}" method="POST" />
+	<enableJavaScript enable="true" />
+</group>
+

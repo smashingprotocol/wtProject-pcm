@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<!-- History Log: -->
+<!-- Excluded when version is Unified -->
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="checkoutPDPbySearchSKU">
+
+	<target name="checkoutPDPbySearchSKU">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="CHECKOUT: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${sku.esd}" description="Define Sku to checkout" />
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+			<storeProperty name="ccey.dynamic" value="2014" description="Define Credit Card Year" />
+			<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+			<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+			<storeProperty name="cardSecCode.dynamic" value="123" description="Define Credit Card Security Code" />
+			<storeProperty name="placeOrder.dynamic" value="false" description="Define If will continue to Place Order" />
+			<storeProperty name="shippingMethod.dynamic" value="${shippingMethod}" description="Define If will continue to Place Order" />
+			
+			&unifiedProceedtoCheckout;
+			
+		</webtest>
+		
+	</target>
+</project>

@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="checkoutOrderConfirmationTrackingScripts">
+
+	<target name="checkoutOrderConfirmationTrackingScripts">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<group description="Define properties">
+				<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${username}" description="Define username to login" />
+				<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+				<storeProperty name="sku.dynamic" value="${sku.itr}" description="Define Sku to checkout" />
+				<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+				<storeProperty name="ccey.dynamic" value="2014" description="Define Credit Card Year" />
+				<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+				<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+				<storeProperty name="cardSecCode.dynamic" value="123" description="Define Security Code" />
+				<storeProperty name="verifyrecyclingfee.dynamic" value="false" description="Define if recycling fee should be verify" />
+				<storeProperty name="recyclingfee.dynamic" value="${recyclingFee}" description="Define recycling fee" />
+				<storeProperty name="placeOrder.dynamic" value="true" description="Define if to continue place order" />
+			</group>
+			
+			&myAccountLogin;
+			&addtoCartPDPSearchSKU;
+			
+			<group description="Shopping Cart: Grand Total is not 0">
+				<verifyXPath xpath="//p[@class='itemTotalPrice' and text()='#{pdp.finalprice}']" description="Verify the Unit Price in PDP can be found in the cart" />
+				<storeXPath xpath="${cart.grandtotaltext}" property="cart.grandTotal" propertyType="dynamic" />
+			</group>
+			
+			&unifiedProceedtoCheckout;
+			
+			
+			<ifStep description="If Staging, continue to Checkout.">
+					<condition>
+						<verifyProperty name="pcmHost" value="prod" propertyType="ant" />
+					</condition>
+					<then>
+						<retry maxCount="6">
+							<sleep seconds="10"/>
+							<verifyXPath xpath="id('billingMessage')" text="The card entered was not approved by your bank. You may use a different credit method, enter a new card or contact your bank." description="Enter Credit Card is not accepted." />
+						</retry>
+					</then>
+					<else>
+						<retry maxCount="6">
+							<sleep seconds="10"/>
+							<verifyXPath xpath="//div[@class='capOrderConfirm']//p" text="Your order has been submitted successfully." regex="true" description="Verify Order Confirmation Page" />
+						</retry>	
+						<!-- <verifyDocumentURL text="https://${host}/o/Order-Confirmation/msc-47" description="Verify the Order Confirmation URL" /> -->
+					</else>
+			</ifStep>
+			
+			<verifyXPath xpath="//img[contains(@src,'www.emjcd.com')]" description="Verify the CJ Tracking Scripts is found." />
+			
+			
+			
+		</webtest>
+		
+	</target>
+</project>

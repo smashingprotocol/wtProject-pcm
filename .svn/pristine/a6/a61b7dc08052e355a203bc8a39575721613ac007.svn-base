@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingSavedCartDetailValidationviaQuickAdd">
+
+	<target name="shoppingSavedCartDetailValidationviaQuickAdd">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: Saved Cart Detail ${title}">
+			
+			&config;
+			
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="${pcmHost}${default.cartusername}" description="Define default username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			
+			&myAccountLogin;
+			&clearCart;
+		
+			<ifStep description="Call For Price validation">
+					<condition>
+						<verifyProperty property="message.id" value="callforprice" propertyType="ant" description="excel dynamic data" />
+					</condition>
+					<then>
+						<storeProperty name="quickaddsku.dynamic" value="${sku.callforprice}" propertyType="dynamic" description="Define Sku" />
+						&quickAddSavedCart;
+						<verifyXPath xpath="//span[text()='Call for Price For SKU ${sku.callforprice}']" description="Verify the message box appears" />
+					</then>
+			</ifStep>
+			
+			<ifStep description="Invalid Sku validation">
+					<condition>
+						<verifyProperty property="message.id" value="invalidsku" propertyType="ant" description="excel dynamic data" />
+					</condition>
+					<then>
+						<storeProperty name="quickaddsku.dynamic" value="123456879,454909" propertyType="dynamic" description="Define Sku" />
+						&quickAddSavedCart;
+						<verifyXPath xpath="//span[contains(text(),'Please enter a valid SKU')]" description="Verify the message box appears" />
+					</then>
+			</ifStep>
+			
+			<ifStep description="Sold Out Validation">
+					<condition>
+						<verifyProperty property="message.id" value="soldout" propertyType="ant" description="excel dynamic data" />
+					</condition>
+					<then>
+						<storeProperty name="quickaddsku.dynamic" value="${sku.soldout}" propertyType="dynamic" description="Define Default Sku" />
+						&quickAddSavedCart;
+						<verifyXPath xpath="${cart.soldoutmsg}" description="Verify the Sold Out message appears under the item" />
+					</then>
+			</ifStep>
+			
+			<ifStep description="Item could not be added on cart">
+					<condition>
+						<verifyProperty property="message.id" value="couldnotbeadded" propertyType="ant" description="excel dynamic data" />
+					</condition>
+					<then>
+						<storeProperty name="quickaddsku.dynamic" value="${sku.couldnotbeadded}" propertyType="dynamic" description="Define Default Sku" />
+						&quickAddSavedCart;
+						<verifyXPath xpath="//span[text()='The item could not be added to the cart.']" description="Verify the message box appears" />
+					</then>
+			</ifStep>
+			
+		</webtest>
+		
+	</target>
+</project>

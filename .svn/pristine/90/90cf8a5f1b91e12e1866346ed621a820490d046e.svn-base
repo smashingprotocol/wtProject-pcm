@@ -1,0 +1,242 @@
+<group description="Proceed to Checkout: 1. Shipping Address">
+	<clickElement xpath="${unifiedCart.btnCheckout}" description="Click Proceed to Checkout" />
+	
+	<ifStep description="If Login page appears,login user">
+		<condition>
+			<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Sign-In CheckOut" regex="true" description="Verify breadcrumbs is Sign-In Checkout page" />
+		</condition>
+		<then>
+			&cartCheckoutLogin;
+		</then>
+	</ifStep>
+	
+	<ifStep description="If item is ESD, skip Shipping method">
+		<condition>
+			<verifyProperty name="shippingMethod.dynamic" value="esd" description="Verify the esd shipping method" />
+		</condition>
+		<else>
+			<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Shipping Address" regex="true" description="Verify breadcrumbs is Shipping Address page" />
+			<ifStep description="If to checkout using specific City for Shipping Address, edit the shipping address">
+				<condition>
+						<verifyProperty property="shipcity.dynamic" propertyType="dynamic" description="Property is defined" />	
+				</condition>
+				<then>
+					<clickElement xpath="id('changeAddbut')" description="Click the Change Button"/>
+					<sleep seconds="3"/>
+					<storeXPath xpath="id('shipOpt')/option[contains(text(),'#{shipcity.dynamic}')]" property="shipaddress" propertyType="dynamic" description="Store the option in Shipping Address" />
+					<setSelectField xpath="id('shipOpt')" text="#{shipaddress}" description="Change the address" />
+					<clickElement xpath="id('subDefShipBut')" description="Click the Continue button" />
+					<retry maxcount="3">
+						<sleep seconds="3"/>
+						<verifyXPath xpath="//span[contains(text(),'#{shipaddress}')]" description="Verify the address is set to default" />
+					</retry>
+				</then>
+			</ifStep>
+			
+			<clickElement xpath="id('subAddbut')" description="Enter Continue" />
+		</else>
+	</ifStep>
+	
+</group>
+
+<group description="Proceed to Checkout: 2. Shipping Method">
+	<ifStep description="If item is ESD, skip Shipping method">
+		<condition>
+			<verifyProperty name="shippingMethod.dynamic" value="esd" description="Verify the esd shipping method" />
+		</condition>
+		<else>
+			<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Shipping Method" regex="true" description="Verify breadcrumbs is Shipping Method page" />
+			<ifStep description="Verify if a shipping method is already selected">
+				<condition>
+					<verifyXPath xpath="//input[@name='shipMethodRadio' and @checked='checked']" description="Ship method radiod button is selected" />
+				</condition>
+				<else>
+					<setRadioButton xpath="//input[@name='shipMethodRadio']" description="Select the first shipment method" />
+				</else>
+			</ifStep>
+			<clickElement xpath="id('subShipBut')" description="Enter Continue" />
+		</else>
+	</ifStep>
+</group>
+
+<group description="Proceed to Checkout: 3. Billing and Payment">
+	<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Billing And Payment" regex="true" description="Verify breadcrumbs is Billing And Payment page" />
+	
+	<ifStep description="If to Verify the selected a Billing Address by optionIndex">
+		<condition>
+			<verifyProperty name="verifyBilling.dynamic" value="true" description="Verify the selected Biling Address" />
+		</condition>
+		<then>
+			<verifySelectField xpath="id('billOpt')" text="#{billText.dynamic}" description="Select a Billing Address by option index count" /> 
+		</then>
+	</ifStep>
+	
+	<ifStep description="If to Select a Billing Address by optionIndex">
+		<condition>
+			<verifyProperty name="selectBilling.dynamic" value="true" description="Verify if to select a Biling Address" />
+		</condition>
+		<then>
+			<storeXPath xpath="id('billOpt')/option[#{billingOptionIndex.dynamic}]" property="billText" propertyType="dynamic" />
+			<setSelectField xpath="id('billOpt')" text="#{billText}" description="Select a Billing Address by option index count" /> 
+		</then>
+	</ifStep>
+	
+	<ifStep description="Select a Saved Payment Method if available">
+		<condition>
+				<verifySelectField xpath="id('_defaultPayment')" text="Select your payment method" description="No Payment Method selected"/>
+		</condition>
+		<then>
+			<setRadioButton xpath="id('ccm')" description="Select Credit Card radiobutton" />
+			<sleep seconds="10"/>
+			<setRadioButton xpath="id('cct_2')" description="Select VISA radiobutton" />
+			<setSelectField xpath="id('ccem')" text="#{ccem.dynamic}" description="Set the Month expiration date" />
+			<setSelectField xpath="id('ccey')" text="#{ccey.dynamic}" description="Set the Year expiration date" />
+			<setInputField xpath="id('cardName')" value="#{cardName.dynamic}" description="Set the Card Name" />
+			<setInputField xpath="id('cardNumber')" value="#{cardNumber.dynamic}" description="Set the Card Number" />
+			<setInputField xpath="id('cardSecCode')" value="#{cardSecCode.dynamic}" description="Set the Card security Code" />
+		</then>
+		<else>
+			<setRadioButton xpath="id('dpm')" description="Select Credit Card radiobutton" />
+			
+		</else>
+	</ifStep>
+
+	<clickElement xpath="id('conCheckBut')" description="Enter Continue" />
+</group>
+
+<not>
+	<verifyXPath xpath="//div[@id='billingMessage' and text()='Please select a payment method!']" description="Error Message" />
+</not>
+
+<group description="Proceed to Checkout: 4. Place Order">
+	<retry maxCount="3">
+		<sleep seconds="10"/>
+		<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Verify Order" regex="true" description="Verify breadcrumbs is Verify Order page" />
+	</retry>
+	<ifStep description="VerifyTax">
+		<condition>
+			<verifyProperty name="verifytax.dynamic" value="true" propertyType="dynamic" description="Verify the tax if has a value or 0" />
+		</condition>
+		<then>
+			<ifStep description="If Tax Free, Tax Amount is 0">
+				<condition>
+					<verifyProperty name="taxfree.dynamic" value="true" propertyType="dynamic" description="Verify the tax if has a value or 0" />
+				</condition>
+				<then>
+					<verifyXPath xpath="(//table//span[@class='txtsubtotalVal']) [position()=2]" text="$0.00" description="Verify the amount on the second value sub total" />
+				</then>
+				<else>
+					<not description="Taxt amount should not be 0.00">
+						<verifyXPath xpath="(//table//span[@class='txtsubtotalVal']) [position()=2]" text="$0.00" description="Verify the amount on the second value sub total" />
+					</not>	
+				</else>
+			</ifStep>
+		</then>	
+	</ifStep>
+	
+	<ifStep description="Verify Recycling Fee">
+		<condition>
+			<verifyProperty name="verifyrecyclingfee.dynamic" value="true" propertyType="dynamic" description="Verify the tax if has a value or 0" />
+		</condition>
+		<then>
+			<ifStep description="If Recycling Fee included in Sub Total">
+				<condition>
+					<verifyProperty name="recyclingfee.dynamic" value="true" propertyType="dynamic" description="Verify the Recycling Fee if included in Sub Total" />
+				</condition>
+				<then>
+					<verifyXPath xpath="//table//td[@class='txtsubtotal' and contains(text(),'Recycling Fee:')]" description="Verify the Recycling Fee label is display" />
+				</then>
+				<else>
+					<not description="Recycling Fee should not be display">
+						<verifyXPath xpath="//table//td[@class='txtsubtotal' and contains(text(),'Recycling Fee:')]" description="Verify the Recycling Fee label is display" />
+					</not>	
+				</else>
+			</ifStep>
+		</then>	
+	</ifStep>
+	
+	<ifStep description="If item is ESD, Verify Shipping Method is empty">
+		<condition>
+			<verifyProperty name="shippingMethod.dynamic" value="esd" propertyType="dynamic" description="Verify the ESD property" />
+		</condition>
+		<then>
+			<verifyXPath xpath="//p[@id='rpshipMethodInfo' and contains(text(),'There are no shipping charges for downloaded software purchases')]" description="Verify Shipping Method is ESD" />
+			<verifyXPath xpath="(//table//span[@class='txtsubtotalVal']) [position()=3]" text="$0.00" description="Verify the amount on the shipping method sub total is 0" />
+		</then>
+	</ifStep>
+
+	<ifStep description="If continue to Place Order">
+		<condition>
+			<verifyProperty name="placeOrder.dynamic" value="true" propertyType="dynamic" description="Proceed to Place Order"/>
+		</condition>
+		<then>
+		
+			<ifStep description="If Default payment is selected, reenter security code">
+				<condition>
+					<setInputField xpath="id('txtSecurityCode')" value="#{cardSecCode.dynamic}" description="Re enter Security Code in Verify Order" />
+				</condition>
+				<then>
+					<clickElement xpath="id('submitSecCodeBut')" description="Click Submit button" />
+					<sleep seconds="30"/>
+				</then>
+			</ifStep>
+			
+			<ifStep description="Accept Terms and Sales">
+				<condition>
+					<verifyXPath xpath="id('placeOrderTermsAndConditions')" description="Verify Terms and Sale checkbox" />
+				</condition>
+				<then>
+					<setCheckbox xpath="id('placeOrderTermsAndConditions')" description="Click checkbox Terms and Sale" />
+				</then>
+			</ifStep>
+			
+			<clickElement xpath="id('placeOrderBut')" description="Enter Continue" />
+			
+			<ifStep description="Check if would exceeds APO Weight Limit, else continue to checkout">
+				<condition>
+					<verifyProperty name="exceedsapolimit.dynamic" value="true" propertyType="dynamic" description="Proceed to Place Order"/>
+				</condition>
+				<then>
+					<retry maxCount="6">
+							<sleep seconds="10"/>
+							<verifyXPath xpath="//div[@id='billingMessage' and text()='Your total order weight exceeds the 70 lbs maximum weight for APO/FPO shipments.']" description="Verify the APO weight limit message" />
+					</retry>
+				</then>
+				<else description="Successful Checkout">
+				
+					<ifStep description="If Prod, expect the card to be declined">
+						<condition>
+							<verifyProperty name="pcmHost" value="prod" propertyType="ant" />
+						</condition>
+						<then>
+							<retry maxCount="6">
+								<sleep seconds="10"/>
+								<ifStep>
+									<condition>
+										<verifyXPath xpath="id('billingMessage')" text="The card entered was not approved by your bank. You may use a different credit method, enter a new card or contact your bank." description="Enter Credit Card is not accepted." />
+									</condition>
+									<else>
+										<verifyXPath xpath="id('billingMessage')" text="Because your card issuer cannot authenticate this card, please select another card or form of payment to complete your purchase." description="Enter Credit Card is not accepted." />
+									</else>
+								</ifStep>	
+							</retry>
+						</then>
+						<else>
+							<retry maxCount="6">
+								<sleep seconds="10"/>
+								<verifyXPath xpath="//div[@class='capOrderConfirm']//p" text="Your order has been submitted successfully." regex="true" description="Verify Order Confirmation Page" />
+							</retry>	
+							<!--<verifyDocumentURL text="https://${host}/o/Order-Confirmation/msc-47" description="Verify the Order Confirmation URL" /> -->
+						</else>
+					</ifStep>
+					
+				</else>
+			</ifStep>
+			
+			
+			
+		</then>
+	</ifStep>
+	
+	
+</group>

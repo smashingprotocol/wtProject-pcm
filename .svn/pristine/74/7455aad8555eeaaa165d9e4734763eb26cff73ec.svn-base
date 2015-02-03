@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchRelatedContentSearchNotDisplay">
+
+	<target name="searchRelatedContentSearchNotDisplay">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title} - ${keyword}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />	
+			<storeProperty name="isContent.dynamic" value="${isContent}" description="Define if Content Search is visible." />	
+			
+			&searchKeyword;
+			
+				<ifStep description="If Content Search is not visible">
+					<condition>
+						<verifyProperty property="isContent.dynamic" propertyType="dynamic" value="false" />
+					</condition>
+					<then>
+						<not>
+							<verifyXPath xpath="${search.relatedcontentbtn}" description="Related Content Button" />
+							<verifyXPath xpath="id('conSearch')" description="Related Content Search Section"/>
+						</not>
+					</then>
+					<else>
+						<verifyXPath xpath="${search.relatedcontentbtn}" description="Related Content Button" />
+						<verifyXPath xpath="id('conSearch')" description="Related Content Search Section"/>
+					</else>
+				</ifStep>
+			
+		</webtest>
+		
+	</target>
+</project>

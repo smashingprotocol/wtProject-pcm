@@ -1,0 +1,70 @@
+<!-- The following should be defined with values with empty or override values 
+		<storeProperty property="cartDPNo.dynamic" value="#{sku.dynamic}" description="Store the sku of test item" />
+		&getEDPofCartDPNo;
+		<storeProperty property="cartEdp.dynamic" value="#{cartEDPNo}" description="Store other property not set under cart form" />
+		
+		<storeProperty property="cartSku.dynamic" value="#{sku no}" description="Store other property not set under cart form" />
+		<storeProperty property="zipCode.dynamic" value="" description="Store other property not set under cart form" />
+		<storeProperty property="couponCode.dynamic" value="" description="Store other property not set under cart form" />
+		<storeProperty property="opType.dynamic" value="" description="Store other property not set under cart form" />
+-->
+
+<group description="Invoke Post msc-Cart process with parameters" >
+	<storeProperty property="posturl.dynamic" value="http://${host}/n/Shopping-Cart/msc-cart?" description="Store the URL of the Post request" />
+	<storeXPath xpath="count(id('shoppingCart')//input[@type='hidden'])" property="inputctr" description="Store the number of Hidden Input parameters" />
+	
+	<repeat count="#{inputctr}" counterName="rptctr" startCount="1" description="Store all the hidden post url parameters under cart">
+		<storeElementAttribute xpath="(id('shoppingCart')//input[@type='hidden']) [position()=#{rptctr}]" property="name.#{rptctr}" attributeName="name" description="Store the name attribute" />
+		<storeElementAttribute xpath="(id('shoppingCart')//input[@type='hidden']) [position()=#{rptctr}]" property="#{name.#{rptctr}}" attributeName="value" description="Store the value  on the Name property" />
+		
+		<ifStep description="If the value is a string empty, convert it to empty value">
+			<condition>
+				<verifyProperty property="#{name.#{rptctr}}" value="empty" description="Value is a string Empty" />
+			</condition>
+			<then>
+				<storeProperty property="#{name.#{rptctr}}" value="" description="Replace empty string with empty value characters." />
+			</then>						
+		</ifStep>
+		
+		<ifStep description="If the value is a string undefined, convert it to empty value ">
+			<condition>
+				<verifyProperty property="#{name.#{rptctr}}" value="undefined" description="Value is a string undefined" />
+			</condition>
+			<then>
+				<storeProperty property="#{name.#{rptctr}}" value="" description="Replace undefined string with empty value characters." />
+			</then>						
+		</ifStep>
+				
+		<storeProperty property="tempvalue" value="#{#{name.#{rptctr}}}" description="Store temporarily the value of attribute to convert to URI" />
+	
+		<scriptStep description="Convert the characters to encodeURI to use in parameter" language="javascript">
+			var strValue = step.getWebtestProperty('tempvalue');
+			var strValue = encodeURIComponent(strValue);
+			step.setWebtestProperty('tempvalue.dynamic',strValue);
+		</scriptStep>	
+		
+		<storeProperty property="#{name.#{rptctr}}" value="#{tempvalue.dynamic}" description="Store the URI encoded value on the property" />
+		
+		<echo message="#{name.#{rptctr}} = #{#{name.#{rptctr}}}" />
+	</repeat>
+	
+	<ifStep description="Overide the value of opType to test coupon ">
+		<condition>
+			<verifyProperty property="opType.dynamic" description="Verify if the opType is defined" />
+		</condition>
+		<then>
+			<storeProperty property="opType" value="#{opType.dynamic}" description="Overide the opType property with a defined value." />
+		</then>						
+	</ifStep>
+	
+	<storeProperty property="cartEdp" value="#{cartEdp.dynamic}" description="Store other property not set under cart form" />
+	<storeProperty property="cartSku" value="#{cartSku.dynamic}" description="Store other property not set under cart form" />
+	<storeElementAttribute xpath="//input[@id='cartStaticQty_#{cartEDPNo}']" property="cartStaticQty_#{cartEDPNo}" attributeName="value" description="Store other property not set under cart form" />
+	<storeProperty property="emailAddress" value="" description="Store other property not set under cart form" />
+	<storeProperty property="password" value="" description="Store other property not set under cart form" />
+	<storeProperty property="zipCode" value="#{zipCode.dynamic}" description="Store other property not set under cart form" />
+	
+	<storeProperty property="content" value="addNewShippingBillingLink=#{addNewShippingBillingLink}&amp;authLink=#{authLink}&amp;cartAssocDpno_#{cartEdp}=#{cartAssocDpno_#{cartEdp}}&amp;cartCustomCodeValue_#{cartEdp}=#{cartCustomCodeValue_#{cartEdp}}&amp;cartDescription_#{cartEdp}=#{cartDescription_#{cartEdp}}&amp;cartDpno_#{cartEdp}=#{cartDpno_#{cartEdp}}&amp;cartEdp=#{cartEdp}&amp;cartManufacturer_#{cartEdp}=#{cartManufacturer_#{cartEdp}}&amp;cartPrice_#{cartEdp}=#{cartPrice_#{cartEdp}}&amp;cartQty_#{cartEdp}=#{cartQty_#{cartEdp}}&amp;cartSku=#{cartSku}&amp;cartStaticQty_#{cartEdp}=#{cartStaticQty_#{cartEdp}}&amp;cartWeight_#{cartEdp}=#{cartWeight_#{cartEdp}}&amp;checkOutLoginLink=#{checkOutLoginLink}&amp;configurationEDP=#{configurationEDP}&amp;couponCode=#{couponCode.dynamic}&amp;custCodeValue=#{custCodeValue}&amp;customCodeLink=#{customCodeLink}&amp;deliveryMtd=#{deliveryMtd}&amp;discountSourceCode=#{discountSourceCode}&amp;emailAddress=#{emailAddress}&amp;engravingURL=#{engravingURL}&amp;expressCheckout=#{expressCheckout}&amp;op=#{op}&amp;opType=#{opType}&amp;password=#{password}&amp;paymentLink=#{paymentLink}&amp;receiptLink=#{receiptLink}&amp;savedViewStateID=#{savedViewStateID}&amp;soldOut_#{cartEdp}=#{soldOut_#{cartEdp}}&amp;zipCode=#{zipCode}" description="Store the content url to used on the POST Invoke" />
+
+	<invoke url="#{posturl.dynamic}" content="#{content}" method="POST" />
+</group>

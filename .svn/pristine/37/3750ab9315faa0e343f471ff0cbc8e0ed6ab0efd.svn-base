@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="orderStatusOrderLookupTotalSummaryFix">
+
+	<target name="orderStatusOrderLookupTotalSummaryFix">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="ORDER STATUS: ${title} in ${store}. [${orderNumber} - ${zipCode}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="manilaqa+voidpcm@gmail.com" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="123456" description="Define password to login" />
+			<storeProperty name="ordernumber.dynamic" value="${orderNumber}" description="Define Order Number to lookup" />
+			<storeProperty name="zipcode.dynamic" value="${zipCode}" description="Define Zip Code to lookup" />
+			<storeProperty name="status.dynamic" value="${zipCode}" description="Define Zip Code to lookup" />
+			
+		<group description="Order Status Page and View Order">
+			<clickElement xpath="${orderstatus.link}" description="Click Order Status" />
+			<setInputField xpath="id('single_orderlookup_order_number')" value="#{ordernumber.dynamic}" description="Enter Order Number" />
+			<setInputField xpath="id('single_orderlookup_zipcode')" value="#{zipcode.dynamic}" description="Enter zip code Number" />
+			<clickElement xpath="${orderstatus.findorderbtn}" description="Click Find Order" />
+			
+			
+			<verifyXPath xpath="//strong[text()='#{ordernumber.dynamic}']" description="Verify the Order Number detail" />
+			<verifyXPath xpath="(//table[@class='order-status_table']) [position()=2]" description="Verify Order Status Total Amount is display" />
+			
+			<ifStep description="Inspect the Total Summary label with Cancelled Order">
+				<condition>
+					<verifyProperty name="status.dynamic" value="iscancelled" description="With Cancelled Order" />
+				</condition>
+				<then>
+					<verifyXPath xpath="//table[@class='order-status_table']//td[contains(text(),'Less Cancelled Items:')]" description="Verify Less Cancelled Items Label" />
+					<verifyXPath xpath="//table[@class='order-status_table']//td[contains(text(),'Invoice Total:')]" description="Verify Invoice Total Label" />
+				</then>
+			</ifStep>
+			
+			<ifStep description="Inspect the Total Summary label without Cancelled Order">
+				<condition>
+					<verifyProperty name="status.dynamic" value="isnocancelled" description="Without Cancelled Order" />
+				</condition>
+				<then>
+					<not description="Less Cancelled and Invoice total label are not display">
+						<verifyXPath xpath="//table[@class='order-status_table']//td[contains(text(),'Less Cancelled Items:')]" description="Verify Less Cancelled Items Label" />
+						<verifyXPath xpath="//table[@class='order-status_table']//td[contains(text(),'Invoice Total:')]" description="Verify Invoice Total Label" />
+					</not>	
+					
+					<verifyXPath xpath="//table[@class='order-status_table']//tr[contains(@style,'font-weight:bold')]/td[contains(text(),'Total:')]" description="Verify Total Label is bolded" />
+				</then>
+			</ifStep>
+			
+			<ifStep description="Order with Purchase Order Number">
+				<condition>
+					<verifyProperty name="status.dynamic" value="isponumber" description="With Purchase Order Number" />
+				</condition>
+				<then>
+					<verifyXPath xpath="//span[contains(text(),'Purchase Order Number')]" description="Verify the Purchase Order Label" />
+				</then>
+			</ifStep>
+			
+			<ifStep description="Order without Purchase Order Number">
+				<condition>
+					<verifyProperty name="status.dynamic" value="isnoponumber" description="Without Purchase Order Number" />
+				</condition>
+				<then>
+					<not description="Order Purchase Number label should not be display">
+						<verifyXPath xpath="//span[contains(text(),'Purchase Order Number')]" description="Verify the Purchase Order Label" />
+					</not>	
+				</then>
+			</ifStep>
+			
+			<ifStep description="Inspect the Total Summary label with California Ewaste Fee Order">
+				<condition>
+					<verifyProperty name="status.dynamic" value="isnoewaste" description="Without Ewaste fee Order" />
+				</condition>
+				<then>
+					<verifyXPath xpath="//table[@class='order-status_table']//td[contains(text(),'California Electronic Waste Recycling Fee:')]" description="Verify Ewaste fee Label" />	
+				</then>
+			</ifStep>
+			
+			<ifStep description="Inspect the Total Summary label without California Ewaste Fee Order">
+				<condition>
+					<verifyProperty name="status.dynamic" value="isnoewaste" description="Without Ewaste fee Order" />
+				</condition>
+				<then>
+					<not description="Ewaste Fee label is not display">
+						<verifyXPath xpath="//table[@class='order-status_table']//td[contains(text(),'California Electronic Waste Recycling Fee:')]" description="Verify Ewaste fee Label" />
+					</not>	
+				</then>
+			</ifStep>
+			
+			<ifStep description="Inspect the Tracking Info link for Shipped Order">
+				<condition>
+					<verifyProperty name="status.dynamic" value="isshipped" description="With tracking info for shipped Order" />
+				</condition>
+				<then>
+					<verifyXPath xpath="//div[@class='level-box-trackno']" description="Verify Tracking Info link" />	
+				</then>
+			</ifStep>
+			
+		</group>
+			
+		</webtest>
+		
+	</target>
+</project>

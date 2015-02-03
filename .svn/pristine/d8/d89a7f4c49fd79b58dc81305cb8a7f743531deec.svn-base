@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderSavedCreditCard">
+
+	<target name="verifyOrderSavedCreditCard">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<group description="Define properties">
+				<storeProperty name="username.dynamic" value="${${store}.savedcarduser}" description="Define default username to login" />
+				<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+				<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+				<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+				<storeProperty name="ccey.dynamic" value="2014" description="Define Credit Card Year" />
+				<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+				<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+				<storeProperty name="cardSecCode.dynamic" value="123" description="Define Security Code" />
+				<storeProperty name="verifyrecyclingfee.dynamic" value="false" description="Define if recycling fee should be verify" />
+				<storeProperty name="recyclingfee.dynamic" value="${recyclingFee}" description="Define recycling fee" />
+				<storeProperty name="placeOrder.dynamic" value="false" description="Define if to continue place order" />
+			</group>
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			<group description="Shopping Cart: Grand Total is not 0">
+				<verifyXPath xpath="//p[@class='itemTotalPrice' and text()='#{pdp.finalprice}']" description="Verify the Unit Price in PDP can be found in the cart" />
+				<storeXPath xpath="${cart.grandtotaltext}" property="cart.grandTotal" propertyType="dynamic" />
+			</group>
+			
+			&unifiedProceedtoCheckout;
+			
+			<group description="Verify Order: Verify The saved card">
+				<not description="Credit Card text should not be display">
+					<setInputField xpath="//input[@id='paymentCardNumber']" value="#{cardNumber.dynamic}" description="User can enter security code" />
+				</not>	
+				<setInputField xpath="//input[@id='enterSecurityCode']" value="123" description="User can enter security code" />
+			</group>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

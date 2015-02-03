@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchwithFacetCondition">
+
+	<target name="searchwithFacetCondition">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />
+			<ifStep description="Check if to invoke url or use search keyword">
+				<condition>
+					<not>
+						<verifyProperty name="invokeurl" value="" propertyType="ant" />
+					</not>					
+				</condition>
+				<then>
+					<invoke url="${invokeurl}" description="Invoke search result by invoking url" />
+				</then>
+				<else>
+					&searchKeyword;
+				</else>
+			</ifStep>
+			
+			&searchSetFaceting;
+			
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+			</not>
+			
+			<ifStep description="Verify if In Stock is selected, Call for Availability icon is not display in search result">
+				<condition>
+					<verifyProperty name="instockItem" text="true" propertyType="ant" />
+				</condition>
+				<then>
+					<not description="Call For Availability is not display">
+						<verifyXPath xpath="${search.iconcall}" description="Verify the Call for Availability icon" />	
+					</not>
+					<verifyXPath xpath="${search.iconinstock}" description="Verify the In Stock icon" />	
+				</then>
+			</ifStep>
+			
+		</webtest>
+		
+	</target>
+</project>

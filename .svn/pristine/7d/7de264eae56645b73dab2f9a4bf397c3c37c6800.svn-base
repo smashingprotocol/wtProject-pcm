@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyLinksPCMSite">
+
+	<target name="verifyLinksPCMSite">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="Homepage: Verify Links in ${host}${urlSite}">
+			
+			&config;
+			<invoke url="${urlSite}" description="Go to PCMall Homepage"/>
+			<verifyLinks depth="1" description="Verify links in ${urlSite}" />
+		
+		</webtest>
+		
+	</target>
+</project>

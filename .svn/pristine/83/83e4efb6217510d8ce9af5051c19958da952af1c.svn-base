@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="myAccountAddressBookDeleteShipAdd">
+
+	<target name="myAccountAddressBookDeleteShipAdd">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="MY ACCOUNT: Address Book Delete Shipping Address [${state_orig}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${default.myaccountuser}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			
+			&myAccountLogin;
+		
+			
+		<group description="My Account > Address Book > Delete Shipping  Address">
+			<clickLink href="/o/My-Account-Dashboard/msc-4" description="Click My Account" />
+			<clickElement xpath="//a[contains(text(),'Manage My Address Book')]" description="Click Manage My Address Book" />
+			
+			<storeXPath xpath="count(//a[contains(@href,'javascript:deleteAddress')])" property="address.count" propertyType="dynamic" description="Get the number of Address in Address book" />
+			
+			<repeat count="#{address.count}" counterName="ctr" startCount="1" description="Loop by the number of addresses to delete">
+				<clickElement xpath="//a[contains(@href,'javascript:deleteAddress')]" description="Click x icon" />
+				<retry maxCount="3">
+					<sleep seconds="5"/>
+					<verifyXPath xpath="//div[contains(text(),'You have successfully deleted your shipping address')]" description="Verify the delete message" />
+				</retry>	
+			</repeat>
+			
+			<not description="Verify there are no x icon display">
+				<verifyXPath xpath="//a[contains(@href,'javascript:deleteAddress')]" description="x icon in Address Book" />
+			</not>
+			
+		</group>
+			
+		</webtest>
+		
+	</target>
+</project>

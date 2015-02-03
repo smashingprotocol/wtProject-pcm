@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderItemPrice">
+
+	<target name="verifyOrderItemPrice">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<group description="Define properties">
+				<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${username}" description="Define username to login" />
+				<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+				<storeProperty name="sku.dynamic" value="${sku}" description="Define Sku to checkout" />
+				<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+				<storeProperty name="ccey.dynamic" value="2014" description="Define Credit Card Year" />
+				<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+				<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+				<storeProperty name="cardSecCode.dynamic" value="123" description="Define Security Code" />
+				<storeProperty name="verifyrecyclingfee.dynamic" value="false" description="Define if recycling fee should be verify" />
+				<storeProperty name="recyclingfee.dynamic" value="${recyclingFee}" description="Define recycling fee" />
+				<storeProperty name="placeOrder.dynamic" value="false" description="Define if to continue place order" />
+			</group>
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			<group description="Shopping Cart: Grand Total is not 0">
+				<verifyXPath xpath="//p[@class='itemTotalPrice' and text()='#{pdp.finalprice}']" description="Verify the Unit Price in PDP can be found in the cart" />
+				<storeXPath xpath="${cart.grandtotaltext}" property="cart.grandTotal" propertyType="dynamic" />
+			</group>
+			
+			&unifiedProceedtoCheckout;
+			
+			<group description="Verify Order: Verify Sub Total and Grand Total is not 0">
+				<verifyXPath xpath="//p[@id='subTotal' and text()='#{cart.grandTotal}']" description="Verify the Sub Total in the Order Review is same with the Cart" />
+				<not description="Verify Grand Total is not 0">
+					<verifyXPath xpath="//p[@id='total']" text="$0.00" description="Verify the Grand Total is not 0" />
+				</not>
+			</group>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

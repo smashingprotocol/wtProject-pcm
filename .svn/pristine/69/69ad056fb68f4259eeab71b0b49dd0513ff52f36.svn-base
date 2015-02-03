@@ -1,0 +1,16 @@
+<group description="Check Cookie values">
+	<ifStep description="If able to find the cookies">
+		<condition>
+			<storeCookie name="widgetti.pcmall.f5" property="widgetti.pcmall.f5" description="Store the source widgetti.pcmall.f5 cookie" />
+			<storeCookie name="Widgetti.PCM.ID" property="Widgetti.PCM.ID" description="Store the source Widgetti.PCM.ID cookie" />
+			<storeCookie name="JSESSIONID" property="JSESSIONID" description="Store the source JSESSIONID cookie" />
+		</condition>
+		<then>	
+			<echo message="widgetti.pcmall.f5: #{widgetti.pcmall.f5}"/>
+			<echo message="Widgetti.PCM.ID: #{Widgetti.PCM.ID}"/>
+			<echo message="JSESSIONID: #{JSESSIONID}"/>
+		</then>
+	</ifStep>	
+</group>
+
+

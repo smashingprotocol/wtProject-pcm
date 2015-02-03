@@ -1,0 +1,16 @@
+<group description="My Account - Subscribe">
+	
+	<verifyDocumentURL text="https://${host}/o/My-Account-Dashboard/msc-4" description="verify the My Account URL" />
+	
+	<storeProperty property="opStatus" value="unsubscribed" propertyType="dynamic" description="Store the subscription status of the user"/>
+	
+	<clickLink xpath="//div[@class='account-subscript']//a[contains(text(),'Subscribe')]" description="Click the Subscribe link" />
+	<setInputField xpath="id('nEmail')" value="#{username.dynamic}" description="Enter the email address" />
+	<setInputField xpath="id('confirmEmailSignUp')" value="#{username.dynamic}" description="Enter the confirmation email address" />
+	<clickElement xpath="${btnsubscribesignup}" description="Click Sign Up" />
+	<verifyXPath xpath="//strong[contains(text(),'Thank you for signing up')]" description="Verify the user is subscribe message" />
+	
+	<clickLink href="/o/My-Account-Dashboard/msc-4" description="Go back to My Account" />
+	<sleep seconds="15"/>
+	<verifyXPath xpath="//div[@class='account-subscript']//a[contains(text(),'Unsubscribe')]" description="Verify the Unsubscribe link in My Account" />
+</group>

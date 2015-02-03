@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="pcmStoredCodeCookies">
+
+	<target name="pcmStoredCodeCookies">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="HOMEPAGE: ${title}">
+			
+			&config;
+			
+			
+			<ifStep description="Search in Google">
+				<condition>
+					<verifyProperty name="campaignURL" value="www.google.com" propertyType="ant"/>
+				</condition>
+				<then>
+					<invoke url="http://${campaignURL}" description="Go to Search site Homepage"/>
+					
+					<setInputField name="q" value="${keyword}" description="Search for the keyword in Google" />
+					<clickElement xpath="//input[@name='q']" description="Click Search button" />
+					<sleep seconds="30" />
+					<clickLink xpath="//a[contains(text(),'Computer Sales')]" description="Click the link in search result with the description of PC Mall" />
+				</then>	
+			</ifStep>
+			
+			
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeCookie name="Widgetti.eCOST.discountCode" property="sourceCode" description="Store the source code cookie" />
+			<verifyProperty name="sourceCode" text="${code}" description="Verify the source code cookie is equal to the campaign provided code" />
+			
+		</webtest>
+		
+	</target>
+</project>

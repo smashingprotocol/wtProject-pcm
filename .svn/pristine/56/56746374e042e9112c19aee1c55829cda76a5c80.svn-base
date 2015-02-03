@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderCreateSavedCreditCard">
+
+	<target name="verifyOrderCreateSavedCreditCard">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: Save Credit Card: ${card.type} ${card.no}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+
+			<storeProperty name="shippingMethod.dynamic" value="${shippingMethod}" description="Define Sku to checkout" />
+	
+			&myAccountLogin;
+			<storeProperty name="sku.dynamic" value="${sku}" description="Define Sku to checkout" />
+			&addtoCartPDPSearchSKU;
+			
+			<storeProperty name="cct.dynamic" value="${card.type}" description="Define Credit Card Type" />
+			<storeProperty name="ccem.dynamic" value="${month}" description="Define Credit Card Month" />
+			<storeProperty name="ccey.dynamic" value="${year}" description="Define Credit Card Year" />
+			<storeProperty name="cardName.dynamic" value="${name}" description="Define Credit Card Name" />
+			<storeProperty name="cardNumber.dynamic" value="${card.no}" description="Define Credit Card Number" />
+			<storeProperty name="cardSecCode.dynamic" value="${card.seccode}" description="Define Credit Card Number" />
+			<storeProperty name="spm.dynamic" value="${savecc}" description="Define Credit if to save credit card" />
+			<storeProperty name="pmName.dynamic" value="${saveName} ${now}" description="Define Save Credit as" />
+			<storeProperty name="placeOrder.dynamic" value="false" description="Define Credit Card Number" />
+			
+			&proceedtoCheckoutShippingAddress;
+			&proceedtoCheckoutShipMethod;
+			&proceedtoCheckoutBillingPaymentDynamicCard;
+			
+			<group description="Go Back to Billing and Payment and check the card in dropdown">
+				<clickLink href="/o/Billing-And-Payment/msc-153" description="Click Billing and Payment" />
+				<setRadioButton xpath="id('dpm')" description="Select Credit Card radiobutton" />
+				<retry maxCount="3">
+					<sleep seconds="3"/>
+					<verifyXPath xpath="//option[contains(text(),'#{pmName.dynamic}')]" description="Verify the Credit Card is added on the dropdown" />
+				</retry>	
+			</group>
+	
+	
+		</webtest>
+		
+	</target>
+</project>

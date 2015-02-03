@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchCategoryNewRedirection">
+
+	<target name="searchCategoryNewRedirection">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			
+			<storeProperty name="mainmenu.dynamic" value="${category.href}" description="Define Main Menu Category" />
+			<storeProperty name="isBrand.dynamic" value="${isBrand}" description="If to select Brands" />
+			<storeProperty name="isPriceRange.dynamic" value="${isPriceRange}" description="If to select Price Range" />
+			<storeProperty name="isCondition.dynamic" value="${isCondition}" description="If to select Condition" />
+			
+			
+			<clickElement xpath="//a[@href='#{mainmenu.dynamic}']" description="This will click Main Menu under Categories Header Menu"/>
+			<storeXPath xpath="count(//div[@class='ibx ibxtwo']//a)" property="mainLinkCount" propertyType="dynamic" />
+			<storeProperty property="mainerrorctr" value="0" propertyType="dynamic" description="Initialize value for mainerrorctr" />	
+			
+			<repeat	count="#{mainLinkCount}" startCount="1" counterName="mainlinkctr">
+			
+				<storeXPath xpath="(//div[@class='ibx ibxtwo']//a) [position()=#{mainlinkctr}]" property="facetLinkwithCount.dynamic" propertyType="dynamic" description="Get the link text"/>
+				&searchGetFacetLinkCount;
+				<clickElement xpath="(//div[@class='ibx ibxtwo']//a) [position()=#{mainlinkctr}]" description="Click #{facetLinkwithCount.dynamic}"/>
+			
+				<not description="No Product found page should not be display">
+					<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+					<verifyXPath xpath="//span[contains(text(),'No products found for keyword')]" description="XPath for No product found page"  />
+				</not>
+				
+				<storeXPath xpath="//span[@class='ottl']" property="itemcount" description="Store the search count by getting the number in pagination" />
+				<verifyProperty property="searchGetFacetLinkCount.value" text="#{itemcount}" regex="true" description="Compare the search count to the category link count" />
+				
+				<ifStep description="Check item count is 25, if below 25, item should be equal to the category count">
+					<condition>
+						<verifyXPath xpath="count(//div[@class='itemlist lst'])" text="25" description="Item on list are 25"/>
+					</condition>
+					<else>
+						<verifyXPath xpath="count(//div[@class='itemlist lst'])" text="#{itemcount}" description="Item on list should be #{itemcount}"/>
+					</else>
+				</ifStep>
+				
+				<clickElement xpath="id('toolbarNextPage')" description="click next page" />
+				<not description="No Product found page should not be display">
+					<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+					<verifyXPath xpath="//span[contains(text(),'No products found for keyword')]" description="XPath for No product found page"  />
+				</not>
+			
+				<clickElement xpath="//a[@href='#{mainmenu.dynamic}']" description="Return to the category page"/>
+			
+			</repeat>
+			
+		</webtest>
+		
+	</target>
+</project>

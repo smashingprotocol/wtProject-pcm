@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="pdpDefaultTab">
+
+	<target name="pdpDefaultTab">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="PDP: Verify the default tab is Overview tab">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+			&searchSKUOpenPDP;	
+			<verifyXPath xpath="//a[@class='active' and contains(@id,'apdppdpOverview')]" description="Verify the Overview tab is active" />
+			
+			
+		</webtest>
+		
+	</target>
+</project>

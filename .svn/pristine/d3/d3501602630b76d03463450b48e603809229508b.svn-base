@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderRebatesPriceSubTotalUpdateQty">
+
+	<target name="verifyOrderRebatesPriceSubTotalUpdateQty">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			&clearCart;
+			<group description="Data driven define properties">
+				<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${default.checkoutuser}" description="Define username to login" />
+				<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+				<storeProperty name="sku.dynamic" value="${sku}" description="Define dynamic Sku to checkout" />
+				<storeProperty name="addserviceplan.dynamic" value="${addServicePlan}" description="Define if to add a Serviceplan" />
+				
+				<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+				<storeProperty name="ccey.dynamic" value="2016" description="Define Credit Card Year" />
+				<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+				<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+				<storeProperty name="cardSecCode.dynamic" value="123" description="Define Security Code" />
+				<storeProperty name="placeOrder.dynamic" value="false" description="Define if to continue place order" />
+				<storeProperty name="rebateid.dynamic" value="${rebateid}" propertyType="dynamic"  description="Define Data Driven Rebate ID" />
+				<storeProperty name="cartDPNo.dynamic" value="${sku}" propertyType="dynamic"  description="Define Dynamic sku to get EDP No" />
+			</group>
+			
+			
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			&getEDPofCartDPNo;
+			&unifiedProceedtoCheckout;
+			
+			<verifyXPath xpath="//p[@id='total' and text()!='$0.00']" description="Verify the Grand Total is not 0" />
+			<verifyXPath xpath="//p[@id='subTotal' and text()='#{pdp.finalprice}']" description="Verify the Sub Total in the Order Review is same with the Cart" />
+			
+			<group description="Update QTY in Verify Order">
+				<clickElement xpath="//a[@id='editYourCart']" description="Click Edit your cart" />
+				<sleep seconds="3"/>
+				<storeProperty name="updateQty.dynamic" value="2" description="Define qty value" />
+				<setInputField xpath="//input[@id='orQty_#{cartEDPNo}']" value="#{updateQty.dynamic}" description="Input Field of the item" />
+				<clickElement xpath="//a[@id='continueShopping']" description="Click Update" />
+				
+				<scriptStep description="Compute the Sub Total via qty" language="javascript">
+							var strQty = step.getWebtestProperty('updateQty.dynamic');
+							var strPDPFinalPrice = step.getWebtestProperty('pdp.finalprice');
+							var strSubTotal;
+							
+							strPDPFinalPrice = strPDPFinalPrice.replace('$','');
+							strPDPFinalPrice = strPDPFinalPrice.replace(',','');
+							
+							strSubTotal = parseFloat(strPDPFinalPrice) * parseFloat(strQty);
+							strSubTotal = parseFloat(strSubTotal).toFixed(2);
+							
+							step.setWebtestProperty('subtotalorigprice',strPDPFinalPrice);		
+							step.setWebtestProperty('subTotal',strSubTotal);				
+				</scriptStep>
+				
+				<verifyXPath xpath="//p[@id='subTotal' and text()='$ #{subTotal}']" description="Verify the Sub Total is updated based on the no of quantity" />
+				
+				<clickElement xpath="//a[@id='editYourCart']" description="Click Edit your cart" />
+				<sleep seconds="3"/>
+				<storeProperty name="updateQty.dynamic" value="1" description="Define qty value" />
+				<setInputField xpath="//input[@id='orQty_#{cartEDPNo}']" value="#{updateQty.dynamic}" description="Input Field of the item" />
+				<clickElement xpath="//a[@id='continueShopping']" description="Click Update" />
+			</group>
+			
+			<not description="Verify Order: Sub Total is not negative">
+				<verifyXPath xpath="//p[@id='subTotal' and contains(text(),'-')]" description="Verify the Sub Total is not negative" />		
+			</not>
+					
+			<verifyXPath xpath="//p[@id='total' and text()!='$ 0.00']" description="Verify the Grand Total is not 0" />
+			<verifyXPath xpath="//p[@id='subTotal' and text()='$ #{subtotalorigprice}']" description="Verify the Sub Total is updated to the original price of 1 qty" />
+			
+		</webtest>
+		
+	</target>
+</project>

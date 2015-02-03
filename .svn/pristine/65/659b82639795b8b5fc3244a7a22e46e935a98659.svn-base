@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchNewVerifyPriceisDisplay">
+
+	<target name="searchNewVerifyPriceisDisplay">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title} - ${keyword}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />	
+			&searchKeyword;
+			
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+			</not>
+				
+			<group description="View by 100">
+				<setSelectField xpath="id('toolbarViewBy')" value="100" description="Select View 100"/>
+					<storeXPath xpath="count(//div[@class='itemlist lst'])" property="itemcount" description="Count of items in the search list"/>
+					<verifyXPath xpath="count(//span[@class='tprice prod-price']/text())" text="#{itemcount}" description="Verify all #{itemcount} items have price display"/>
+					<verifyXPath xpath="//span[@class='spriceprcnt']/text()='(0%)'" text="false" description="Verify no price discount of 0 percent is display"/>
+					<verifyXPath xpath="//span[@class='sprice']/text()='$1.00'" text="false" description="Verify no price discount of 1.00 is display"/>
+			</group>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

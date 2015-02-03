@@ -1,0 +1,46 @@
+<group description="Verify Order Page">
+	<verifyDocumentURL text="https://${host}/o/Verify-Order/macmsc-macmsc.46" regex="true" description="Verify the url of the Verify Order page"/>
+	&noExceptions;
+</group>	
+	
+<ifStep>
+		<condition>
+				<verifyProperty name="proceedCheckout" text="false" propertyType="ant" />			
+		</condition>
+		<else description="Proceed to Checkout">
+				<clickElement xpath="id('placeOrder')" description="Click Place Order Button" />
+				
+				<ifStep>
+						<condition>
+								<verifyDocumentURL text="https://${host}/o/Authentication-Page/msc-62?isExpress=false&amp;op=zones.payerAuth.payerAuth" description="Verify Order Confirmation" />
+						</condition>
+						<else description="Processesing Checkout">
+								<verifyText text="Processing your order. You are initiating checkout," regex="true" />
+								<sleep seconds="30"/>
+								<invoke url="/o/Authentication-Page/msc-62?isExpress=false&amp;op=zones.payerAuth.payerAuth" description="Verify Order Confirmation" />
+								<previousResponse/>
+								
+								<ifStep>
+										<condition>
+												<verifyProperty name="expectSuccessCheckout" text="false" propertyType="ant" />		
+										</condition>
+										<then description="Checkout Failed">
+												<verifyText text="The card entered was not approved by your bank. You may use a different credit method, enter a new card or contact your bank." />
+										</then>
+										<else description="Checkout is Successful">
+												<not description="Credit Card not declined">
+													<verifyText text="The card entered was not approved by your bank. You may use a different credit method, enter a new card or contact your bank." />
+												</not>
+												<group description="Verify Cart is empty">
+														<clickLink href="/n/Shopping-Cart/macmsc-cart?op=zones.shoppingCartMain.processCart" description="click My Cart" />
+														<verifyText text="Your shopping cart is currently empty!" />
+												</group>		
+										</else>
+								</ifStep>
+							
+						</else>
+				</ifStep>
+	
+		</else>
+</ifStep>
+	

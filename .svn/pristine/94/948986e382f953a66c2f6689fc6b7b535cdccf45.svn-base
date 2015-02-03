@@ -1,0 +1,10 @@
+<group description="Check Reset PCM Password email in GMAIL" >
+	<invoke url="http://www.gmail.com/" description="Go to Gmail" />
+	<setInputField xpath="id('Email')" value="#{username.dynamic}" description="Enter Username" />
+	<setInputField xpath="id('Passwd')" value="#{gmail.passwd}" description="Enter Password" />
+	
+	<clickElement xpath="id('signIn')" description="Click the Sign In" />
+	
+	<clickElement xpath="(//a[contains(@href,'?&amp;v=c&amp;th=')]) [position()=1]" description="click the How to Reset Your PCM Password link" />
+	<clickLink xpath="//a[contains(@href,'Password-Change')]" description="Click the link to reset password" />
+</group>

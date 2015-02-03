@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartItemSavedonLoggedIn">
+
+	<target name="shoppingCartItemSavedonLoggedIn">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="Shopping Cart: ${title}. [${pcmHost}${username}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			&clearCart;
+			<group description="Define properties value">
+				<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+				<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+				<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+				<storeProperty name="cartDPNo.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+				<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+				<storeProperty name="ccey.dynamic" value="2015" description="Define Credit Card Year" />
+				<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+				<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+				<storeProperty name="cardSecCode.dynamic" value="123" description="Define Credit Card Number" />
+			</group>
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			&getEDPofCartDPNo;
+			<enableJavaScript enable="false"/>
+			&logout;
+			<enableJavaScript enable="true"/>
+			<group description="Check cart if empty after logged out">
+				<clickLink href="/n/Shopping-Cart/msc-cart" />
+				<not description="Verify the quantity field is not found in the cart">
+					<verifyXPath xpath="id('cartStaticQty_#{cartEDPNo}')" description="Verify the item QTY Box is still found on Shopping Cart after user logs in" />
+				</not>	
+			</group>
+			
+			&myAccountLogin;
+			<clickLink href="/n/Shopping-Cart/msc-cart" />
+			<verifyXPath xpath="id('cartStaticQty_#{cartEDPNo}')" description="Verify the item QTY Box is still found on Shopping Cart after user logs in" />
+							
+		</webtest>
+		
+	</target>
+</project>

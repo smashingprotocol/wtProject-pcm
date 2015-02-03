@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="myAccountAddressBookCreateShipAdd">
+
+	<target name="myAccountAddressBookCreateShipAdd">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="MY ACCOUNT: Address Book Create New Shipping Address [${state_orig}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${default.myaccountuser}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			
+			&myAccountLogin;
+		
+		<storeProperty property="firstName.dynamic" value="${firstName}" propertyType="dynamic" description="Enter firstName" />
+		<storeProperty property="middleInitial.dynamic" value="${middleInitial}" propertyType="dynamic" description="Enter middleInitial" />
+		<storeProperty property="lastName.dynamic" value="${pcmHost}${lastName}" propertyType="dynamic" description="Enter lastName" />
+		<storeProperty property="companyName.dynamic" value="${companyName} ${now}" propertyType="dynamic" description="Enter companyName" />
+		<storeProperty property="addressOne.dynamic" value="${addressOne}" propertyType="dynamic" description="Enter addressOne" />
+		<storeProperty property="addressTwo.dynamic" value="${addressTwo}" propertyType="dynamic" description="Enter addressTwo" />
+		<storeProperty property="city_orig.dynamic" value="${city_orig}" propertyType="dynamic" description="Enter city_orig" />
+		<storeProperty property="state_orig.dynamic" value="${state_orig}" propertyType="dynamic" description="Enter state_orig" />
+		<storeProperty property="zipCode.dynamic" value="${zipCode}" propertyType="dynamic" description="Enter zipCode" />
+		<storeProperty property="dayAreaCode.dynamic" value="${dayAreaCode}" propertyType="dynamic" description="Enter dayAreaCode" />
+		<storeProperty property="dayPhone1.dynamic" value="${dayPhone1}" propertyType="dynamic" description="Enter dayPhone1" />
+		<storeProperty property="dayPhone2.dynamic" value="${dayPhone2}" propertyType="dynamic" description="Enter dayPhone2" />
+		<storeProperty property="eveAreaCode.dynamic" value="${dayPhone2}" propertyType="dynamic" description="Enter eveAreaCode" />
+		<storeProperty property="evePhone1.dynamic" value="${evePhone1}" propertyType="dynamic" description="Enter evePhone1" />
+		<storeProperty property="evePhone2.dynamic" value="${evePhone2}" propertyType="dynamic" description="Enter evePhone2" />
+			
+		<group description="My Account > Address Book > Create New Address">
+			<clickLink href="/o/My-Account-Dashboard/msc-4" description="Click My Account" />
+			<clickElement xpath="//a[contains(text(),'Manage My Address Book')]" description="Click Manage My Address Book" />
+			<clickElement xpath="//a[contains(@href,'javascript:createAddress')]" description="Click Create New" />
+			<setInputField xpath="id('firstName')" value="#{firstName.dynamic}" description="Enter firstName" />
+			<setInputField xpath="id('middleInitial')" value="#{middleInitial.dynamic}" description="Enter middleInitial" />
+			<setInputField xpath="id('lastName')" value="#{lastName.dynamic}" description="Enter lastName" />
+			<setInputField xpath="id('companyName')" value="#{companyName.dynamic}" description="Enter companyName" />
+			<setInputField xpath="id('addressOne')" value="#{addressOne.dynamic}" description="Enter addressOne" />
+			<setInputField xpath="id('addressTwo')" value="#{addressTwo.dynamic}" description="Enter addressTwo" />
+			<setInputField xpath="id('city_orig')" value="#{city_orig.dynamic}" description="Enter city_orig" />
+			<setSelectField xpath="id('state_orig')" text="#{state_orig.dynamic}" description="Enter state_orig" />
+			<setInputField xpath="id('zipCode')" value="#{zipCode.dynamic}" description="Enter zipCode" />
+			<setInputField xpath="id('dayAreaCode')" value="#{dayAreaCode.dynamic}" description="Enter dayAreaCode" />
+			<setInputField xpath="id('dayPhone1')" value="#{dayPhone1.dynamic}" description="Enter dayPhone1" />
+			<setInputField xpath="id('dayPhone2')" value="#{dayPhone2.dynamic}" description="Enter dayPhone2" />
+			<setInputField xpath="id('eveAreaCode')" value="#{eveAreaCode.dynamic}" description="Enter eveAreaCode" />
+			<setInputField xpath="id('evePhone1')" value="#{evePhone1.dynamic}" description="Enter evePhone1" />
+			<setInputField xpath="id('evePhone2')" value="#{evePhone2.dynamic}" description="Enter evePhone2" />
+			
+			<clickElement xpath="//img[contains(@onclick,'validate_address')]" description="Click Save Button" />
+			
+			<retry maxCount="3">
+				<sleep seconds="10"/>
+				<ifStep description="If QAS Appears, use address as entered">
+					<condition>
+						<verifyXPath xpath="id('QAS_AcceptOriginal')" description="Click QAS Use Address as entered"/>
+					</condition>
+					<then>
+						<clickElement xpath="id('QAS_AcceptOriginal')" description="Click QAS Use Address as entered"/>
+					</then>
+				</ifStep>
+				
+				<verifyText text="You have successfully added a new shipping address!" />
+			</retry>
+		</group>
+			
+		</webtest>
+		
+	</target>
+</project>

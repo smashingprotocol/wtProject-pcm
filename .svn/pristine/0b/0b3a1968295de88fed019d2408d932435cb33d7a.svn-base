@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="checkoutpreferredActPDPbySearchSKU">
+
+	<target name="checkoutpreferredActPDPbySearchSKU">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="CHECKOUT: User able to checkout using Preferred Account [${preferred.username}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="username.dynamic" value="${preferred.username}" description="Define preferred account username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${default.sku}" description="Define Sku to checkout" />
+			<storeProperty name="placeOrder.dynamic" value="true" description="Define if proceed to order checkout" />
+			
+			&myAccountLogin;
+			&clearCart;
+			&addtoCartPDPSearchSKU;
+			
+			&unifiedCheckoutPreferredAct;
+			
+			<ifStep description="If Prod, expect the card to be declined">
+				<condition>
+					<verifyProperty name="pcmHost" value="prod" propertyType="ant" />
+				</condition>
+				<then>
+					<verifyXPath xpath="id('billingMessage')" text="PCM Preferred Account was unable to authorize your transaction. Please select another payment method to complete your order." description="Enter Credit Card is not accepted." />
+				</then>
+				<else>
+					<verifyXPath xpath="//div[@class='capOrderConfirm']//p" text="Your order has been submitted successfully. If you ordered several items to be delivered to the same address, we may send them to you in a different package but rest assured this will not affect shipping charges." description="Verify Order Confirmation Page" />
+				</else>
+			</ifStep>
+		</webtest>
+		
+	</target>
+</project>

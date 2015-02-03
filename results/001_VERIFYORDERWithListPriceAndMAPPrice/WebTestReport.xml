@@ -1,0 +1,1037 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<summary Implementation-Title="Canoo Webtest" Implementation-Version="R_1825">
+    <testresult endtime="Mon Feb 02 11:41:37 SGT 2015"
+        location="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml:13: "
+        starttime="Mon Feb 02 11:36:47 SGT 2015" successful="yes" testspecname="VERIFY ORDER: With List Price and MAP Price.">
+        <config>
+            <parameter name="port" value="80"/>
+            <parameter name="protocol" value="http"/>
+            <parameter name="host" value="afs-sl-pcmuit01.afservice.org"/>
+            <parameter name="resultpath" value="C:\workingWebtest\staging\wtProject-pcm\results"/>
+            <parameter name="saveprefix" value="response"/>
+            <parameter name="basepath" value="null"/>
+            <parameter name="resultfile" value="WebTestReport.xml"/>
+            <parameter name="haltonerror" value="no"/>
+            <parameter name="browser" value="FF10"/>
+            <parameter name="saveresponse" value="yes"/>
+            <parameter name="haltonfailure" value="no"/>
+            <parameter name="autorefresh" value="false"/>
+            <parameter name="timeout" value="300"/>
+            <parameter name="showhtmlparseroutput" value="no"/>
+        </config>
+        <results>
+            <step
+                _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                _line="16" description="Go to PCMall Homepage" duration="40197" result="completed" taskName="invoke">
+                <parameter name="-> complete url" value="http://afs-sl-pcmuit01.afservice.org/n/Shopping-Cart/msc-cart"/>
+                <parameter name="url" value="/n/Shopping-Cart/msc-cart"/>
+                <resultFile name="001_response_invoke.html"/>
+            </step>
+            <step _filename="C:\workingWebtest\staging\wtProject-pcm\includes\clearCart.xml"
+                _line="1" description="Clear Cart" duration="12775" result="completed" taskName="group">
+                <step _filename="C:\workingWebtest\staging\wtProject-pcm\includes\clearCart.xml"
+                    _line="3" description="Click My Cart" duration="12636" result="completed" taskName="clickElement">
+                    <parameter name="xpath" value="//a[@href='/n/Shopping-Cart/msc-cart']"/>
+                    <resultFile name="002_response_clickElement.html"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                    _line="1" description="Check Cookie values" duration="20" result="completed" taskName="group">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                        _line="2" description="If able to find the cookies" duration="17"
+                        result="completed" taskName="ifStep">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="3" duration="13" result="completed" taskName="condition">
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                                _line="4" description="Store the source widgetti.pcmall.f5 cookie"
+                                duration="1" result="completed" taskName="storeCookie">
+                                <parameter name="-> cookie value" value="0FFF37C5966643EC8E15D0D47EA2DAB3"/>
+                                <parameter name="name" value="widgetti.pcmall.f5"/>
+                                <parameter name="property" value="widgetti.pcmall.f5"/>
+                            </step>
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                                _line="5" description="Store the source Widgetti.PCM.ID cookie"
+                                duration="1" result="completed" taskName="storeCookie">
+                                <parameter name="-> cookie value" value="061734CDE6994D33825A8DA6F1BF9698"/>
+                                <parameter name="name" value="Widgetti.PCM.ID"/>
+                                <parameter name="property" value="Widgetti.PCM.ID"/>
+                            </step>
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                                _line="6" description="Store the source JSESSIONID cookie"
+                                duration="7" result="completed" taskName="storeCookie">
+                                <parameter name="-> cookie value" value="A1C5FF796F3597310CA89B75B58899E2"/>
+                                <parameter name="name" value="JSESSIONID"/>
+                                <parameter name="property" value="JSESSIONID"/>
+                            </step>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="8" duration="3" result="completed" taskName="then">
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                                _line="9" duration="1" result="completed" taskName="echo">
+                                <parameter name="message" value="widgetti.pcmall.f5: 0FFF37C5966643EC8E15D0D47EA2DAB3"/>
+                            </step>
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                                _line="10" duration="0" result="completed" taskName="echo">
+                                <parameter name="message" value="Widgetti.PCM.ID: 061734CDE6994D33825A8DA6F1BF9698"/>
+                            </step>
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                                _line="11" duration="0" result="completed" taskName="echo">
+                                <parameter name="message" value="JSESSIONID: A1C5FF796F3597310CA89B75B58899E2"/>
+                            </step>
+                        </step>
+                    </step>
+                </step>
+                <step _filename="C:\workingWebtest\staging\wtProject-pcm\includes\clearCart.xml"
+                    _line="5" duration="57" result="completed" taskName="ifStep">
+                    <step _filename="C:\workingWebtest\staging\wtProject-pcm\includes\clearCart.xml"
+                        _line="6" duration="49" result="failed" taskName="condition">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\clearCart.xml"
+                            _line="7" description="Qty field" duration="45" result="failed" taskName="verifyXPath">
+                            <parameter name="xpath" value="//input[contains(@id,'cartStaticQty')]"/>
+                        </step>
+                    </step>
+                    <step _filename="C:\workingWebtest\staging\wtProject-pcm\includes\clearCart.xml"
+                        _line="19" duration="8" result="completed" taskName="else">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\clearCart.xml"
+                            _line="20" duration="5" result="completed" taskName="verifyText">
+                            <parameter name="text" value="empty"/>
+                        </step>
+                    </step>
+                    <step duration="0" result="notexecuted" taskName="else">
+                        <step duration="0" result="notexecuted" taskName="verifyText">
+                            <parameter name="text" value="empty"/>
+                        </step>
+                    </step>
+                </step>
+            </step>
+            <step
+                _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                _line="18" description="Define properties" duration="71" result="completed" taskName="group">
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="19" description="Define username to login" duration="1"
+                    result="completed" taskName="storeProperty">
+                    <parameter name="=> value" value="manilaqa+stagepcm1@gmail.com"/>
+                    <parameter name="name" value="username.dynamic"/>
+                    <parameter name="value" value="manilaqa+stagepcm1@gmail.com"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="20" description="Define password to login" duration="1"
+                    result="completed" taskName="storeProperty">
+                    <parameter name="=> value" value="123456"/>
+                    <parameter name="name" value="password.dynamic"/>
+                    <parameter name="value" value="123456"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="21" description="Define dynamic Sku to checkout" duration="0"
+                    result="completed" taskName="storeProperty">
+                    <parameter name="=> value" value="8321160"/>
+                    <parameter name="name" value="sku.dynamic"/>
+                    <parameter name="value" value="8321160"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="22" description="Define if to add a Serviceplan" duration="1"
+                    result="completed" taskName="storeProperty">
+                    <parameter name="=> value" value="false"/>
+                    <parameter name="name" value="addserviceplan.dynamic"/>
+                    <parameter name="value" value="false"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="23" description="Define List Price" duration="0" result="completed" taskName="storeProperty">
+                    <parameter name="=> value" value="$1,200.00"/>
+                    <parameter name="name" value="listprice.dynamic"/>
+                    <parameter name="value" value="$1,200.00"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="26" description="Define Credit Card Month" duration="3"
+                    result="completed" taskName="storeProperty">
+                    <parameter name="=> value" value="December"/>
+                    <parameter name="name" value="ccem.dynamic"/>
+                    <parameter name="value" value="December"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="27" description="Define Credit Card Year" duration="0" result="completed" taskName="storeProperty">
+                    <parameter name="=> value" value="2016"/>
+                    <parameter name="name" value="ccey.dynamic"/>
+                    <parameter name="value" value="2016"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="28" description="Define Credit Card Name" duration="1" result="completed" taskName="storeProperty">
+                    <parameter name="=> value" value="Marlon Palo"/>
+                    <parameter name="name" value="cardName.dynamic"/>
+                    <parameter name="value" value="Marlon Palo"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="29" description="Define Credit Card Number" duration="0"
+                    result="completed" taskName="storeProperty">
+                    <parameter name="=> value" value="4111111111111111"/>
+                    <parameter name="name" value="cardNumber.dynamic"/>
+                    <parameter name="value" value="4111111111111111"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="30" description="Define Security Code" duration="0" result="completed" taskName="storeProperty">
+                    <parameter name="=> value" value="123"/>
+                    <parameter name="name" value="cardSecCode.dynamic"/>
+                    <parameter name="value" value="123"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="31" description="Define if to continue place order" duration="59"
+                    result="completed" taskName="storeProperty">
+                    <parameter name="=> value" value="false"/>
+                    <parameter name="name" value="placeOrder.dynamic"/>
+                    <parameter name="value" value="false"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="32" description="Define Data Driven Rebate ID" duration="0"
+                    result="completed" taskName="storeProperty">
+                    <parameter name="=> value" value="instantrebates"/>
+                    <parameter name="name" value="rebateid.dynamic"/>
+                    <parameter name="propertyType" value="dynamic"/>
+                    <parameter name="value" value="instantrebates"/>
+                </step>
+            </step>
+            <step _filename="C:\workingWebtest\staging\wtProject-pcm\includes\myAccountLogin.xml"
+                _line="1" description="Enter Account and Password in My Account Page"
+                duration="26911" result="completed" taskName="group">
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\myAccountLogin.xml"
+                    _line="2" description="Click Saved Cart in Cart to temporary login in cart"
+                    duration="3655" result="completed" taskName="clickLink">
+                    <parameter name="href" value="/n/Shopping-Cart/msc-257"/>
+                    <resultFile name="003_response_clickLink.html"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\myAccountLogin.xml"
+                    _line="3" description="Enter Username" duration="22" result="completed" taskName="setInputField">
+                    <parameter name="value" value="manilaqa+stagepcm1@gmail.com"/>
+                    <parameter name="xpath" value="id('emailAddress')"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\myAccountLogin.xml"
+                    _line="4" description="Enter Username" duration="5" result="completed" taskName="setInputField">
+                    <parameter name="value" value="123456"/>
+                    <parameter name="xpath" value="id('password')"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\myAccountLogin.xml"
+                    _line="6" description="Click the Login in the New Form" duration="12963"
+                    result="completed" taskName="clickElement">
+                    <parameter name="xpath" value="//input[@id='input-submit']"/>
+                    <resultFile name="004_response_clickElement.html"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\myAccountLogin.xml"
+                    _line="8" duration="10245" result="completed" taskName="retry">
+                    <parameter name="maxCount" value="3"/>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\myAccountLogin.xml"
+                        _line="8" description="Retry 0/2" duration="10244" result="completed" taskName="iteration wrapper">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\myAccountLogin.xml"
+                            _line="9" duration="10002" result="completed" taskName="sleep">
+                            <parameter name="seconds" value="10"/>
+                            <resultFile name="005_response_sleep.html"/>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\myAccountLogin.xml"
+                            _line="10" description="Sign out link" duration="4" result="completed" taskName="verifyXPath">
+                            <parameter name="xpath" value="//a[@class='sgn-out']"/>
+                        </step>
+                    </step>
+                    <step description="Sign out link" duration="0" result="notexecuted" taskName="verifyXPath">
+                        <parameter name="xpath" value="//a[@class='sgn-out']"/>
+                    </step>
+                </step>
+            </step>
+            <step
+                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                _line="1" description="Check Cookie values" duration="7" result="completed" taskName="group">
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                    _line="2" description="If able to find the cookies" duration="7"
+                    result="completed" taskName="ifStep">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                        _line="3" duration="3" result="completed" taskName="condition">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="4" description="Store the source widgetti.pcmall.f5 cookie"
+                            duration="1" result="completed" taskName="storeCookie">
+                            <parameter name="-> cookie value" value="0FFF37C5966643EC8E15D0D47EA2DAB3"/>
+                            <parameter name="name" value="widgetti.pcmall.f5"/>
+                            <parameter name="property" value="widgetti.pcmall.f5"/>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="5" description="Store the source Widgetti.PCM.ID cookie"
+                            duration="1" result="completed" taskName="storeCookie">
+                            <parameter name="-> cookie value" value="3B72CE2AA617481598D339BCD8AE8EA1"/>
+                            <parameter name="name" value="Widgetti.PCM.ID"/>
+                            <parameter name="property" value="Widgetti.PCM.ID"/>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="6" description="Store the source JSESSIONID cookie" duration="1"
+                            result="completed" taskName="storeCookie">
+                            <parameter name="-> cookie value" value="A1C5FF796F3597310CA89B75B58899E2"/>
+                            <parameter name="name" value="JSESSIONID"/>
+                            <parameter name="property" value="JSESSIONID"/>
+                        </step>
+                    </step>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                        _line="8" duration="2" result="completed" taskName="then">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="9" duration="1" result="completed" taskName="echo">
+                            <parameter name="message" value="widgetti.pcmall.f5: 0FFF37C5966643EC8E15D0D47EA2DAB3"/>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="10" duration="0" result="completed" taskName="echo">
+                            <parameter name="message" value="Widgetti.PCM.ID: 3B72CE2AA617481598D339BCD8AE8EA1"/>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="11" duration="1" result="completed" taskName="echo">
+                            <parameter name="message" value="JSESSIONID: A1C5FF796F3597310CA89B75B58899E2"/>
+                        </step>
+                    </step>
+                </step>
+            </step>
+            <step _filename="C:\workingWebtest\staging\wtProject-pcm\includes\clearCart.xml"
+                _line="1" description="Clear Cart" duration="6057" result="completed" taskName="group">
+                <step _filename="C:\workingWebtest\staging\wtProject-pcm\includes\clearCart.xml"
+                    _line="3" description="Click My Cart" duration="6006" result="completed" taskName="clickElement">
+                    <parameter name="xpath" value="//a[@href='/n/Shopping-Cart/msc-cart']"/>
+                    <resultFile name="006_response_clickElement.html"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                    _line="1" description="Check Cookie values" duration="8" result="completed" taskName="group">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                        _line="2" description="If able to find the cookies" duration="7"
+                        result="completed" taskName="ifStep">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="3" duration="2" result="completed" taskName="condition">
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                                _line="4" description="Store the source widgetti.pcmall.f5 cookie"
+                                duration="1" result="completed" taskName="storeCookie">
+                                <parameter name="-> cookie value" value="0FFF37C5966643EC8E15D0D47EA2DAB3"/>
+                                <parameter name="name" value="widgetti.pcmall.f5"/>
+                                <parameter name="property" value="widgetti.pcmall.f5"/>
+                            </step>
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                                _line="5" description="Store the source Widgetti.PCM.ID cookie"
+                                duration="0" result="completed" taskName="storeCookie">
+                                <parameter name="-> cookie value" value="3B72CE2AA617481598D339BCD8AE8EA1"/>
+                                <parameter name="name" value="Widgetti.PCM.ID"/>
+                                <parameter name="property" value="Widgetti.PCM.ID"/>
+                            </step>
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                                _line="6" description="Store the source JSESSIONID cookie"
+                                duration="1" result="completed" taskName="storeCookie">
+                                <parameter name="-> cookie value" value="A1C5FF796F3597310CA89B75B58899E2"/>
+                                <parameter name="name" value="JSESSIONID"/>
+                                <parameter name="property" value="JSESSIONID"/>
+                            </step>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="8" duration="4" result="completed" taskName="then">
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                                _line="9" duration="0" result="completed" taskName="echo">
+                                <parameter name="message" value="widgetti.pcmall.f5: 0FFF37C5966643EC8E15D0D47EA2DAB3"/>
+                            </step>
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                                _line="10" duration="1" result="completed" taskName="echo">
+                                <parameter name="message" value="Widgetti.PCM.ID: 3B72CE2AA617481598D339BCD8AE8EA1"/>
+                            </step>
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                                _line="11" duration="1" result="completed" taskName="echo">
+                                <parameter name="message" value="JSESSIONID: A1C5FF796F3597310CA89B75B58899E2"/>
+                            </step>
+                        </step>
+                    </step>
+                </step>
+                <step _filename="C:\workingWebtest\staging\wtProject-pcm\includes\clearCart.xml"
+                    _line="5" duration="37" result="completed" taskName="ifStep">
+                    <step _filename="C:\workingWebtest\staging\wtProject-pcm\includes\clearCart.xml"
+                        _line="6" duration="32" result="failed" taskName="condition">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\clearCart.xml"
+                            _line="7" description="Qty field" duration="32" result="failed" taskName="verifyXPath">
+                            <parameter name="xpath" value="//input[contains(@id,'cartStaticQty')]"/>
+                        </step>
+                    </step>
+                    <step _filename="C:\workingWebtest\staging\wtProject-pcm\includes\clearCart.xml"
+                        _line="19" duration="5" result="completed" taskName="else">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\clearCart.xml"
+                            _line="20" duration="4" result="completed" taskName="verifyText">
+                            <parameter name="text" value="empty"/>
+                        </step>
+                    </step>
+                    <step duration="0" result="notexecuted" taskName="else">
+                        <step duration="0" result="notexecuted" taskName="verifyText">
+                            <parameter name="text" value="empty"/>
+                        </step>
+                    </step>
+                </step>
+            </step>
+            <step
+                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                _line="1" description="Open PDP by SKU Search" duration="94315" result="completed" taskName="group">
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                    _line="2" description="Enter sku in Search field." duration="7"
+                    result="completed" taskName="storeProperty">
+                    <parameter name="=> value" value="8321160"/>
+                    <parameter name="property" value="search.keyword"/>
+                    <parameter name="propertyType" value="dynamic"/>
+                    <parameter name="value" value="8321160"/>
+                </step>
+                <step _filename="C:\workingWebtest\staging\wtProject-pcm\includes\searchKeyword.xml"
+                    _line="1" description="Enter a keyword in the Search Field and Go"
+                    duration="22552" result="completed" taskName="group">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\searchKeyword.xml"
+                        _line="2" description="Enter sku in Search field." duration="852"
+                        result="completed" taskName="setInputField">
+                        <parameter name="value" value="8321160"/>
+                        <parameter name="xpath" value="id('search-menu-9')//input"/>
+                        <resultFile name="007_response_setInputField.html"/>
+                    </step>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\searchKeyword.xml"
+                        _line="3" description="Click the Search button" duration="21275"
+                        result="completed" taskName="clickElement">
+                        <parameter name="xpath" value="//a[@class='searchInputBtn']"/>
+                        <resultFile name="008_response_clickElement.html"/>
+                    </step>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\searchKeyword.xml"
+                        _line="4"
+                        description="Store the Search url parameter when keyword is search"
+                        duration="20" result="completed" taskName="storeProperty">
+                        <parameter name="=> value" value="/s?rch&amp;includeImage=true&amp;ssrc=box&amp;q=8321160"/>
+                        <parameter name="property" value="searchurl.dynamic"/>
+                        <parameter name="value" value="/s?rch&amp;includeImage=true&amp;ssrc=box&amp;q=8321160"/>
+                    </step>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                    _line="16" description="CRF 47961 - REDESIGN ADD TO CART BUTTON IN SEARCH"
+                    duration="69744" result="completed" taskName="ifStep">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                        _line="17" duration="9" result="completed" taskName="condition">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                            _line="18" description="Verify the page is still in Search Results."
+                            duration="2" result="completed" taskName="verifyDocumentURL">
+                            <parameter name="regex" value="true"/>
+                            <parameter name="text" value="http://afs-sl-pcmuit01.afservice.org/s?"/>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                            _line="19" description="Not in PDP" duration="2" result="completed" taskName="not">
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                                _line="21" description="Page is PDP" duration="1" result="failed" taskName="verifyDocumentURL">
+                                <parameter name="regex" value="true"/>
+                                <parameter name="text" value="http://afs-sl-pcmuit01.afservice.org/p/"/>
+                            </step>
+                        </step>
+                    </step>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                        _line="24" duration="67733" result="completed" taskName="then">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                            _line="25" description="Click Image or description to go to PDP."
+                            duration="65727" result="completed" taskName="clickElement">
+                            <parameter name="xpath" value="//a[contains(@href,'8321160') and contains(@href,'/p/')]"/>
+                            <resultFile name="009_response_clickElement.html"/>
+                        </step>
+                    </step>
+                </step>
+            </step>
+            <step
+                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                _line="31" description="PDP: Add to Cart" duration="56385" result="completed" taskName="group">
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                    _line="33" description="If to enter a qty" duration="2005" result="completed" taskName="ifStep">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                        _line="34" duration="3" result="failed" taskName="condition">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                            _line="35" description="Verify if qty is define" duration="1"
+                            result="failed" taskName="verifyProperty">
+                            <parameter name="property" value="qty.dynamic"/>
+                            <parameter name="propertyType" value="dynamic"/>
+                        </step>
+                    </step>
+                    <step duration="0" result="notexecuted" taskName="then">
+                        <step description="Enter QTY" duration="0" result="notexecuted" taskName="setInputField">
+                            <parameter name="name" value="selectedDPNoQuantity"/>
+                            <parameter name="value" value="#{qty.dynamic}"/>
+                        </step>
+                    </step>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                    _line="42" description="Store the Final Price if available" duration="12263"
+                    result="completed" taskName="ifStep">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                        _line="43" duration="2006" result="completed" taskName="condition">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                            _line="44" description="verify the Final Price of PDP Redesign"
+                            duration="7" result="completed" taskName="verifyXPath">
+                            <parameter name="xpath" value="//p[@itemprop='price']"/>
+                        </step>
+                    </step>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                        _line="46" duration="8250" result="completed" taskName="then">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                            _line="47"
+                            description="If the Final Price is free after rebates set strikethrough price as final price"
+                            duration="4050" result="completed" taskName="ifStep">
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                                _line="48" duration="47" result="failed" taskName="condition">
+                                <step
+                                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                                    _line="49" description="verify the Final Price of PDP Redesign"
+                                    duration="46" result="failed" taskName="verifyXPath">
+                                    <parameter name="xpath" value="//p[@itemprop='price' and text()='Free after rebate(s)']"/>
+                                </step>
+                            </step>
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                                _line="54" duration="2004" result="completed" taskName="else">
+                                <step
+                                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                                    _line="55" description="Store the Final Price" duration="6"
+                                    result="completed" taskName="storeXPath">
+                                    <parameter name="=> value" value="$980.00"/>
+                                    <parameter name="property" value="pdp.finalprice"/>
+                                    <parameter name="propertyType" value="dynamic"/>
+                                    <parameter name="xpath" value="//p[@itemprop='price']"/>
+                                </step>
+                            </step>
+                            <step duration="0" result="notexecuted" taskName="else">
+                                <step description="Store the Final Price" duration="0"
+                                    result="notexecuted" taskName="storeXPath">
+                                    <parameter name="property" value="pdp.finalprice"/>
+                                    <parameter name="propertyType" value="dynamic"/>
+                                    <parameter name="xpath" value="//p[@itemprop='price']"/>
+                                </step>
+                            </step>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                            _line="59" description="Convert price text to digit" duration="2192"
+                            result="completed" taskName="scriptStep">
+                            <parameter name="language" value="javascript"/>
+                            <parameter name="nested text" value="var strPrice = step.getWebtestProperty('pdp.finalprice');&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;var strPrice = strPrice.replaceAll(&quot;[A-Za-z,:,(,),',;,_]&quot;, &quot;&quot;);&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;step.setWebtestProperty('finalPriceNum',strPrice);"/>
+                            <parameter name="script" value="&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;var strPrice = step.getWebtestProperty('pdp.finalprice');&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;var strPrice = strPrice.replaceAll(&quot;[A-Za-z,:,(,),',;,_]&quot;, &quot;&quot;);&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;step.setWebtestProperty('finalPriceNum',strPrice);&#xa;&#x9;&#x9;&#x9;&#x9;"/>
+                        </step>
+                    </step>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                    _line="67" description="Store the Strikethrough Price if available"
+                    duration="8035" result="completed" taskName="ifStep">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                        _line="68" duration="2020" result="completed" taskName="condition">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                            _line="69" description="verify the Strikethrough Price of PDP Redesign"
+                            duration="9" result="completed" taskName="verifyXPath">
+                            <parameter name="xpath" value="//span[@class='priceLineThr']"/>
+                        </step>
+                    </step>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                        _line="71" duration="4011" result="completed" taskName="then">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                            _line="72" description="Store the Strikethrough Price of PDP Redesign"
+                            duration="5" result="completed" taskName="storeXPath">
+                            <parameter name="=> value" value="$1,200.00"/>
+                            <parameter name="property" value="pdp.strikethrprice"/>
+                            <parameter name="propertyType" value="dynamic"/>
+                            <parameter name="xpath" value="//span[@class='priceLineThr']"/>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                            _line="73" description="Convert price text to digit" duration="2003"
+                            result="completed" taskName="scriptStep">
+                            <parameter name="language" value="javascript"/>
+                            <parameter name="nested text" value="var strPrice = step.getWebtestProperty('pdp.strikethrprice');&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;var strPrice = strPrice.replaceAll(&quot;[A-Za-z,:,(,),',;,_]&quot;, &quot;&quot;);&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;step.setWebtestProperty('finalStrikethrPriceNum',strPrice);"/>
+                            <parameter name="script" value="&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;var strPrice = step.getWebtestProperty('pdp.strikethrprice');&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;var strPrice = strPrice.replaceAll(&quot;[A-Za-z,:,(,),',;,_]&quot;, &quot;&quot;);&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;step.setWebtestProperty('finalStrikethrPriceNum',strPrice);&#xa;&#x9;&#x9;&#x9;&#x9;"/>
+                        </step>
+                    </step>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                    _line="83" description="If to add a Service Plan, add a Service Plan"
+                    duration="19033" result="completed" taskName="ifStep">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                        _line="84" duration="2" result="failed" taskName="condition">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                            _line="86" description="If to add a Service Plan" duration="2"
+                            result="failed" taskName="verifyProperty">
+                            <parameter name="property" value="addserviceplan.dynamic"/>
+                            <parameter name="value" value="true"/>
+                        </step>
+                    </step>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                        _line="99" description="if not to add service plan, click add to cart"
+                        duration="19030" result="completed" taskName="else">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                            _line="100"
+                            description="If Buy Customize button - skip the mac config page"
+                            duration="19026" result="completed" taskName="ifStep">
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                                _line="101" duration="19025" result="completed" taskName="condition">
+                                <step
+                                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                                    _line="102" description="PDP: Click Add to Cart button"
+                                    duration="19020" result="completed" taskName="clickElement">
+                                    <parameter name="xpath" value="//a[contains(@href,'addToCart') or contains(@href,'javascript:submitEppForm')]"/>
+                                    <resultFile name="010_response_clickElement.html"/>
+                                </step>
+                            </step>
+                            <step
+                                description="Page proceeds to Configurator Page/Engraving/Service Plan"
+                                duration="0" result="notexecuted" taskName="else">
+                                <step description="PDP: Click Buy-Customize button" duration="0"
+                                    result="notexecuted" taskName="clickElement">
+                                    <parameter name="xpath" value="${pdp.btnbuycustomize}"/>
+                                </step>
+                                <step description="Click the Configurator Page - Add to Cart Button"
+                                    duration="0" result="notexecuted" taskName="clickElement">
+                                    <parameter name="xpath" value="//input[@class='submit']"/>
+                                </step>
+                                <step description="If Engraving page is display" duration="0"
+                                    result="notexecuted" taskName="ifStep">
+                                    <step duration="0" result="notexecuted" taskName="condition">
+                                        <step description="IXPath for engraving section"
+                                            duration="0" result="notexecuted" taskName="verifyXPath">
+                                            <parameter name="xpath" value="//div[@class='engrave-option']"/>
+                                        </step>
+                                    </step>
+                                    <step duration="0" result="notexecuted" taskName="then">
+                                        <step
+                                            description="Click Engraving - Buy Now without engraving button"
+                                            duration="0" result="notexecuted" taskName="clickElement">
+                                            <parameter name="xpath" value="//img[@id='addIpodWithoutEngraving']"/>
+                                        </step>
+                                    </step>
+                                </step>
+                                <step description="Click Next in Service Plan selection"
+                                    duration="0" result="notexecuted" taskName="clickLink">
+                                    <parameter name="xpath" value="//a[contains(@href,'submitServicePlansSelection')]"/>
+                                </step>
+                                <step description="Click Proceed to Cart" duration="0"
+                                    result="notexecuted" taskName="clickLink">
+                                    <parameter name="href" value="/n/Shopping-Cart/msc-cart"/>
+                                </step>
+                            </step>
+                        </step>
+                    </step>
+                    <step description="if not to add service plan, click add to cart" duration="0"
+                        result="notexecuted" taskName="else">
+                        <step description="If Buy Customize button - skip the mac config page"
+                            duration="0" result="notexecuted" taskName="ifStep">
+                            <step duration="0" result="notexecuted" taskName="condition">
+                                <step description="PDP: Click Add to Cart button" duration="0"
+                                    result="notexecuted" taskName="clickElement">
+                                    <parameter name="xpath" value="${pdp.btnaddtocart}"/>
+                                </step>
+                            </step>
+                            <step
+                                description="Page proceeds to Configurator Page/Engraving/Service Plan"
+                                duration="0" result="notexecuted" taskName="else">
+                                <step description="PDP: Click Buy-Customize button" duration="0"
+                                    result="notexecuted" taskName="clickElement">
+                                    <parameter name="xpath" value="${pdp.btnbuycustomize}"/>
+                                </step>
+                                <step description="Click the Configurator Page - Add to Cart Button"
+                                    duration="0" result="notexecuted" taskName="clickElement">
+                                    <parameter name="xpath" value="//input[@class='submit']"/>
+                                </step>
+                                <step description="If Engraving page is display" duration="0"
+                                    result="notexecuted" taskName="ifStep">
+                                    <step duration="0" result="notexecuted" taskName="condition">
+                                        <step description="IXPath for engraving section"
+                                            duration="0" result="notexecuted" taskName="verifyXPath">
+                                            <parameter name="xpath" value="//div[@class='engrave-option']"/>
+                                        </step>
+                                    </step>
+                                    <step duration="0" result="notexecuted" taskName="then">
+                                        <step
+                                            description="Click Engraving - Buy Now without engraving button"
+                                            duration="0" result="notexecuted" taskName="clickElement">
+                                            <parameter name="xpath" value="//img[@id='addIpodWithoutEngraving']"/>
+                                        </step>
+                                    </step>
+                                </step>
+                                <step description="Click Next in Service Plan selection"
+                                    duration="0" result="notexecuted" taskName="clickLink">
+                                    <parameter name="xpath" value="//a[contains(@href,'submitServicePlansSelection')]"/>
+                                </step>
+                                <step description="Click Proceed to Cart" duration="0"
+                                    result="notexecuted" taskName="clickLink">
+                                    <parameter name="href" value="/n/Shopping-Cart/msc-cart"/>
+                                </step>
+                            </step>
+                        </step>
+                    </step>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                    _line="124" description="Retry to wait if the page is still in PDP"
+                    duration="15039" result="completed" taskName="retry">
+                    <parameter name="maxCount" value="3"/>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                        _line="124" description="Retry 0/2" duration="15038" result="completed" taskName="iteration wrapper">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                            _line="125" duration="15017" result="completed" taskName="sleep">
+                            <parameter name="seconds" value="15"/>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                            _line="126" description="Page is no longer on PDP" duration="21"
+                            result="completed" taskName="not">
+                            <step
+                                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                                _line="127" description="Add to Cart button" duration="16"
+                                result="failed" taskName="verifyXPath">
+                                <parameter name="xpath" value="//a[contains(@href,'addToCart') or contains(@href,'javascript:submitEppForm')]"/>
+                            </step>
+                        </step>
+                    </step>
+                    <step description="Page is no longer on PDP" duration="0" result="notexecuted" taskName="not">
+                        <step description="Add to Cart button" duration="0" result="notexecuted" taskName="verifyXPath">
+                            <parameter name="xpath" value="${pdp.btnaddtocart}"/>
+                        </step>
+                    </step>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                    _line="131" description="Verify Recommended page msc-194 is skipped"
+                    duration="1" result="completed" taskName="not">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                        _line="132" description="Verify page is Shopping Cart" duration="1"
+                        result="failed" taskName="verifyDocumentURL">
+                        <parameter name="regex" value="true"/>
+                        <parameter name="text" value="http://afs-sl-pcmuit01.afservice.org/n/Shopping-Cart/msc-194"/>
+                    </step>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                    _line="135" duration="4" result="completed" taskName="not">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\addtoCartPDPSearchSKU.xml"
+                        _line="136" duration="3" result="failed" taskName="verifyText">
+                        <parameter name="text" value="Your shopping cart is currently empty!"/>
+                    </step>
+                </step>
+            </step>
+            <step
+                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                _line="1" description="Check Cookie values" duration="6" result="completed" taskName="group">
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                    _line="2" description="If able to find the cookies" duration="5"
+                    result="completed" taskName="ifStep">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                        _line="3" duration="3" result="completed" taskName="condition">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="4" description="Store the source widgetti.pcmall.f5 cookie"
+                            duration="0" result="completed" taskName="storeCookie">
+                            <parameter name="-> cookie value" value="0FFF37C5966643EC8E15D0D47EA2DAB3"/>
+                            <parameter name="name" value="widgetti.pcmall.f5"/>
+                            <parameter name="property" value="widgetti.pcmall.f5"/>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="5" description="Store the source Widgetti.PCM.ID cookie"
+                            duration="1" result="completed" taskName="storeCookie">
+                            <parameter name="-> cookie value" value="3B72CE2AA617481598D339BCD8AE8EA1"/>
+                            <parameter name="name" value="Widgetti.PCM.ID"/>
+                            <parameter name="property" value="Widgetti.PCM.ID"/>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="6" description="Store the source JSESSIONID cookie" duration="1"
+                            result="completed" taskName="storeCookie">
+                            <parameter name="-> cookie value" value="A1C5FF796F3597310CA89B75B58899E2"/>
+                            <parameter name="name" value="JSESSIONID"/>
+                            <parameter name="property" value="JSESSIONID"/>
+                        </step>
+                    </step>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                        _line="8" duration="2" result="completed" taskName="then">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="9" duration="0" result="completed" taskName="echo">
+                            <parameter name="message" value="widgetti.pcmall.f5: 0FFF37C5966643EC8E15D0D47EA2DAB3"/>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="10" duration="1" result="completed" taskName="echo">
+                            <parameter name="message" value="Widgetti.PCM.ID: 3B72CE2AA617481598D339BCD8AE8EA1"/>
+                        </step>
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\includes\verifyStoreCookies.xml"
+                            _line="11" duration="0" result="completed" taskName="echo">
+                            <parameter name="message" value="JSESSIONID: A1C5FF796F3597310CA89B75B58899E2"/>
+                        </step>
+                    </step>
+                </step>
+            </step>
+            <step
+                _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                _line="39" description="Verify first if the XPath of Final Price exist"
+                duration="20" result="completed" taskName="verifyXPath">
+                <parameter name="xpath" value="//div[@class='itemPrice']//p[@class='itemTotalPrice']"/>
+            </step>
+            <step
+                _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                _line="41" description="Verify MAIL IN REBATES" duration="2" result="completed" taskName="ifStep">
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="42" duration="1" result="failed" taskName="condition">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                        _line="43" description="Verify Instant and Mail in Rebate" duration="0"
+                        result="failed" taskName="verifyProperty">
+                        <parameter name="property" value="rebateid.dynamic"/>
+                        <parameter name="propertyType" value="dynamic"/>
+                        <parameter name="value" value="instantmailin"/>
+                    </step>
+                </step>
+                <step duration="0" result="notexecuted" taskName="then">
+                    <step description="PDP Final Price is not negative" duration="0"
+                        result="notexecuted" taskName="not">
+                        <step description="Verify the Unit Price is not Negative" duration="0"
+                            result="notexecuted" taskName="verifyXPath">
+                            <parameter name="xpath" value="//div[@class='itemPrice']//p[@class='itemTotalPrice' and contains(text(),'-')]"/>
+                        </step>
+                    </step>
+                    <step description="Verify the Unit Price is not 0.00" duration="0"
+                        result="notexecuted" taskName="verifyXPath">
+                        <parameter name="xpath" value="//div[@class='itemPrice']//p[@class='itemTotalPrice' and text()!='$0.00']"/>
+                    </step>
+                    <step description="Verify the Unit Price in PDP is the prince in the cart"
+                        duration="0" result="notexecuted" taskName="verifyXPath">
+                        <parameter name="xpath" value="//div[@class='itemPrice']//p[@class='itemTotalPrice' and text()!='#{pdp.finalprice}']"/>
+                    </step>
+                </step>
+            </step>
+            <step
+                _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                _line="54" description="Verify INSTANT REBATES" duration="80" result="completed" taskName="ifStep">
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="55" duration="1" result="completed" taskName="condition">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                        _line="56" description="Verify Instant and Mail in Rebate" duration="1"
+                        result="completed" taskName="verifyProperty">
+                        <parameter name="property" value="rebateid.dynamic"/>
+                        <parameter name="propertyType" value="dynamic"/>
+                        <parameter name="value" value="instantrebates"/>
+                    </step>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="58" duration="78" result="completed" taskName="then">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                        _line="59" duration="15" result="completed" taskName="not">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                            _line="60" description="Verify the Unit Price is not negative"
+                            duration="14" result="failed" taskName="verifyXPath">
+                            <parameter name="xpath" value="//div[@class='itemPrice']//p[@class='itemTotalPrice' and contains(text(),'-')]"/>
+                        </step>
+                    </step>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                        _line="62" description="Verify the the List Price." duration="6"
+                        result="completed" taskName="verifyXPath">
+                        <parameter name="xpath" value="//p[@class='listPrice' and text()='$1,200.00']"/>
+                    </step>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                        _line="63" description="Verify the Unit Price is not 0.00" duration="22"
+                        result="completed" taskName="verifyXPath">
+                        <parameter name="xpath" value="//div[@class='itemPrice']//p[@class='itemTotalPrice' and text()!='$0.00']"/>
+                    </step>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                        _line="64"
+                        description="Verify the Unit Price in PDP can be found in the cart"
+                        duration="34" result="completed" taskName="verifyXPath">
+                        <parameter name="xpath" value="//div[@class='itemPrice']//p[@class='itemTotalPrice' and text()='$980.00']"/>
+                    </step>
+                </step>
+            </step>
+            <step
+                _filename="C:\workingWebtest\staging\wtProject-pcm\includes\unifiedProceedtoCheckout.xml"
+                _line="1" description="Proceed to Checkout" duration="40720" result="completed" taskName="group">
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\unifiedProceedtoCheckout.xml"
+                    _line="2" description="Click Checkout in Unified Shopping Cart" duration="38718"
+                    result="completed" taskName="clickElement">
+                    <parameter name="xpath" value="//a[contains(@href,'checkOut') and @title='Checkout']"/>
+                    <resultFile name="011_response_clickElement.html"/>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\includes\unifiedProceedtoCheckout.xml"
+                    _line="3" description="Verify Unified Checkout Page" duration="1"
+                    result="completed" taskName="verifyDocumentURL">
+                    <parameter name="text" value="https://afs-sl-pcmuit01.afservice.org/o/unifiedWidget-1?opOrigin=processCheckOut"/>
+                </step>
+            </step>
+            <step
+                _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                _line="70" description="Verify MAIL IN REBATES" duration="1999" result="completed" taskName="ifStep">
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="71" duration="2" result="failed" taskName="condition">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                        _line="72" description="Verify Instant and Mail in Rebate" duration="0"
+                        result="failed" taskName="verifyProperty">
+                        <parameter name="property" value="rebateid.dynamic"/>
+                        <parameter name="propertyType" value="dynamic"/>
+                        <parameter name="value" value="instantmailin"/>
+                    </step>
+                </step>
+                <step duration="0" result="notexecuted" taskName="then">
+                    <step
+                        description="Verify the Sub Total in the Order Review is NOT same with the Cart"
+                        duration="0" result="notexecuted" taskName="verifyXPath">
+                        <parameter name="xpath" value="//p[@id='subTotal' and text()!='#{pdp.finalprice}']"/>
+                    </step>
+                    <step description="Verify the Grand Total is not 0" duration="0"
+                        result="notexecuted" taskName="verifyXPath">
+                        <parameter name="xpath" value="//p[@id='total' and text()!='$0.00']"/>
+                    </step>
+                    <step description="Verify Order: Sub Total is not negative" duration="0"
+                        result="notexecuted" taskName="not">
+                        <step description="Verify the Sub Total is not negative" duration="0"
+                            result="notexecuted" taskName="verifyXPath">
+                            <parameter name="xpath" value="//p[@id='subTotal' and contains(text(),'-')]"/>
+                        </step>
+                    </step>
+                </step>
+            </step>
+            <step
+                _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                _line="83" description="Verify INSTANT REBATES" duration="8031" result="completed" taskName="ifStep">
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="84" duration="2002" result="completed" taskName="condition">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                        _line="85" description="Verify Instant and Mail in Rebate" duration="0"
+                        result="completed" taskName="verifyProperty">
+                        <parameter name="property" value="rebateid.dynamic"/>
+                        <parameter name="propertyType" value="dynamic"/>
+                        <parameter name="value" value="instantrebates"/>
+                    </step>
+                </step>
+                <step
+                    _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                    _line="87" duration="4049" result="completed" taskName="then">
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                        _line="88"
+                        description="Verify the Sub Total in the Order Review is same with the Cart"
+                        duration="10" result="completed" taskName="verifyXPath">
+                        <parameter name="xpath" value="//p[@id='subTotal' and text()='$980.00']"/>
+                    </step>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                        _line="89"
+                        description="Verify the Sub Total in the Order Review is not the List Price."
+                        duration="9" result="completed" taskName="verifyXPath">
+                        <parameter name="xpath" value="//p[@id='subTotal' and text()!='$1,200.00']"/>
+                    </step>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                        _line="91" description="Verify the Grand Total is not 0" duration="20"
+                        result="completed" taskName="verifyXPath">
+                        <parameter name="xpath" value="//p[@id='total' and text()!='$0.00']"/>
+                    </step>
+                    <step
+                        _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                        _line="92" description="Verify Order: Sub Total is not negative"
+                        duration="2009" result="completed" taskName="not">
+                        <step
+                            _filename="C:\workingWebtest\staging\wtProject-pcm\tests\test\verifyOrderMIRPriceVerification.xml"
+                            _line="93" description="Verify the Sub Total is not negative"
+                            duration="10" result="failed" taskName="verifyXPath">
+                            <parameter name="xpath" value="//p[@id='subTotal' and contains(text(),'-')]"/>
+                        </step>
+                    </step>
+                </step>
+            </step>
+        </results>
+    </testresult>
+</summary>

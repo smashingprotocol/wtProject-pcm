@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchNewItemwithAddtoCartBtnCondition">
+
+	<target name="searchNewItemwithAddtoCartBtnCondition">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />
+			<storeProperty name="ctodialogaction.dynamic" value="${btn.action}" description="Define expected dialog box action" />
+			<storeProperty name="searchqty.dynamic" value="${qty}" description="Define quantity" />			
+			&searchKeyword;
+			
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+			</not>
+			
+			<ifStep description="Check If Add to cart button behavior">
+				<condition>
+					<verifyProperty name="ctodialogaction.dynamic" value="callforprice" description="Define expected dialog box action" />
+				</condition>
+				<then>
+					<verifyXPath xpath="//a[@data-label='prod-#{search.keyword}' and text()='Call For Price']" description="Call for price button"/>
+				</then>
+				<else>
+					<storeElementAttribute xpath="${searchnew.addtocart}" attributeName="id" property="searchAddBtnID" propertyType="dynamic" description="Store the qty box DPNo" />
+			
+					&searchGetSKUinAddBtn;
+					
+					<setInputField xpath="id('addCartQty#{searchGetSKUinAddBtn.value}')" value="#{searchqty.dynamic}" description="Enter qty" />
+					<clickElement xpath="${searchnew.addtocart}" description="Click Add to cart button on the first list of search result" />
+					
+					<verifyXPath xpath="//div[@class='add-cntt-dv error-mdlbx']//p[contains(text(),'An error occurred while adding the item')]" description="Verify message that user cant add item in cart" />
+				</else>
+			</ifStep>
+			
+			
+			
+		</webtest>
+		
+	</target>
+</project>

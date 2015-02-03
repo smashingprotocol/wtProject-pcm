@@ -1,0 +1,5 @@
+<group description="Enter a keyword in the Search Field and Go">
+		<setInputField xpath="${search.textboxseach}" value="#{search.keyword}" description="Enter sku in Search field." />
+		<clickElement xpath="${search.btngo}" description="Click the Search button" />
+		<storeProperty property="searchurl.dynamic" value="/s?rch&amp;includeImage=true&amp;ssrc=box&amp;q=#{search.keyword}" description="Store the Search url parameter when keyword is search" />
+</group>

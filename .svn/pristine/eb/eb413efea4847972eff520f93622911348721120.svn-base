@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartOmnitureProperties">
+
+	<target name="shoppingCartOmnitureProperties">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: Omniture values in cart.">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+				
+			<group description="View Cart.">
+				<clickLink href="/n/Shopping-Cart/msc-cart" description="Click Cart" />
+				<verifyXPath xpath="//script[contains(text(),'s.events=&#34;scView&#34;')]" description="s.events" />	
+			</group>
+			
+			<group description="Quick Add">
+				<storeProperty name="quickaddsku.dynamic" value="${sku.esd}" propertyType="dynamic" description="Define Sku in excel file" />
+				&quickAddCart;
+				<verifyXPath xpath="//script[contains(text(),'s.events=&#34;scAdd,scOpen&#34;')]" description="s.events" />
+			</group>
+			
+			<group description="Quick Add another sku">
+				<storeProperty name="quickaddsku.dynamic" value="${defaultSku}" propertyType="dynamic" description="Define Sku in excel file" />
+				&quickAddCart;
+				<verifyXPath xpath="//script[contains(text(),'s.events=&#34;scAdd&#34;')]" description="s.events" />
+			</group>
+		
+			<group description="Add to cart via PDP">
+				<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+				&addtoCartPDPSearchSKU;
+				<verifyXPath xpath="//script[contains(text(),'s.events=&#34;scAdd&#34;')]" description="s.events" />
+			</group>
+			
+			<group description="Remove items in cart">
+				&clearCart;
+				<verifyXPath xpath="//script[contains(text(),'s.events=&#34;scRemove&#34;')]" description="s.events" />
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

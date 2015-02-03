@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="orderStatusOrderLookup">
+
+	<target name="orderStatusOrderLookup">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="ORDER STATUS: Verify Order Status lookup [${host}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="manilaqa+voidpcm@gmail.com" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="123456" description="Define password to login" />
+			<storeProperty name="ordernumber.dynamic" value="${orderNumber}" description="Define Order Number to lookup" />
+			<storeProperty name="zipcode.dynamic" value="${zipCode}" description="Define Zip Code to lookup" />
+			
+		<group description="Order Status Page and View Order">
+			<clickElement xpath="${orderstatus.link}" description="Click Order Status" />
+			<setInputField xpath="id('single_orderlookup_order_number')" value="#{ordernumber.dynamic}" description="Enter Order Number" />
+			<setInputField xpath="id('single_orderlookup_zipcode')" value="#{zipcode.dynamic}" description="Enter zip code Number" />
+			<clickElement xpath="${orderstatus.findorderbtn}" description="Click Find Order" />
+			
+			
+			<verifyXPath xpath="//strong[text()='#{ordernumber.dynamic}']" description="Verify the Order Number detail" />
+			<verifyXPath xpath="(//table[@class='order-status_table']) [position()=2]" description="Verify Order Status Total Amount is display" />
+			
+		</group>
+			
+		</webtest>
+		
+	</target>
+</project>

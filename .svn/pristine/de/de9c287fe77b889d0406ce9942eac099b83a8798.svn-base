@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchwithFacetFiltering">
+
+	<target name="searchwithFacetFiltering">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />
+			<ifStep description="Check if to invoke url or use search keyword">
+				<condition>
+					<not>
+						<verifyProperty name="invokeurl" value="" propertyType="ant" />
+					</not>					
+				</condition>
+				<then>
+					<invoke url="${invokeurl}" description="Invoke search result by invoking url" />
+					<storeProperty property="searchurl.dynamic" value="${invokeurl}" propertyType="dynamic" description="Store the invoke url"/>
+				</then>
+				<else>
+					&searchKeyword;
+				</else>
+			</ifStep>
+			
+			&searchSetFaceting;
+			
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+			</not>
+			
+			<ifStep description="If Test Case is CRF 47477">
+				<condition>
+					<verifyProperty property="tc.id" value="crf47477" propertyType="ant" description="CRF 47477" />
+				</condition>
+				<then>
+					<retry maxCount="3">
+						<sleep seconds="10"/>
+						<clickElement xpath="//a[text()='Clear All' or contains(@onclick,'clearFacetSelection')]" description="Click Clear All" />
+					</retry>		
+					<retry maxCount="3">
+						<sleep seconds="10"/>
+						<verifyXPath xpath="(//a[text()='#{category1.link}']) [position()=1]" description="Verify the Category facets is returned to previous category" />
+					</retry>	
+				</then>
+			</ifStep>
+			
+			<ifStep description="If Test Case is CRF 47194">
+				<condition>
+					<verifyProperty property="tc.id" value="crf47194" propertyType="ant" description="CRF 47477" />
+				</condition>
+				<then>
+					<clickElement xpath="//a[text()='Clear All' or contains(@onclick,'clearFacetSelection')]" description="Click Clear All" />
+					<not description="Clear All is removed">
+						<verifyXPath xpath="//a[text()='Clear All' or contains(@onclick,'clearFacetSelection')]" description="Verify the Category facets is returned to previous category" />
+					</not>
+					<not description="No Product found page should not be display">
+						<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+					</not>	
+				</then>
+			</ifStep>
+			
+			<ifStep description="If Test Case is CRF 47871">
+				<condition>
+					<verifyProperty property="tc.id" value="crf47871" propertyType="ant" description="CRF 47871" />
+				</condition>
+				<then>
+					<not description="No Product found page should not be display">
+						<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+					</not>
+					<ifStep description="If page is in search result, verify the header search result, else page is in PDP">
+						<condition>
+							<verifyXPath xpath="//h2/a[contains(text(),'${brand}')]" description="Verify the Brand is found in Search Result header" />
+						</condition>
+						<else>
+							<verifyXPath xpath="//span[@itemprop='name' and contains(text(),'${brand}')]" description="Verify the Brand is found in title of  the PDP" />
+						</else>						
+					</ifStep>	
+				</then>
+			</ifStep>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

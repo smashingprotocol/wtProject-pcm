@@ -1,0 +1,6 @@
+<group description="Proceed to Checkout">
+	<clickElement xpath="${unifiedCart.btnCheckout}" description="Click Checkout in Unified Shopping Cart" />
+	<verifyDocumentURL text="https://${host}/o/unifiedWidget-1?opOrigin=processCheckOut" description="Verify Unified Checkout Page" />
+</group>
+	
+	

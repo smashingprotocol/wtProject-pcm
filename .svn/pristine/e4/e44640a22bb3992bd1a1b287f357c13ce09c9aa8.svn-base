@@ -1,0 +1,140 @@
+<group description="Click Express Checkout and check default steps">
+
+		<clickElement xpath="${cart.btnExpressCheckout}" description="Click Express Checkout" />
+
+		<ifStep description="Proceed to 1. Shipping Address if not Set to default">
+			<condition>
+				<verifyProperty name="defaultShipping.dynamic" value="false" description="Verify if Shipping is not set to default" />
+			</condition>
+			<then>
+				<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Shipping Address" regex="true" description="Verify breadcrumbs is Shipping Address page" />
+				<clickElement xpath="id('subAddbut')" description="Enter Continue" />
+			</then>	
+		</ifStep>
+
+		<ifStep description="Proceed to Checkout: 2. Shipping Method if not set to default">
+			<condition>
+				<verifyProperty name="defaultShipMethod.dynamic" value="false" description="Verify if Shipping Method is not set to default" />
+			</condition>
+			<then>
+				<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Shipping Method" regex="true" description="Verify breadcrumbs is Shipping Method page" />
+				<clickElement xpath="id('subShipBut')" description="Enter Continue" />
+			</then>	
+		</ifStep>
+
+		<ifStep description="Proceed to Checkout: 3. Billing and Payment if not set to default">
+			<condition>
+				<verifyProperty name="defaultBilling.dynamic" value="false" description="Verify if Shipping Method is not set to default" />
+			</condition>
+			<then>
+					<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Billing And Payment" regex="true" description="Verify breadcrumbs is Billing And Payment page" />
+					<ifStep description="Select a Saved Payment Method if available">
+						<condition>
+								<verifySelectField xpath="id('_defaultPayment')" text="Select your payment method" description="No Payment Method selected"/>
+						</condition>
+						<then>
+							<setRadioButton xpath="id('ccm')" description="Select Credit Card radiobutton" />
+							<sleep seconds="10"/>
+							<setRadioButton xpath="id('cct_2')" description="Select VISA radiobutton" />
+							<setSelectField xpath="id('ccem')" text="#{ccem.dynamic}" description="Set the Month expiration date" />
+							<setSelectField xpath="id('ccey')" text="#{ccey.dynamic}" description="Set the Year expiration date" />
+							<setInputField xpath="id('cardName')" value="#{cardName.dynamic}" description="Set the Card Name" />
+							<setInputField xpath="id('cardNumber')" value="#{cardNumber.dynamic}" description="Set the Card Number" />
+							<setInputField xpath="id('cardSecCode')" value="#{cardSecCode.dynamic}" description="Set the Card security Code" />
+						</then>
+						<else>
+							<setRadioButton xpath="id('dpm')" description="Select Credit Card radiobutton" />
+							
+						</else>
+					</ifStep>
+				
+					<clickElement xpath="id('conCheckBut')" description="Enter Continue" />
+			</then>		
+		</ifStep>
+
+		<sleep seconds="30"/>
+
+</group>
+
+<group description="Proceed to Checkout: 4. Place Order">
+	<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Verify Order" regex="true" description="Verify breadcrumbs is Verify Order page" />
+	
+	<ifStep description="VerifyTax">
+		<condition>
+			<verifyProperty name="verifytax.dynamic" value="true" description="Verify the tax if has a value or 0" />
+		</condition>
+		<then>
+			<ifStep description="If Tax Free, Tax Amount is 0">
+				<condition>
+					<verifyProperty name="taxfree.dynamic" value="true" description="Verify the tax if has a value or 0" />
+				</condition>
+				<then>
+					<verifyXPath xpath="(//table//span[@class='txtsubtotalVal']) [position()=2]" text="$0.00" description="Verify the amount on the second value sub total" />
+				</then>
+				<else>
+					<not description="Taxt amount should not be 0.00">
+						<verifyXPath xpath="(//table//span[@class='txtsubtotalVal']) [position()=2]" text="$0.00" description="Verify the amount on the second value sub total" />
+					</not>	
+				</else>
+			</ifStep>
+		</then>	
+	</ifStep>
+	
+	<ifStep description="Verify Recycling Fee">
+		<condition>
+			<verifyProperty name="verifyrecyclingfee.dynamic" value="true" description="Verify the tax if has a value or 0" />
+		</condition>
+		<then>
+			<ifStep description="If Recycling Fee included in Sub Total">
+				<condition>
+					<verifyProperty name="recyclingfee.dynamic" value="true" description="Verify the Recycling Fee if included in Sub Total" />
+				</condition>
+				<then>
+					<verifyXPath xpath="//table//td[@class='txtsubtotal' and contains(text(),'Recycling Fee:')]" description="Verify the Recycling Fee label is display" />
+				</then>
+				<else>
+					<not description="Recycling Fee should not be display">
+						<verifyXPath xpath="//table//td[@class='txtsubtotal' and contains(text(),'Recycling Fee:')]" description="Verify the Recycling Fee label is display" />
+					</not>	
+				</else>
+			</ifStep>
+		</then>	
+	</ifStep>
+	
+	
+	<ifStep description="If continue to Place Order">
+		<condition>
+			<verifyProperty name="placeOrder.dynamic" value="true" description="Proceed to Place Order"/>
+		</condition>
+		<then>
+		
+			<ifStep description="If Default payment is selected, reenter security code">
+				<condition>
+					<setInputField xpath="id('txtSecurityCode')" value="#{cardSecCode.dynamic}" description="Re enter Security Code in Verify Order" />
+				</condition>
+				<then>
+					<clickElement xpath="id('submitSecCodeBut')" description="Click Submit button" />
+					<sleep seconds="30"/>
+				</then>
+			</ifStep>
+			
+			<ifStep description="Accept Terms and Sales">
+				<condition>
+					<verifyXPath xpath="id('placeOrderTermsAndConditions')" description="Verify Terms and Sale checkbox" />
+				</condition>
+				<then>
+					<setCheckbox xpath="id('placeOrderTermsAndConditions')" description="Click checkbox Terms and Sale" />
+				</then>
+			</ifStep>
+			
+			<retry maxCount="6" description="Wait for Place order button to appear">
+				<sleep seconds="10"/>
+				<clickElement xpath="id('placeOrderBut')" description="Enter Continue" />
+			</retry>	
+			<sleep seconds="30"/>
+		
+		</then>
+	</ifStep>
+	
+	
+</group>

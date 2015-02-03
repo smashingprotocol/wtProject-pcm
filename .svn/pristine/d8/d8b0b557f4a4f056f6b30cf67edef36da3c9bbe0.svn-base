@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="login">
+
+	<target name="login">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="test">
+			
+			&config;
+			 <invoke url="http://www.wicket-library.com/wicket-examples/ajax/upload?"/>
+			<clickElement xpath="id('id3')"/>
+			<previousResponse/>
+			<verifyText text="This request was processed using AJAX"/>
+			
+		</webtest>
+		
+	</target>
+</project>

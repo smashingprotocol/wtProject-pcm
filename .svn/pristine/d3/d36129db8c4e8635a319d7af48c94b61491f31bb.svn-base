@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="pdpMaxQty">
+
+	<target name="pdpMaxQty">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="PDP: Stop Icon when quantity enter is more than the max available quantity [${sku.maxqty}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="sku.dynamic" value="${sku.maxqty}" propertyType="dynamic"  description="Define Sku to checkout" />
+			<storeProperty name="qty.dynamic" value="999" propertyType="dynamic" description="Define QTY" />
+			
+			&searchSKUOpenPDP;
+			
+			
+			<setInputField name="selectedDPNoQuantity" value="#{qty.dynamic}" description="Enter quantity" />
+			<clickElement xpath="${pdp.btnaddtocart}" description="Click add to cart" />
+			<sleep seconds="10"/>
+			<verifyXPath xpath="//img[@title='STOP']" description="Verify the Stop logo" />
+			
+		</webtest>
+		
+	</target>
+</project>

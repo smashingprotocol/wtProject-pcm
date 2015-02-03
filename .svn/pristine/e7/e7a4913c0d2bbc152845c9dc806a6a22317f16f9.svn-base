@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartAppleCustomizationCodeInvalid">
+
+	<target name="shoppingCartAppleCustomizationCodeInvalid">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="CHECKOUT: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<group description="Define properties">
+					<storeProperty name="username.dynamic" value="${pcmHost}${default.cartusername}" description="Define username to login" />
+					<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+					<storeProperty name="sku.dynamic" value="${sku.withapplecare}" description="Define Sku to checkout" />
+					<storeProperty name="serviceplansku.dynamic" value="${sku.withcustomcode}" description="Define Sku to checkout" />
+					<!--<storeProperty name="firstname.dynamic" value="${firstname}" description="Enter End User First Name" />
+					<storeProperty name="lastname.dynamic" value="${lastname}" description="Enter End User Last Name" />
+					<storeProperty name="phone.dynamic" value="${phone}" description="Enter End User Phone" />
+					<storeProperty name="email.dynamic" value="${email}" description="Enter End User Email" />
+					<storeProperty name="serial.dynamic" value="${serial}" description="Enter End User Serial" />
+					<storeProperty name="date.dynamic" value="${date}" description="Enter End User Purchase Date" /> -->
+					
+			</group>
+			
+			&myAccountLogin;
+			&buyCustomizeAppleAddtoCart;
+
+			<verifyDocumentURL text="/n/Shopping-Cart/msc-cart" regex="true" description="Verify Page is in Shopping Cart" />
+			<clickElement xpath="${cart.btnProceedToCheckout}" description="Click Proceed to Checkout" />
+			
+			<repeat count="6" counterName="colctr" startCount="1" description="Enter a value on each field">
+					<!-- set initial value to empty -->
+					<storeProperty name="field1.dynamic" value="" description="Initialize empty End User First Name" />
+					<storeProperty name="field2.dynamic" value="" description="Initialize empty End User Last Name" />
+					<storeProperty name="field3.dynamic" value="" description="Initialize empty End User Phone" />
+					<storeProperty name="field4.dynamic" value="" description="Initialize empty End User Email" />
+					<storeProperty name="field5.dynamic" value="" description="Initialize empty End User Serial" />
+					<storeProperty name="field6.dynamic" value="" description="Initialize empty End User Purchase Date" />
+					
+					<repeat count="6" counterName="fieldctr" startCount="1" description="Set value to Field #{colctr}">
+						<ifStep description="If to set Field #{colctr}">
+							<condition>
+								<verifyProperty name="colctr" value="#{fieldctr}" description="Enter End User First Name" />
+							</condition>
+							<then>
+								<storeProperty name="field#{fieldctr}.dynamic" value="${c#{colctr}}" description="Enter End User Field #{fieldctr}" />
+							</then>
+							<else>
+								<storeProperty name="field#{fieldctr}.dynamic" value="" description="Enter Empty value User Field #{fieldctr}" />
+							</else>
+						</ifStep>
+					</repeat>	
+						
+					&customCodeFormFillupForm;
+					<verifyXPath xpath="//span[@class='errorText']" description="Validation message appears" />
+					<verifyXPath xpath="id('errorWarn')" description="Validation message appears" />
+					<verifyDocumentURL text="/n/Shopping-Cart/msc-cart" regex="true" description="Verify Page is in Shopping Cart" />
+			</repeat>
+			
+			
+			
+		</webtest>
+		
+	</target>
+</project>

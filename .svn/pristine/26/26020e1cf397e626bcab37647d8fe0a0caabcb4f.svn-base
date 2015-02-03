@@ -1,0 +1,26 @@
+<group description="Open Configure Page by Search">
+		<storeProperty property="search.keyword" value="#{sku.dynamic}" propertyType="dynamic" description="Enter sku in Search field." />
+		&searchKeyword;	
+		<verifyDocumentURL text="http://${host}/s?" regex="true" description="Verify the page is still in Search Results." />
+		<not description="Page is not in PDP URL">
+		<verifyDocumentURL text="http://${host}/p/" regex="true" description="URL for PDP" />
+		</not>
+		<storeElementAttribute xpath="${searchnew.addtocart}" attributeName="id" property="searchAddBtnID" propertyType="dynamic" description="Store the qty box DPNo" />	
+		&searchGetSKUinAddBtn;
+		<setInputField xpath="id('addCartQty#{searchGetSKUinAddBtn.value}')" value="#{searchqty.dynamic}" description="Enter qty" />
+		<clickElement xpath="${searchnew.addtocart}" description="Click Add to cart button on the first list of search result" />
+		
+		<ifStep description="If Modal widget CTO is not available, proceeds to PDP (iPad items)">
+			<condition>
+				<verifyDocumentURL text="http://${host}/p/" regex="true" description="URL for PDP" />
+			</condition>
+			<then>
+				<clickElement xpath="//a[contains(@href,'productConfigurator-ipad-mini-2')]" description="Click Buy Now Customize button in PDP" />
+			</then>
+			<else>
+				<clickElement xpath="${searchcto.configureitembtn}" description="Click Configure Item button on the Modal Widget CTO of Search" />
+				<verifyDocumentURL text="configuratorBaseSkuQty=1&#35;#{sku.dynamic}" regex="true" description="Verify the url configuratorBaseSkuQty parameter" />
+			</else>
+		</ifStep>
+		<verifyDocumentURL text="#{navlinks.dynamic}" regex="true" description="Verify the url navpoint url" />
+</group>

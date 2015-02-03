@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="logout">
+
+	<target name="logout">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="LOGOUT: Verify user ${mmHost}${username} can log out in MacMall">
+		
+			&config;
+			<invoke url="${basepath}" description="Go to MacMall Homepage"/>
+			&macMallLogin;
+			&macMallLogout;
+		
+		</webtest>
+		
+	</target>
+</project>

@@ -1,0 +1,19 @@
+<group description="My Account - Unsubscribe the user.">
+
+	<verifyDocumentURL text="https://${host}/o/My-Account-Dashboard/msc-4" description="verify the My Account URL" />
+
+	<storeProperty property="opStatus" value="subscribed" propertyType="dynamic" description="Store the subscription status of the user"/>
+	<clickLink xpath="//div[@class='account-subscript']//a[contains(text(),'Unsubscribe')]" description="Click Unsubscribe link" />
+	<setCheckbox name="pubIds" value="314" description="Set checkbox" />
+	<setCheckbox name="pubIds" value="allPubIds" description="Set checkbox" />
+	
+	<verifyInputField xpath="id('email')" value="#{username.dynamic}" description="verify the email address of the user" />
+	
+	<clickElement xpath="${btnunsubscribe}" description="Click Unsubscribe" />
+	
+	<verifyXPath xpath="//td[@class='yellowC' and contains(text(),'#{username.dynamic}')]" description="Verify the message that user has been unsubscribe" />
+	
+	<clickLink href="/o/My-Account-Dashboard/msc-4" description="Go back to My Account" />
+	<sleep seconds="15"/>
+	<verifyXPath xpath="//div[@class='account-subscript']//a[contains(text(),'Subscribe')]" description="Verify the Subscribe link in My Account" />
+</group>	

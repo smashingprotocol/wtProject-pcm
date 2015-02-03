@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchNewIpadEPPRedirection">
+
+	<target name="searchNewIpadEPPRedirection">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to ${store} Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />
+			<storeProperty name="ctodialogaction.dynamic" value="${btn.action}" description="Define vto dialog box action" />
+			<storeProperty name="searchqty.dynamic" value="${qty}" description="Define quantity" />			
+			&searchKeyword;
+			
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+			</not>
+			
+			<storeElementAttribute xpath="${searchnew.addtocart}" attributeName="id" property="searchAddBtnID" propertyType="dynamic" description="Store the qty box DPNo" />
+			
+			&searchGetSKUinAddBtn;
+			
+			<setInputField xpath="id('addCartQty#{searchGetSKUinAddBtn.value}')" value="#{searchqty.dynamic}" description="Enter qty" />
+			<clickElement xpath="${searchnew.addtocart}" description="Click Add to cart button on the first list of search result" />
+			
+			<ifStep description="If PCM or PCMG">
+				<condition>
+					<verifyProperty property="store" value="pcmg" propertyType="ant" description="Selected store is pcmg" />
+				</condition>
+				<then description="Site is PCMG">
+					<clickElement xpath="${searchipad.buynoweppbtn}" description="Click Buy Now via Business Direct" />
+					<verifyDocumentURL text="https://${bdHost}/n/Global-Login-Register/bd-120" description="Verify the url of BD site" />
+				</then>
+				<else>
+					<not description="Verify the EPP Modal Widget is not shown">
+						<clickElement xpath="${searchipad.buynoweppbtn}" description="Click Buy Now via Business Direct" />
+					</not>
+					
+					<verifyDocumentURL text="http://${host}/p" regex="true" description="Verify the url is PDP" />
+					<verifyXPath xpath="${pdp.btnbuycustomize}" description="Verify the Buy Now / Customize button" />	
+				</else>
+			</ifStep>
+			
+		</webtest>
+		
+	</target>
+</project>

@@ -1,0 +1,84 @@
+<group description="Input Default Bill to Address Fields">
+
+	<clickElement xpath="id('changeAddbut')" description="Click Change button to open Create Ship Add Form" />
+
+	<retry maxCount="6">
+		<sleep seconds="10"/>
+		<verifyXPath xpath="id('shipOpt')" description="Verify the Shipping Address dropdown appears" />
+	</retry>
+	
+	<ifStep description="If form is create or Edit">
+			<condition>
+				<verifyProperty property="formmode.dynamic" value="edit" description="Flag Create New Add" />
+			</condition>
+			<then>
+				<storeProperty property="shipaddmessage" value="Shipping address changed successfully" propertyType="dynamic" description="Store the message to expect when edit ship add"/>
+				
+				<clickElement xpath="${checkout.linkEditShipAdd}" description="Click Edit Address" />
+				
+				<setInputField xpath="id('shipToAptCompanySuite')" value="#{companyName.dynamic}" description="Enter companyName" />
+				<setInputField xpath="id('shipToStreetAddress')" value="#{addressOne.dynamic}" description="Enter addressOne" />
+				<setInputField xpath="id('shipToAddressTwo')" value="#{addressTwo.dynamic}" description="Enter addressTwo" />
+				<setInputField xpath="id('shipToCity_orig')" value="#{city_orig.dynamic}" description="Enter city_orig" />
+				<setSelectField xpath="id('shipToState_orig')" value="#{state_orig.dynamic}" description="Enter state_orig" />
+				<setInputField xpath="id('shipToZipCode')" value="#{zipCode.dynamic}" description="Enter zipCode" />
+				
+				<setCheckbox xpath="id('saveToMyAcountCbx')" checked="true" description="Save new shipping address as"/>
+				<setInputField xpath="id('saveAsToMyAccount')" value="#{saveAsToMyAccount.dynamic}" description="Enter zipCode" />
+				
+				<setInputField xpath="id('shipToFirstName')" value="#{firstName.dynamic}" description="Enter First Name" />
+				<setInputField xpath="id('shipToMiddleName')" value="#{middleInitial.dynamic}" description="Enter Middle Initial" />
+				<setInputField xpath="id('shipToLastName')" value="#{lastName.dynamic}" description="Enter Last Name" />
+				
+				<setInputField xpath="id('shipToDayAreaCode')" value="#{dayAreaCode.dynamic}" description="Enter dayAreaCode" />
+				<setInputField xpath="id('shipToDayPhone')" value="#{dayPhone1.dynamic}" description="Enter dayPhone1" />
+				<setInputField xpath="id('shipToDayExtension')" value="#{dayPhone2.dynamic}" description="Enter dayPhone2" />
+				<setInputField xpath="id('shipToEveAreaCode')" value="#{eveAreaCode.dynamic}" description="Enter eveAreaCode" />
+				<setInputField xpath="id('shipToEvePhone')" value="#{evePhone1.dynamic}" description="Enter evePhone1" />
+				<setInputField xpath="id('shipToEveExtension')" value="#{evePhone2.dynamic}" description="Enter evePhone2" />
+
+				 <expectDialogs description="set up dialog expectations">
+					<alert description="expect alert with save of dialog message" saveProperty="dialogAlertValidation" />
+				</expectDialogs>
+					
+				<clickElement xpath="${checkout.btnPopupEditShipAddCont}" description="Click Continue Button" />
+				
+			</then>
+			<else>
+				
+				<storeProperty property="shipaddmessage" value="New shipping address added successfully" propertyType="dynamic" description="Store the message to expect when edit ship add"/>
+				
+				<setRadioButton xpath="id('newShipAddRadioBut')" description="Select New Shipping Address" />
+				<sleep seconds="10" />
+				<clickElement xpath="id('subDefShipBut')" description="Click Continue Button" />
+				
+				<setInputField xpath="id('createNewShipAdd')//input[@id='shipToAptCompanySuite']" value="#{companyName.dynamic}" description="Enter companyName" />
+				<setInputField xpath="id('createNewShipAdd')//input[@id='shipToStreetAddress']" value="#{addressOne.dynamic}" description="Enter addressOne" />
+				<setInputField xpath="id('createNewShipAdd')//input[@id='shipToAddressTwo']" value="#{addressTwo.dynamic}" description="Enter addressTwo" />
+				<setInputField xpath="id('createNewShipAdd')//input[@id='shipToCity_orig']" value="#{city_orig.dynamic}" description="Enter city_orig" />
+				<setSelectField xpath="id('createNewShipAdd')//select[@id='shipToState_orig']" value="#{state_orig.dynamic}" description="Enter state_orig" />
+				<setInputField xpath="id('createNewShipAdd')//input[@id='shipToZipCode']" value="#{zipCode.dynamic}" description="Enter zipCode" />
+				
+				<setCheckbox xpath="id('createNewShipAdd')//input[@id='saveToMyAcountCbx']" checked="true" description="Save new shipping address as"/>
+				<setInputField xpath="id('createNewShipAdd')//input[@id='saveAsToMyAccount']" value="#{saveAsToMyAccount.dynamic}" description="Enter zipCode" />
+				
+				<setInputField xpath="id('divRecipientInput')//input[@id='shipToFirstName']" value="#{firstName.dynamic}" description="Enter First Name" />
+				<setInputField xpath="id('divRecipientInput')//input[@id='shipToMiddleName']" value="#{middleInitial.dynamic}" description="Enter Middle Initial" />
+				<setInputField xpath="id('divRecipientInput')//input[@id='shipToLastName']" value="#{lastName.dynamic}" description="Enter Last Name" />
+				
+				<setInputField xpath="id('divRecipientInput')//input[@id='shipToDayAreaCode']" value="#{dayAreaCode.dynamic}" description="Enter dayAreaCode" />
+				<setInputField xpath="id('divRecipientInput')//input[@id='shipToDayPhone']" value="#{dayPhone1.dynamic}" description="Enter dayPhone1" />
+				<setInputField xpath="id('divRecipientInput')//input[@id='shipToDayExtension']" value="#{dayPhone2.dynamic}" description="Enter dayPhone2" />
+				<setInputField xpath="id('divRecipientInput')//input[@id='shipToEveAreaCode']" value="#{eveAreaCode.dynamic}" description="Enter eveAreaCode" />
+				<setInputField xpath="id('divRecipientInput')//input[@id='shipToEvePhone']" value="#{evePhone1.dynamic}" description="Enter evePhone1" />
+				<setInputField xpath="id('divRecipientInput')//input[@id='shipToEveExtension']" value="#{evePhone2.dynamic}" description="Enter evePhone2" />
+				
+				 <expectDialogs description="set up dialog expectations">
+					<alert description="expect alert with save of dialog message" saveProperty="dialogAlertValidation" />
+				</expectDialogs>
+				
+				<clickElement xpath="id('subDefShipBut')" description="Click Continue Button" />
+			</else>
+	</ifStep>	
+
+</group>

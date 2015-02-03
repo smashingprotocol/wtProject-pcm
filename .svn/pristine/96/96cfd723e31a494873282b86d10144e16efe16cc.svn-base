@@ -1,0 +1,7 @@
+<group description="Enter Account and Password in Shopping Cart Page">
+	<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+	<setInputField xpath="id('password')" value="#{password.dynamic}" description="Enter Username" />
+	<clickElement xpath="//input[@id='input-submit']" description="Click Login" /> 
+	<!--<clickElement xpath="//a[@href='/n/Shopping-Cart/msc-cart']" description="Click My Cart"/>
+	<clickElement xpath="${cart.btnProceedToCheckout}" description="Click Proceed to Checkout" />-->
+</group>

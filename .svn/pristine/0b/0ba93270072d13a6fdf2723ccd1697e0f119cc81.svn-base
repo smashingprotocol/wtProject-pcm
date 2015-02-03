@@ -1,0 +1,6 @@
+<group description="Enter Account and Password">
+	<clickLink href="/o/My-Account-Dashboard/macmsc-macmsc.4" description="Click My Account Link" />
+	<setInputField xpath="id('emailAddress')" value="${userName}" description="Enter Username" />
+	<setInputField xpath="id('password')" value="${password}" description="Enter Username" />
+	<clickElement xpath="//input[@src='/mall/widgetti/images/security/signIn/button_sign-in2_70x15.gif']" description="Click Login" />
+</group>

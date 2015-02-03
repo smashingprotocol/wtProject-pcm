@@ -1,0 +1,21 @@
+<group description="Open PDP by SKU Search">
+		<storeProperty property="search.keyword" value="#{sku.dynamic}" propertyType="dynamic" description="Enter sku in Search field." />
+		&searchKeyword;
+			
+		<ifStep description="CRF 47961 - REDESIGN ADD TO CART BUTTON IN SEARCH">
+			<condition>
+				<verifyDocumentURL text="http://${host}/s?" regex="true" description="Verify the page is still in Search Results." />
+				<!--
+				<not description="Not in PDP">
+					<verifyXPath xpath="//b[contains(text(),'#{sku.dynamic}')]" description="Verify the page is in PDP Redesign by verifying the Sku in breadcrumbs" />
+				</not> -->
+				<not description="Page is not in PDP URL">
+				<verifyDocumentURL text="http://${host}/p/" regex="true" description="URL for PDP" />
+				</not>	
+			</condition>
+			<then>
+				<clickElement xpath="//a[contains(@href,'#{search.keyword}') and contains(@href,'/p/')]" description="Click Image or description to go to PDP." /> 
+			</then>
+		</ifStep>
+	
+</group>

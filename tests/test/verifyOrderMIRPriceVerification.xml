@@ -10,7 +10,7 @@
 			<format property="now" pattern="MMdhmS" />
 		</tstamp>
 		
-		<webtest name="VERIFY ORDER: ${title}">
+		<webtest name="VERIFY ORDER: ${title} - ${sku}">
 			
 			&config;
 			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
@@ -20,6 +20,8 @@
 				<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
 				<storeProperty name="sku.dynamic" value="${sku}" description="Define dynamic Sku to checkout" />
 				<storeProperty name="addserviceplan.dynamic" value="${addServicePlan}" description="Define if to add a Serviceplan" />
+				<storeProperty name="listprice.dynamic" value="${listPrice}" description="Define List Price" />
+				
 				
 				<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
 				<storeProperty name="ccey.dynamic" value="2016" description="Define Credit Card Year" />
@@ -44,6 +46,7 @@
 					<not description="PDP Final Price is not negative">
 						<verifyXPath xpath="//div[@class='itemPrice']//p[@class='itemTotalPrice' and contains(text(),'-')]" description="Verify the Unit Price is not Negative" />
 					</not>
+					<verifyXPath xpath="//p[@class='listPrice' and text()='#{listprice.dynamic}']" description="Verify the the List Price." />	
 					<verifyXPath xpath="//div[@class='itemPrice']//p[@class='itemTotalPrice' and text()!='$0.00']" description="Verify the Unit Price is not 0.00" />
 					<verifyXPath xpath="//div[@class='itemPrice']//p[@class='itemTotalPrice' and text()!='#{pdp.finalprice}']" description="Verify the Unit Price in PDP is the prince in the cart" />
 				</then>
@@ -57,6 +60,7 @@
 					<not>
 						<verifyXPath xpath="//div[@class='itemPrice']//p[@class='itemTotalPrice' and contains(text(),'-')]" description="Verify the Unit Price is not negative" />
 					</not>
+					<verifyXPath xpath="//p[@class='listPrice' and text()='#{listprice.dynamic}']" description="Verify the the List Price." />	
 					<verifyXPath xpath="//div[@class='itemPrice']//p[@class='itemTotalPrice' and text()!='$0.00']" description="Verify the Unit Price is not 0.00" />	
 					<verifyXPath xpath="//div[@class='itemPrice']//p[@class='itemTotalPrice' and text()='#{pdp.finalprice}']" description="Verify the Unit Price in PDP can be found in the cart" />
 				</then>
@@ -74,6 +78,7 @@
 					<not description="Verify Order: Sub Total is not negative">
 						<verifyXPath xpath="//p[@id='subTotal' and contains(text(),'-')]" description="Verify the Sub Total is not negative" />						
 					</not>
+					<verifyXPath xpath="//p[@id='subTotal' and text()!='#{listprice.dynamic}']" description="Verify the Sub Total in the Order Review is not the List Price." />
 				</then>
 			</ifStep>
 			
@@ -82,11 +87,13 @@
 					<verifyProperty property="rebateid.dynamic" value="instantrebates" propertyType="dynamic" description="Verify Instant and Mail in Rebate" />
 				</condition>
 				<then>
-					<verifyXPath xpath="//p[@id='subTotal' and text()='#{pdp.finalprice}']" description="Verify the Sub Total in the Order Review is same with the Cart" />
 					<verifyXPath xpath="//p[@id='total' and text()!='$0.00']" description="Verify the Grand Total is not 0" />
 					<not description="Verify Order: Sub Total is not negative">
 						<verifyXPath xpath="//p[@id='subTotal' and contains(text(),'-')]" description="Verify the Sub Total is not negative" />		
 					</not>
+					
+					<verifyXPath xpath="//p[@id='subTotal' and text()='#{pdp.finalprice}']" description="Verify the Sub Total in the Order Review is same with the Cart" />
+					<verifyXPath xpath="//p[@id='subTotal' and text()!='#{listprice.dynamic}']" description="Verify the Sub Total in the Order Review is not the List Price." />
 				</then>
 			</ifStep>
 			

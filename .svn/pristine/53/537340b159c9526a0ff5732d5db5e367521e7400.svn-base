@@ -1,0 +1,10 @@
+<!-- Need to pass the SKU to the facetLinkwithCount.dynamic property, and page should be in shopping cart -->
+<group description="Function to Get count in search Facet Link">
+	<verifyProperty property="facetLinkwithCount.dynamic" propertyType="dynamic" description="Verify facetLinkwithCount.dynamic property is defined" />
+	<scriptStep description="Store the match count" language="javascript">
+		var strfacetLinkwithCount = step.getWebtestProperty('facetLinkwithCount.dynamic');
+		var strfacetLinkwithCount = strfacetLinkwithCount.replaceAll("[A-Za-z,(,),_]", "");
+		step.setWebtestProperty('searchGetFacetLinkCount.value',strfacetLinkwithCount);
+	</scriptStep>
+	<echo message="#{searchGetFacetLinkCount.value}"/>
+</group>

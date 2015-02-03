@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchCategoryPageNextPage">
+
+	<target name="searchCategoryPageNextPage">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			
+			<storeProperty name="mainmenu.dynamic" value="${category.href}" description="Define Main Menu Category" />
+			<storeProperty name="isSpecialOffer.dynamic" value="${isSpecialOffer}" description="If to select Brands" />
+			<storeProperty name="isRelatedCategory.dynamic" value="${isRelatedCategory}" description="If to select Price Range" />
+			<storeProperty name="isCondition.dynamic" value="${isCondition}" description="If to select Condition" />
+			
+			
+			<!--<clickElement xpath="//a[@href='#{mainmenu.dynamic}']" description="This will click Main Menu under Categories Header Menu"/>-->
+			<invoke url="#{mainmenu.dynamic}" description="This will click Main Menu under Categories Header Menu"/>
+			<storeProperty property="searchurl.dynamic" value="#{mainmenu.dynamic}" propertyType="dynamic" description="store the url" />
+		
+			<ifStep description="If to select SpecialOffer">
+				<condition>
+					<verifyProperty property="isSpecialOffer.dynamic" value="true" description="If isSpecialOffer is set to true" />
+				</condition>
+				<then>
+					<storeElementAttribute xpath="(//div[@class='ibx ibxtwo']//a) [position()=1]" property="searchurl.dynamic" attributeName="href" propertyType="dynamic" description="CLick the 1st link From Special Offers" />
+					<clickElement xpath="(//div[@class='ibx ibxtwo']//a) [position()=1]" description="CLick the 1st link From Special Offers" />
+					<not description="No Product found page should not be display">
+						<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+						<verifyXPath xpath="//span[contains(text(),'No products found for keyword')]" description="XPath for No product found page"  />
+						<verifyXPath xpath="count(//div[@class='itemlist lst'])" text="0" description="Item on list are 0"/>
+					</not>
+					
+				</then>
+			</ifStep>
+			
+			<ifStep description="If to select Related Categories">
+				<condition>
+					<verifyProperty property="isRelatedCategory.dynamic" value="true" description="If isRelatedCategory is set to true" />
+				</condition>
+				<then>
+					<storeElementAttribute xpath="(//div[@class='ibx ibxtwo']//a) [position()=5]" property="searchurl.dynamic" attributeName="href" propertyType="dynamic" description="CLick the 5th link From Special Offers up to Related Category" />
+					<clickElement xpath="(//div[@class='ibx ibxtwo']//a) [position()=5]" description="CLick the 5th link From Special Offers up to Related Category" />
+					<not description="No Product found page should not be display">
+						<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+						<verifyXPath xpath="//span[contains(text(),'No products found for keyword')]" description="XPath for No product found page"  />
+						<verifyXPath xpath="count(//div[@class='itemlist lst'])" text="0" description="Item on list are 0"/>
+					</not>
+				</then>
+			</ifStep>
+			
+			<clickElement xpath="id('toolbarNextPage')" description="click next page" />
+			<invoke url="#{searchurl.dynamic}&amp;numPerPage=25&amp;showFacetStatus=show&amp;resultViewType=list&amp;isAutoExpandDisabled=false&amp;callerWidget=toolbar&amp;op=zones.SearchResults.pageNo&amp;pageNo=2" description="Force page to go to the 2nd page, problem with htmlunit buttons shows 0 results" />
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+				<verifyXPath xpath="//span[contains(text(),'No products found for keyword')]" description="XPath for No product found page"  />
+				<verifyXPath xpath="count(//div[@class='itemlist lst'])" text="0" description="Item on list are 0"/>
+			</not>
+			
+			
+			
+			
+		</webtest>
+		
+	</target>
+</project>

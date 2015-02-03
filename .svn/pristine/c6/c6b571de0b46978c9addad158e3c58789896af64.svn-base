@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="createAccountNewInvalidDataValidation">
+
+	<target name="createAccountNewInvalidDataValidation">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="CREATE ACCOUNT [NEW]: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go new Create Account Page"/>
+			<enableJavaScript enable="false" />
+			<clickLink href="https://${host}/o/Create-New-Account-With-Billing-and-Shipping/msc-135" description="Go new Create Account Page"/>
+			
+			
+			
+			<storeProperty name="firstName.dynamic" value="${firstName}" propertyType="dynamic" description="firstName" />
+			<storeProperty name="lastName.dynamic" value="${lastName}" propertyType="dynamic" description="lastName" />
+			<storeProperty name="userEmail.dynamic" value="${userEmail}" propertyType="dynamic" description="userEmail" />
+			<storeProperty name="caConEmail.dynamic" value="${userEmailReenter}" propertyType="dynamic" description="userEmail" />
+			<storeProperty name="userPassword.dynamic" value="${userPassword}" propertyType="dynamic" description="userPassword" />
+			<storeProperty name="userPasswordReenter.dynamic" value="${userPasswordReenter}" propertyType="dynamic" description="userPasswordReenter" />
+			<storeProperty name="msgid.dynamic" value="${msg.id}" propertyType="dynamic" description="userPasswordReenter" />
+			
+		
+			&createAccountNewSetData;
+			
+		</webtest>
+		
+		
+	</target>
+</project>

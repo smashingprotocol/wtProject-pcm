@@ -1,0 +1,44 @@
+<group description="Proceed to Checkout: 3. Billing and Payment">
+	<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Billing And Payment" regex="true" description="Verify breadcrumbs is Billing And Payment page" />
+	
+	<ifStep description="If to Verify the selected a Billing Address by optionIndex">
+		<condition>
+			<verifyProperty name="verifyBilling.dynamic" value="true" description="Verify the selected Biling Address" />
+		</condition>
+		<then>
+			<verifySelectField xpath="id('billOpt')" text="#{billText.dynamic}" description="Select a Billing Address by option index count" /> 
+		</then>
+	</ifStep>
+	
+	<ifStep description="If to Select a Billing Address by optionIndex">
+		<condition>
+			<verifyProperty name="selectBilling.dynamic" value="true" description="Verify if to select a Biling Address" />
+		</condition>
+		<then>
+			<storeXPath xpath="id('billOpt')/option[#{billingOptionIndex.dynamic}]" property="billText" propertyType="dynamic" />
+			<setSelectField xpath="id('billOpt')" text="#{billText}" description="Select a Billing Address by option index count" /> 
+		</then>
+	</ifStep>
+	
+	<verifyXPath xpath="//strong[text()='PayPal Credit']" description="Verify the PayPal Credit label radiobutton" />
+	<setRadioButton xpath="id('bmlm')" description="Select PayPal Credit"/>
+	
+	<setSelectField xpath="id('bml_em')" value="#{ppcMonth.dynamic}" description="Enter Month" />
+	<setSelectField xpath="id('bml_ed')" value="#{ppcDay.dynamic}" description="Enter Day" />
+	<setSelectField xpath="id('bml_ey')" value="#{ppcYear.dynamic}" description="Enter Year" />
+	<setInputField xpath="id('ssnBml')" value="#{ppcSSN.dynamic}" description="Enter SSN" />
+	
+	<forceInputFieldAttribute name="signBml" attributeName="disabled" attributeValue=""/>
+	<setCheckbox xpath="id('signBml')" description="Accept Terms" />
+	<clickElement xpath="id('conCheckBut')" description="Enter Continue" />
+
+	<retry maxCount="4">
+		<sleep seconds="3"/>
+		<not description="Page should not be Billing and Payment anymore">	
+			<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Billing And Payment" regex="true" description="Verify breadcrumbs is Billing And Payment page" />
+		</not>
+	</retry>	
+</group>
+
+
+

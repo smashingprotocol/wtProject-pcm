@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="myAccountSubscribeUnsubscribe">
+
+	<target name="myAccountSubscribeUnsubscribe">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="MY ACCOUNT: Verify User can subsribe and unsubscribe [${host}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${pcmHost}${default.username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${defaultPassword}" description="Define password to login" />
+			
+			&myAccountLogin;
+		
+			
+		<group description="My Account">
+			<clickLink href="/o/My-Account-Dashboard/msc-4" description="Click My Account" />
+			<sleep seconds="15"/>
+			<ifStep description="Store the subscription state of the user">
+				<condition>
+					<verifyXPath xpath="//div[@class='account-subscript']//a[contains(text(),'Unsubscribe')]" description="Verify the link is Unsubscribe, proceed to Unsubscribing the user"/>
+				</condition>
+				<then>
+					&unsubscribe;
+				</then>
+				<else>
+					&subscribe;
+				</else>
+			</ifStep>
+		</group>
+			
+		</webtest>
+		
+	</target>
+</project>

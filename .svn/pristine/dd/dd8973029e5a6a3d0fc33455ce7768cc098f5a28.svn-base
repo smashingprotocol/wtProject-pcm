@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="resourcesVideoLibraryLogin">
+
+	<target name="resourcesVideoLibraryLogin">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="RESOURCE CENTER: ${title} [${host}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+			
+			
+			
+			<invoke url="/n/Video-Center/navLinks-419?op=zones.videoInfoBox.videoInfoBox&amp;videoId=361&amp;isLink=false#tab2" description="Invoke Video Center" />
+			<clickElement xpath="${videocenter.btnlogin}" description="Click the Login Button"/>
+			
+			<group description="Check if users successfully logs In">
+				&cartCheckoutLogin;
+				<ifStep description="Check if user able to login">
+					<condition>
+						<verifyProperty name="login" value="true" propertyType="ant"/>
+					</condition>
+					<then>	
+						<verifyXPath xpath="//h1[text()='Video Center']" description="Verify the Video Center header." />
+						<not description="Login field is not display">
+							<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+						</not>
+					</then>
+					<else>
+						<verifyXPath xpath="//p[@class='wcR']" text="Invalid email address or password." description="Validation message appears" />
+						<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+					</else>
+				</ifStep>				
+			</group>
+		
+		</webtest>
+		
+	</target>
+</project>

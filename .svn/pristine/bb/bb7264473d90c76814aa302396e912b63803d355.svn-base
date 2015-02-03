@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="myAccountVerifyOrderStatus">
+
+	<target name="myAccountVerifyOrderStatus">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="MY ACCOUNT: Verify Order Status [${host}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="manilaqa+voidpcm@gmail.com" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="123456" description="Define password to login" />
+			
+			&myAccountLogin;
+		
+			
+		<group description="Order Status Page and View Order">
+			<clickLink href="/o/Order-Summary/msc-33" description="Click Order Status" />
+			<verifyXPath xpath="//h1[text()='Order Summary']" description="Verify Order Summary page" />
+			<storeXPath xpath="(//div[@class='order-summary']//table//td[contains(text(),'W')]) [position()=1]" property="orderNo" propertyType="dynamic" description="Store the first order number in the list." />
+			<clickLink xpath="//a[contains(@href,'#{orderNo}')]" description="Click the View Order of #{orderNo}" />
+			<verifyXPath xpath="//strong[text()='#{orderNo}']" description="Verify the Order Number detail" />
+			<verifyXPath xpath="//td[@class='order-status-status' and contains(text(),'Cancelled')]" description="Verify the status of the order is cancelled" />
+		</group>
+			
+		</webtest>
+		
+	</target>
+</project>

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="loginSingleSignOn">
+
+	<target name="loginSingleSignOn">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="NEW LOGIN: ${title} [${pcmHost}${username}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			<storeProperty name="isSiteSelector.dynamic" value="${isSiteSelector}" description="Define password to login" />
+			<storeProperty name="siteLogin.dynamic" value="${siteLogin}" description="Define password to login" />
+			
+			<invoke url="/o/New-sign-in-with-selector/msc-login-selector" description="Invoke login page" />
+			&invokePostNewLoginwithSS;
+	
+			<ifStep description="Site redirection">
+				<condition>
+					<verifyProperty name="siteLogin.dynamic" value="pcm" propertyType="dynamic"/>
+				</condition>
+				<then>
+					<verifyDocumentURL text="${host}" regex="true" description="Site is PCM"/>
+					<verifyXPath xpath="//a[@class='sgn-out']" description="Sign out link" />
+				</then>
+				<else>
+					<retry maxCount="3">
+						<sleep seconds="15"/>
+						<verifyDocumentURL text="${bdHost}" regex="true" description="Site is BD PCM"/>
+					</retry>
+
+					<not description="BD Login form should not appear">
+						<verifyXPath xpath="id('bdLoginForm')" description="BD Login Form" />
+					</not>
+				</else> 
+			</ifStep>
+		
+		</webtest>
+		
+	</target>
+</project>

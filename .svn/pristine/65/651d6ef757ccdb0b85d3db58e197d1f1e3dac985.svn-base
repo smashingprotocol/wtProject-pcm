@@ -1,0 +1,29 @@
+<group description="Clear Cart">
+	<!--<clickLink href="/n/Shopping-Cart/msc-cart" description="Click My Cart"/> -->
+	<clickElement xpath="//a[@href='/n/Shopping-Cart/msc-cart']" description="Click My Cart"/>
+	&verifyStoreCookies;			
+		<ifStep>
+			<condition>
+				<verifyXPath xpath="//input[contains(@id,'cartStaticQty')]" description="Qty field"/>
+			</condition>
+			<then>
+				<clickLink xpath="${cart.btnclearcart}" description="Click Clear Cart button"  />
+				<sleep seconds="3"/>
+				<ifStep>
+					<condition>
+						<clickElement xpath="id('removeAllConfirmed')" description="Click Remove Items on Popup to clear cart." />
+					</condition>
+				</ifStep>
+				<verifyText text="empty" />
+			</then>
+			<else>
+				<verifyText text="empty" />
+			</else>
+		</ifStep>
+
+	<!--<clickLink href="/home" description="Go to homepage"/> -->
+	
+</group>
+
+			
+

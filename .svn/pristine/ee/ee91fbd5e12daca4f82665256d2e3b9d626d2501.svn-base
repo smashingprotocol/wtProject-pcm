@@ -1,0 +1,29 @@
+<group description="My Account - Change Default Address in Address Book">
+	<clickElement xpath="${myaccount.link}" description="Click My Account Link" />
+	<clickElement xpath="//a[contains(text(),'Manage My Address Book')]" description="Click Manage My Address Book" />
+	
+	<ifStep description="Check if The City is already the default Ship Address">
+		<condition>
+			<verifyXPath xpath="//div[@class='addBookListDefault']//span[contains(text(),'#{city.dynamic}')]" description="Verify the default Address City" />
+			
+		</condition>
+		<then>
+			<echo message="Default Ship Address is #{city.dynamic}" />
+		</then>
+		<else>
+			<storeElementAttribute xpath="(//span[contains(text(),'#{city.dynamic}')]) [position()=1]" attributeName="id" property="span.id" description="Store the id of the span containing the City" />
+			<scriptStep description="Store the Address ID" language="javascript">
+				var straddid = step.getWebtestProperty('span.id');
+				var straddid = straddid.replaceAll("[A-Za-z,(,),_]", "");
+				step.setWebtestProperty('addID',straddid);
+			</scriptStep>
+			<echo message="#{addID}"/>
+			<clickElement xpath="//a[contains(@href,'#{addID}') and contains(@href,'setDefault')]" description="Click the set default link of the address with the city specified" />
+		</else>
+	</ifStep>
+	
+	<retry maxCount="3">
+		<sleep seconds="10"/>
+		<verifyXPath xpath="//div[@class='addBookListDefault']//span[contains(text(),'#{city.dynamic}')]" description="Verify the default Address City" />
+	</retry>	
+</group>

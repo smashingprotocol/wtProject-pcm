@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="categoryPageSearchRedirection">
+
+	<target name="categoryPageSearchRedirection">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			
+			<storeProperty name="mainmenu.dynamic" value="${category.href}" description="Define Main Menu Category" />
+			<invoke url="#{mainmenu.dynamic}" description="This will click Main Menu under Categories Header Menu"/>
+			<storeProperty property="searchurl.dynamic" value="#{mainmenu.dynamic}" propertyType="dynamic" description="store the url" />
+		
+			<storeXPath xpath="count(//div[@class='ibx ibxtwo']//a)" property="linkcount.dynamic" description="Store the numbers of facets link in Category Page" />
+			
+			<repeat count="#{linkcount.dynamic}" counterName="ctr" startCount="1" >
+				
+				<clickElement xpath="(//div[@class='ibx ibxtwo']//a) [position()=#{ctr}]" description="CLick the 1st link From Special Offers" />
+				<not description="No Product found page should not be display">
+					<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+					<verifyXPath xpath="//span[contains(text(),'No products found for keyword')]" description="XPath for No product found page"  />
+					<verifyXPath xpath="count(//div[@class='itemlist lst'])" text="0" description="Item on list are 0"/>
+				</not>
+				
+				<invoke url="#{mainmenu.dynamic}" description="This will return to Category Page"/>
+				
+			</repeat>
+			
+			
+			
+			
+			
+		</webtest>
+		
+	</target>
+</project>

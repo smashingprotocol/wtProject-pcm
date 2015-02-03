@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="shoppingCartVerifyAvailableShippingMethod">
+
+	<target name="shoppingCartVerifyAvailableShippingMethod">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SHOPPING CART: ${title} [ZipCode: ${zipCode}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			&clearCart;
+			<storeProperty name="sku.dynamic" value="${sku}" description="Define Dynamic Sku" />
+			
+		
+			<storeProperty property="cartSku.dynamic" value="#{sku.dynamic}" description="Store other property not set under cart form - SKU NO" />
+			<storeProperty property="zipCode.dynamic" value="${zipCode}" description="Store other property not set under cart form - ZIPCODE" />
+			<storeProperty property="couponCode.dynamic" value="" description="Store other property not set under cart form - COUPON CODE" />
+			<storeProperty property="opType.dynamic" value="" description="Store other property not set under cart form - OPTYPE" />
+				
+			<storeProperty name="quickaddsku.dynamic" value="#{sku.dynamic}" propertyType="dynamic" description="Define Sku to quick add" />
+			<storeProperty property="qty.dynamic" value="${qty}" description="Store the quantity." />
+		
+			&quickAddCart;
+			
+			<!-- get the dpno in cart page -->
+			<storeProperty property="cartDPNo.dynamic" value="#{sku.dynamic}" description="Store the sku of test item" />
+			&getEDPofCartDPNo;
+			<storeProperty property="cartEdp.dynamic" value="#{cartEDPNo}" description="Store other property not set under cart form - EDP" />
+			
+			<ifStep description="Update sku quantity">
+				<condition>
+					<verifyProperty property="qty.dynamic" value="1" description="Verify the quantity field" />
+				</condition>
+				<else>
+					<setInputField xpath="id('cartStaticQty_#{cartEdp.dynamic}')" value="#{qty.dynamic}" description="enter a value on the qty field."/>
+					<clickElement xpath="//a[@onclick='javascript:updateEdp(#{cartEdp.dynamic});']" description="Click update" />
+				</else>
+			</ifStep>
+			
+			&invokePostProcessCart;
+			
+			<verifyXPath xpath="//select[@name='shippingMethod']//option" description="Verify first the Shipping method dropdown appears." />
+			
+			<repeat count="${shipmethod.ctr}" counterName="ctr.shipmethod" startCount="1" description="Get All the Shipping method in Pcmall properties">
+				<ifStep description="Check if shipping method is not available in the dropdown [FALSE]">
+					<condition>
+						<verifyProperty property="isshipmethod.#{ctr.shipmethod}" propertyType="ant" value="false" description="Verify if the Shipping Method is false in the excel dynamic value" />
+					</condition>
+					<then>
+						<not description="Verify ${shipmethod.#{ctr.shipmethod}} is not available" >
+							<verifyXPath xpath="//select[@name='shippingMethod']//option[contains(text(),'${shipmethod.#{ctr.shipmethod}}')]" description="Verify if ${shipmethod.#{ctr.shipmethod}}"/>
+						</not>	
+					</then>
+				</ifStep>
+				
+				<ifStep description="Check if shipping method is available in the dropdown [TRUE]">
+					<condition>
+						<verifyProperty property="isshipmethod.#{ctr.shipmethod}" propertyType="ant" value="true" description="Verify if the Shipping Method is false in the excel dynamic value" />
+					</condition>
+					<then>
+						<verifyXPath xpath="//select[@name='shippingMethod']//option[contains(text(),'${shipmethod.#{ctr.shipmethod}}')]" description="Verify if ${shipmethod.#{ctr.shipmethod}}"/>
+					</then>
+				</ifStep>
+			
+			</repeat>
+				
+			
+			
+		</webtest>
+		
+	</target>
+</project>

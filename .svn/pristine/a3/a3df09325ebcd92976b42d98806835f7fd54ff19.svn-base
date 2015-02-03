@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="searchResultPDPManufacturer">
+
+	<target name="searchResultPDPManufacturer">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="SEARCH: ${title}">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			
+			<storeProperty name="search.keyword" value="${keyword}" description="Define keyword to search" />
+			&searchKeyword;
+			
+			<verifyXPath xpath="//div[@class='pcmallpartupc']//li[contains(text(),'#{search.keyword}')]" description="SKU is found in PDP Page" />
+			<clickLink xpath="(//a[text()='${brand}']) [position()=1]" description="Click The Manufacturer link in the PDP" />
+			
+			<clickElement xpath="//a[text()='Clear All']" description="Click Clear All" />
+			<not description="Clear All is removed">
+				<verifyXPath xpath="//a[text()='Clear All']" description="Verify the Clear All link is removed." />
+			</not>
+			<not description="No Product found page should not be display">
+				<verifyXPath xpath="//table[@class='search_body']//strong[contains(text(),'No products found for')]" description="XPath for No product found page" />
+			</not>	
+			
+		</webtest>
+		
+	</target>
+</project>

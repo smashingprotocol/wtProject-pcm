@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="homepagePcmNotRedirecttoHome">
+
+	<target name="homepagePcmNotRedirecttoHome">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="HOMEPAGE: PCM Site redirection [${host}]">
+			
+			&config;
+			<group description="Access PCM Site without /home" >
+				<invoke url="/" description="Go to PCMall without home"/>
+				<not description="Page not found is not display">
+					<verifyXPath xpath="//span[contains(text(),'we were unable to find the page you requested.')]" />
+				</not>
+				<verifyDocumentURL text="http://${host}/" description="Verify the PCM.COM didn't redirect to home" />
+			</group>
+			
+			<group description="Access PCM Site with /home">
+				<invoke url="/home" description="Go to PCMall with home"/>
+				<not description="Page not found is not display">
+					<verifyXPath xpath="//span[contains(text(),'we were unable to find the page you requested.')]" />
+				</not>
+				<verifyDocumentURL text="http://${host}/home" description="Verify the PCM.COM redirect to home" />
+			</group>
+			
+		</webtest>
+		
+	</target>
+</project>

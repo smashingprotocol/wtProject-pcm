@@ -1,0 +1,53 @@
+<group description="Enter Fields to Create Account">
+	
+	<setInputField name="firstName" value="#{firstName.dynamic}" description="firstName" />
+	<setInputField xpath="id('lastName')" value="#{lastName.dynamic}" description="lastName" />
+	<setInputField xpath="id('userEmail')" value="#{userEmail.dynamic}" description="userEmail" />
+	<setInputField xpath="id('caConEmail')" value="#{caConEmail.dynamic}" description="userEmail" />
+	<setInputField xpath="id('userPassword')" value="#{userPassword.dynamic}" description="userPassword" />
+	<setInputField xpath="id('userPasswordReenter')" value="#{userPasswordReenter.dynamic}" description="userPasswordReenter" />
+	
+	<scriptStep description="Convert the characters to encodeURI to use in parameter" language="javascript">
+		var strEmail = step.getWebtestProperty('userEmail.dynamic');
+		var strEmail = encodeURIComponent(strEmail);
+		step.setWebtestProperty('userEmail.dynamic',strEmail);
+		
+		var strFirstName = step.getWebtestProperty('firstName.dynamic');
+		var strFirstName = encodeURIComponent(strFirstName);
+		step.setWebtestProperty('firstName.dynamic',strFirstName);
+		
+		var strLastName = step.getWebtestProperty('lastName.dynamic');
+		var strLastName = encodeURIComponent(strLastName);
+		step.setWebtestProperty('lastName.dynamic',strLastName);
+	</scriptStep>
+	<enableJavaScript enable="true" />
+	<invoke url="https://${host}/ajaxCall/validation" content="email=#{userEmail.dynamic}&amp;firstName=#{firstName.dynamic}&amp;lastName=#{lastName.dynamic}" method="POST" />
+	
+	
+	<ifStep description="Message is for Required characters">
+		<condition>
+			<verifyProperty property="msgid.dynamic" value="required" description="Required Characters" />
+		</condition>
+		<then>
+			<verifyText text="First Name cannot be empty" regex="true" description="First Name validation message in json" />
+			<verifyText text="Last Name cannot be empty" regex="true" description="Last Name validation message in json" />
+			<verifyText text="Email cannot be empty" regex="true" description="Email validation message in json" />
+		</then>
+	</ifStep>
+	
+	<ifStep description="Message is for Invalid characters">
+		<condition>
+			<verifyProperty property="msgid.dynamic" value="invalid" description="Required Characters" />
+		</condition>
+		<then>
+			<verifyText text="are supported in the field First Name" regex="true" description="First Name validation message in json" />
+			<verifyText text="are supported in the field Last Name" regex="true" description="Last Name validation message in json" />
+			<verifyText text="Please enter a valid Email" regex="true" description="Email validation message in json" />
+		</then>
+	</ifStep>
+	
+	
+	
+</group>
+
+

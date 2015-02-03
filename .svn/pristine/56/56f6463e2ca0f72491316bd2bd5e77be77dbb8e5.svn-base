@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="verifyOrderDeletedItemUpdatedComputation">
+
+	<target name="verifyOrderDeletedItemUpdatedComputation">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="VERIFY ORDER: ${title}.">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			<storeProperty name="username.dynamic" value="manilaqa+${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+
+			<storeProperty name="shippingMethod.dynamic" value="${shippingMethod}" description="Define Sku to checkout" />
+	
+			&myAccountLogin;
+			<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+			&addtoCartPDPSearchSKU;
+			<storeProperty name="sku.dynamic" value="${sku.freeshipping}" description="Define Sku to checkout" />
+			&addtoCartPDPSearchSKU;
+			<storeProperty name="cartDPNo.dynamic" value="${sku.freeshipping}" description="Define Sku to get the PDP No" />
+			&getEDPofCartDPNo;
+			
+			<storeProperty name="ccem.dynamic" value="December" description="Define Credit Card Month" />
+			<storeProperty name="ccey.dynamic" value="2015" description="Define Credit Card Year" />
+			<storeProperty name="cardName.dynamic" value="Marlon Palo" description="Define Credit Card Name" />
+			<storeProperty name="cardNumber.dynamic" value="4111111111111111" description="Define Credit Card Number" />
+			<storeProperty name="cardSecCode.dynamic" value="123" description="Define Credit Card Number" />
+			<storeProperty name="placeOrder.dynamic" value="false" description="Define Credit Card Number" />
+			
+			&proceedtoCheckout;
+			
+			<group description="Change City first to taxable"> <!-- California -->
+				<verifyXPath xpath="(//table//span[@class='txtsubtotalVal']) [position()=3]" text="$0.00" description="Verify the Shipping Fee is 0.00 "/>
+				<storeProperty name="city.dynamic" value="${city.withtax}" description="Define City  that contains the address." />
+				&verifyOrderChangeAddressbyCity;
+				
+				<!-- delete item-->
+				<setInputField name="qty_#{cartEDPNo}" value="0" description="Enter 0 qty to delete item"/>
+				<clickElement xpath="//img[@id='updateCart']" />
+				
+				<not>
+					<verifyXPath xpath="(//table//span[@class='txtsubtotalVal']) [position()=3]" text="$0.00" description="Verify the Shipping Fee is 0.00 "/>
+				</not>
+				<not description="No Recycling Fee">
+					<verifyXPath xpath="//td[@class='txtsubtotal' and contains(text(),'Recycling Fee')]" description="Verify the Recycling Fee Label"/>
+					<verifyXPath xpath="(//table//span[@class='txtsubtotalVal']) [position()=4]" description="Verify the Recycling Fee"/>
+				</not>
+			</group>
+		</webtest>
+		
+	</target>
+</project>

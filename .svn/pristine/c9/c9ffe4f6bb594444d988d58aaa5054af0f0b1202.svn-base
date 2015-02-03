@@ -1,0 +1,12 @@
+<config
+host="${host}"
+protocol="${protocol}"
+port="${port}"
+browser="${browser}"
+easyajax="true"
+useInsecureSSL="true">
+
+<option name="ThrowExceptionOnScriptError" value="false"/>
+<option name="ThrowExceptionOnFailingStatusCode" value="false"/>
+
+</config>

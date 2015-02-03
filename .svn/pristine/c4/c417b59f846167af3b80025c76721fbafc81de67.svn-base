@@ -1,0 +1,16 @@
+<group description="Enter Credit Card Details">
+	<verifyDocumentURL text="https://${host}/o/Payment/macmsc-macmsc.45" />	
+	<setRadioButton name="cardType" value="${cardType}" />
+	<setSelectField name="expireMonth" text="${expireMonth}" />
+	<setSelectField name="expireYear" text="${expireYear}" />
+	<setInputField name="nameOnCard" value="${nameOnCard}" />
+	<setInputField name="cardNumber" value="${cardNumber}" />
+	<setInputField name="cardSecCode" value="${cardSecCode}" />
+	<clickElement xpath="id('continue')" description="Click Continue button" />
+	
+	<not>
+		<verifyXPath xpath="id('paymentMessage')" text="We are sorry you are having trouble entering your card data." description="Verify if Credit card has error" />
+	</not>
+	
+	&noExceptions;
+</group>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<overview Implementation-Title="Canoo Webtest" Implementation-Version="R_1825">
+	<folder name="001_VERIFYORDERWithListPriceAndMAPPrice">
+<summary duration='287576' starttime='Mon Feb 02 11:36:47 SGT 2015' name='VERIFY ORDER: With List Price and MAP Price.' successful='yes'><topsteps total='15' notexecuted='0' failed='0' successful='15'></topsteps><steps total='199' notexecuted='45' failed='20' successful='134'></steps><timingprofile number='9' average='24466'><range to='1' number='0' from='0'></range><range to='3' number='0' from='1'></range><range to='5' number='8' from='3'></range><range to='10' number='8' from='5'></range><range to='30' number='4' from='10'></range><range number='3' from='30'></range></timingprofile></summary>
+</folder>
+
+</overview>

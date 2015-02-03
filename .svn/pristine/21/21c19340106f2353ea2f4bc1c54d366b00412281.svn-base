@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="cartCheckoutLogin">
+
+	<target name="cartCheckoutLogin">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="CHECKOUT LOGIN: ${title} [${host}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCMall Homepage"/>
+			
+			<storeProperty name="sku.dynamic" value="${defaultSku}" description="Define Sku to checkout" />
+			&addtoCartPDPSearchSKU;
+			
+			<ifStep description="Express Checkout or Proceed to Checkout">
+				<condition>
+					<verifyProperty name="checkout" value="express" propertyType="ant"/>
+				</condition>
+				<then>
+					<clickElement xpath="${cart.btnExpressCheckout}" description="Click Express Checkout" />
+					<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Sign-In CheckOut" regex="true" description="Verify breadcrumbs is Sign-In Checkout page" />
+				</then>
+				<else>
+					<clickElement xpath="${cart.btnProceedToCheckout}" description="Click Proceed to Checkout" />
+					<verifyXPath xpath="//span[@class='breadCrumbsTitle']" text="Sign-In CheckOut" regex="true" description="Verify breadcrumbs is Sign-In Checkout page" />
+				</else>
+			</ifStep>
+			
+			
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			&cartCheckoutLogin;
+		
+			
+		<group description="Check if users successfully logs In">
+			<ifStep description="If successful login">
+				<condition>	
+					<verifyProperty name="login" value="true" propertyType="ant"/>
+				</condition>
+				<then>
+					<not description="Login field should not be visible">
+						<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+					</not>
+					<clickLink href="/n/Shopping-Cart/msc-cart" description="Click View Cart" />
+					<verifyXPath xpath="//div[@class='txtpcmallpart' and contains(text(),'#{sku.dynamic}')]" description="Verify the Sku number in PDP" />	
+				</then>
+				<else>
+					<verifyXPath xpath="//p[@class='wcR']" text="Invalid email address or password." description="Validation message appears" />
+					<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+				</else>
+			</ifStep>
+			
+		</group>
+		
+		</webtest>
+		
+	</target>
+</project>

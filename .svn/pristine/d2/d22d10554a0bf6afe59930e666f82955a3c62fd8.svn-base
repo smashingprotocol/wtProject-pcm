@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="homepageAlive">
+
+	<target name="homepageAlive">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="HOMEPAGE: [${store}] ${host} site is accessible [${hostip}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+		
+			<not description="Page not found is not display">
+				<verifyXPath xpath="//span[contains(text(),'we were unable to find the page you requested.')]" />
+			</not>
+			
+			<setInputField xpath="id('search-menu-9')//input" value="computer" description="Searchbox is shown"/>
+			
+			
+		</webtest>
+		
+	</target>
+</project>

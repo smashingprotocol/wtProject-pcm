@@ -1,0 +1,9 @@
+<group description="Click Logout button">
+	<clickLink href="?op=mall.web.common.signInLink.signInLink&amp;reqOp=logOut" description="Click Logout." />
+</group>
+
+<group description="Check if users logged out">
+	<clickLink href="/o/My-Account-Dashboard/macmsc-macmsc.4" description="Click My Account Link" />
+	<verifyInputField xpath="id('emailAddress')" value="" description="Username is empty" />
+	<verifyInputField xpath="id('password')" value="" description="password is empty" />
+</group>

@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project SYSTEM "../../dtd/Project.dtd">
+
+<project default="myAccountLogin">
+
+	<target name="myAccountLogin">
+	
+		<tstamp>
+			<format property="now" pattern="MMdhmS" />
+		</tstamp>
+		
+		<webtest name="LOGIN: ${title} [${pcmHost}${username}]">
+			
+			&config;
+			<invoke url="${basepath}" description="Go to PCM Homepage"/>
+			<storeProperty name="username.dynamic" value="${pcmHost}${username}" description="Define username to login" />
+			<storeProperty name="password.dynamic" value="${password}" description="Define password to login" />
+			
+			<clickLink href="/o/My-Account-Dashboard/msc-4" description="Click My Account" />
+			<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+			<setInputField xpath="id('password')" value="#{password.dynamic}" description="Enter Username" />
+
+			&invokePostNewLogin;
+			
+			<verifyDocumentURL text="https://${host}/o/My-Account-Dashboard/msc-4" regex="true" description="Verify the url is the redirect URL value" />
+			
+			
+		
+			<!--
+		<group description="Check if users successfully logs In">
+			<ifStep description="If successful login">
+				<condition>	
+					<verifyProperty name="login" value="true" propertyType="ant"/>
+				</condition>
+				<then>
+					<not description="Login field should not be visible">
+						<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+					</not>	
+				</then>
+				<else>
+					<verifyXPath xpath="//p[@class='wcR']" text="Invalid email address or password." description="Validation message appears" />
+					<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+				</else>
+			</ifStep>
+			
+		</group>
+		-->
+		</webtest>
+		
+	</target>
+</project>

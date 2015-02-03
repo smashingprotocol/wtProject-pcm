@@ -1,0 +1,26 @@
+<group description="Input Default Bill to Address Fields">
+
+	<clickLink href="/o/My-Account-Dashboard/msc-4" description="Click My Account" />
+	<clickElement xpath="//a[contains(@name,'Account Settings')]" description="Click Account Settings" />
+	
+	<clickElement xpath="//a[contains(@onclick,'BillEdit') and contains(text(),'Edit')]" description="Click Edit" />
+				
+	<setInputField xpath="id('txtBFName')" value="#{firstName.dynamic}" description="Enter firstName" />
+	<setInputField xpath="id('txtBMName')" value="#{middleInitial.dynamic}" description="Enter middleInitial" />
+	<setInputField xpath="id('txtBLName')" value="#{lastName.dynamic}" description="Enter lastName" />
+	<setInputField xpath="id('txtBStAddress')" value="#{addressOne.dynamic}" description="Enter addressOne" />
+	<setInputField xpath="id('txtBAptAddress')" value="#{addressTwo.dynamic}" description="Enter addressTwo" />
+	<setInputField xpath="id('txtBCity')" value="#{city_orig.dynamic}" description="Enter city_orig" />
+	<setSelectField xpath="id('ddBState')" text="#{state_orig.dynamic}" description="Enter state_orig" />
+	<setInputField xpath="id('txtBZip')" value="#{zipCode.dynamic}" description="Enter zipCode" />
+	<setInputField xpath="id('txtBAreaCode')" value="#{dayAreaCode.dynamic}" description="Enter dayAreaCode" />
+	<setInputField xpath="id('txtBPhone_1')" value="#{dayPhone1.dynamic}" description="Enter dayPhone1" />
+	<setInputField xpath="id('txtBPhone_2')" value="#{dayPhone2.dynamic}" description="Enter dayPhone2" />
+	<setInputField xpath="id('txtBSecAreaCode')" value="#{eveAreaCode.dynamic}" description="Enter eveAreaCode" />
+	<setInputField xpath="id('txtBSecPhone_1')" value="#{evePhone1.dynamic}" description="Enter evePhone1" />
+	<setInputField xpath="id('txtBSecPhone_2')" value="#{evePhone2.dynamic}" description="Enter evePhone2" />
+
+	<clickElement xpath="//a[contains(@href,'validate_billing_address')]" description="Click Update Button" />
+	
+	
+</group>

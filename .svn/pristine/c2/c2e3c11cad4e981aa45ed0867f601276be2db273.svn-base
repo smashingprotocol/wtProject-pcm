@@ -1,0 +1,67 @@
+<ifStep description="Login by Sign In Popup in header">
+		<condition>	
+			<verifyProperty name="login.entry" value="popup.login" propertyType="ant" description="Verify the login entry" />
+		</condition>
+		<then>
+			<setInputField xpath="id('emailAddress344')" value="#{username.dynamic}" description="Enter Username" />
+		<setInputField xpath="id('password344')" value="#{password.dynamic}" description="Enter Password" />
+		<clickElement xpath="//input[@src='/mall/widgetti/images/security/signInPcmall/loginBtn_59x21.gif']" description="Click Login" />
+		</then>
+</ifStep>
+
+<ifStep description="Login by Greetings link in header">
+		<condition>	
+			<verifyProperty name="login.entry" value="greet.login" propertyType="ant" description="Verify the login entry" />
+		</condition>
+		<then>
+			<clickLink href="/o/Sign-In-With-New-Account/msc-39?op=zones.userGreeting.userGreeting&amp;reqOp=logIn&amp;sourceUrl=msc-home&amp;includeBdLogin=true" description="Click the Sign In greeting link" />
+			
+			<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+			<setInputField xpath="id('password')" value="#{password.dynamic}" description="Enter Password" />
+			<clickElement xpath="//input[@src='/mall/widgetti/images/security/signInPcmall/loginBtnL2.gif']" description="Click Login" />
+		</then>
+</ifStep>
+
+<ifStep description="Login by footer link">
+		<condition>	
+			<verifyProperty name="login.entry" value="footer.login" propertyType="ant" description="Verify the login entry" />
+		</condition>
+		<then>
+			<clickLink href="/o/Login/msc-23?includeBdLogin=true" description="Click the Sign In greeting link" />
+			
+			<setInputField xpath="id('emailAddress')" value="#{username.dynamic}" description="Enter Username" />
+			<setInputField xpath="id('password')" value="#{password.dynamic}" description="Enter Password" />
+			<clickElement xpath="//input[@src='/mall/widgetti/images/security/signInPcmall/loginBtnL2.gif']" description="Click Login" />
+		</then>
+</ifStep>
+
+<ifStep description="Login by Careers page">
+		<condition>	
+			<verifyProperty name="login.entry" value="careers.login" propertyType="ant" description="Verify the login entry" />
+		</condition>
+		<then>
+			<clickLink href="/n/Careers/navLinks-129" description="Click the Sign In greeting link" />
+			
+			<setInputField xpath="id('emailAddress21')" value="#{username.dynamic}" description="Enter Username" />
+			<setInputField xpath="id('password21')" value="#{password.dynamic}" description="Enter Password" />
+			<clickElement xpath="//input[@src='/mall/widgetti/images/security/signInPcmall/loginBtn.gif']" description="Click Login" />
+		</then>
+</ifStep>
+	
+
+<ifStep description="If Single Sign In is On, select a site">
+	<condition>
+		<verifyProperty name="enableSingleSignIn" text="1" propertyType="ant" description="Single Sign In enable" />
+	</condition>
+	<then>
+		<ifStep description="If PCM and BD user with same password, select a site">
+			<condition>
+				<verifyProperty name="site.selector" text="true" propertyType="ant" description="To select consumer" />
+			</condition>
+			<then>
+				<setRadioButton xpath="//input[@value='#{site.dynamic}']" description="Select a Site in the site selector window" />
+				<clickElement xpath="id('selectBtnLogin366')" description="Click GO" />
+			</then>
+		</ifStep>
+	</then>
+</ifStep>
